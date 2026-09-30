@@ -26,9 +26,10 @@ description: Read-only audit of this Next.js client's architecture rules in src/
 | 13 | Naming | files not kebab-case; default exports in components (except `src/app/**` route files); `type X =` without `T`, `interface X` without `I`, `enum X` without `E`; hooks not `use-*.ts` |
 | 14 | Thin routes | `src/app/**/page.tsx` with business logic, direct service calls without query options, or inline styling beyond layout |
 | 15 | Feature public API | components/hooks used outside a feature but not exported from its `index.ts`; services exported from `index.ts` |
+| 16 | Hand-written API types | types in `src/features/*/types/` declaring fields of an API payload instead of aliasing `TApiSchema<'...'>`; edits to `src/shared/lib/http/openapi.d.ts` (generated) |
 
 ## Output
 One line per finding, most severe first:
 `path:line: <HIGH|MED|LOW>: <rule #> <problem>. <fix>.`
-HIGH = security/data (10, 4, 9), MED = boundaries (1, 2, 3, 5, 6, 8, 11, 12), LOW = style (7, 13, 14, 15) — raise 7 to MED when many.
+HIGH = security/data (10, 4, 9), MED = boundaries (1, 2, 3, 5, 6, 8, 11, 12, 16), LOW = style (7, 13, 14, 15) — raise 7 to MED when many.
 End with counts per severity. No praise, no restating clean checks. If nothing found: `No architecture violations.`
