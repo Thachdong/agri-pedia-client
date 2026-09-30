@@ -1,4 +1,5 @@
 import { ROUTES } from "@/shared/constants";
+import type { TLoginUser } from "../types/auth.types";
 
 /** Origin giả chỉ để parse — path hợp lệ phải giữ nguyên origin này sau khi resolve. */
 const PARSE_ORIGIN = "http://agripedia.local";
@@ -27,3 +28,10 @@ export const getSafeNextPath = (value: unknown, fallback: string = ROUTES.home):
 
   return `${pathname}${url.search}${url.hash}`;
 };
+
+/**
+ * Đích sau khi đăng nhập: `?next=` an toàn được ưu tiên (quay lại trang đang mở trước khi bị đẩy về login);
+ * không có / không hợp lệ → theo role: DISTRIBUTOR → profile của mình, FARMER → trang chủ.
+ */
+export const getPostLoginPath = (user: Pick<TLoginUser, "id" | "role">, next?: unknown): string =>
+  getSafeNextPath(next, user.role === "DISTRIBUTOR" ? ROUTES.profile(user.id) : ROUTES.home);

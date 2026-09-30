@@ -127,7 +127,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Get the profile of the caller
+         * @description Profile as returned by POST /auth/login (user), including the primary address (null if none). Works for any user with a valid access token, whatever its status.
+         */
+        get: operations["UserController_getMe"];
         put?: never;
         post?: never;
         delete?: never;
@@ -542,7 +546,15 @@ export interface components {
             identifier: string;
             password: string;
         };
-        LoginUserProfileResponse: {
+        UserAddressResponse: {
+            province: string;
+            ward: string;
+            houseNumber: string;
+            lat: number;
+            long: number;
+        };
+        UserProfileResponse: {
+            id: string;
             /** @enum {string} */
             loginType: "EMAIL" | "PHONE";
             username: string;
@@ -557,11 +569,12 @@ export interface components {
             createdAt: string;
             /** Format: date-time */
             updatedAt: string;
+            address: components["schemas"]["UserAddressResponse"] | null;
         };
         LoginUserResponse: {
             accessToken: string;
             refreshToken: string;
-            user: components["schemas"]["LoginUserProfileResponse"];
+            user: components["schemas"]["UserProfileResponse"];
         };
         RefreshAccessTokenDto: {
             refreshToken: string;
@@ -1039,6 +1052,43 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_getMe: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserProfileResponse"];
                 };
             };
             /** @description AUTH_INVALID_ACCESS_TOKEN */

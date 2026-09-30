@@ -8,7 +8,7 @@ export type TLoginInput = TApiSchema<"LoginUserDto">;
 export type TRequestPasswordResetInput = TApiSchema<"RequestPasswordResetDto">;
 export type TConfirmPasswordResetInput = TApiSchema<"ConfirmPasswordResetDto">;
 /** Profile trả về khi đăng nhập — token nằm ở cookie httpOnly (BFF), browser không thấy. */
-export type TLoginUser = TApiSchema<"LoginUserProfileResponse">;
+export type TLoginUser = TApiSchema<"UserProfileResponse">;
 /** Loại code: ACTIVATE_DISTRIBUTOR (gửi lúc đăng ký) | RESET_PASSWORD. */
 export type TOtpPurpose = TResendCodeInput["purpose"];
 export type TLoginType = TRegisterInput["loginType"];
