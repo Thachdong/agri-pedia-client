@@ -1,3 +1,4 @@
+import { LOGIN_NEXT_PARAM, LOGIN_PATH } from "@/shared/lib/auth/auth.constants";
 import { APP_ERROR_CODE } from "./app-error";
 import { createHttpClient } from "./create-http-client";
 
@@ -11,7 +12,7 @@ export const http = createHttpClient({
       const next = encodeURIComponent(`${window.location.pathname}${window.location.search}`);
       // Reload toàn trang có chủ đích: xóa cache react-query của phiên cũ; code này chạy ngoài React nên không dùng router.
       // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-      window.location.assign(`/login?next=${next}`);
+      window.location.assign(`${LOGIN_PATH}?${LOGIN_NEXT_PARAM}=${next}`);
     }
   },
 });
