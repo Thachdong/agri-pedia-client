@@ -18,3 +18,11 @@ export type TChatMessagesPage = TApiSchema<"ListRoomMessagesResponse">;
 
 /** Cache infinite query tin nhắn: trang 0 = mới nhất, mỗi trang mới nhất trước. */
 export type TChatMessagesCache = { pages: TChatMessagesPage[]; pageParams: unknown[] };
+
+/**
+ * Socket `chat.message.send` — không có trong openapi (socket), viết theo server
+ * `SendChatMessageDto` / `SendChatMessageResponse`. `roomId` ưu tiên hơn `receiverId`.
+ */
+export type TSendMessageInput = { roomId?: string; receiverId?: string; message: string };
+/** Ack thành công; `createdAt` là ISO string (qua JSON). */
+export type TSendMessageAck = { messageId: string; roomId: string; createdAt: string };
