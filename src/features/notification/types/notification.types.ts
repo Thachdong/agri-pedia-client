@@ -3,6 +3,9 @@ import type { TApiSchema } from "@/shared/lib/http";
 export type TNotification = TApiSchema<"NotificationResponse">;
 export type TNotificationsPage = TApiSchema<"ListMyNotificationsResponse">;
 
+/** Dữ liệu cache của infinite query (cùng shape `InfiniteData` của react-query). */
+export type TNotificationsCache = { pages: TNotificationsPage[]; pageParams: unknown[] };
+
 /** Các trang đã gộp — menu + badge dùng chung. */
 export type TNotificationsView = {
   items: TNotification[];

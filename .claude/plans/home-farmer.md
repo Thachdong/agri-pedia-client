@@ -26,7 +26,7 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 5. [feature-api]          GET /users/me → TUserProfile, getMe, meQuery, useMe; keys users.me
 - [x] 6. [feature-api]          POST /auth/logout (BFF) → useLogout (feature auth); onSuccess tải lại toàn trang "/" (xoá cache + ngắt socket + nhánh guest)
 - [x] 7. [feature-api]          GET /notifications → TNotification, useNotifications (infinite cursor); keys notifications.list
-- [ ] 8. [feature-api]          PATCH /notifications/:id/read → useMarkNotificationRead (optimistic setQueryData, rollback onError)
+- [x] 8. [feature-api]          PATCH /notifications/:id/read → useMarkNotificationRead (optimistic setQueryData, rollback onError)
 - [ ] 9. [feature-api]          PATCH /notifications/read-all → useMarkAllNotificationsRead (optimistic, invalidates notifications.all)
 - [ ] 10. [feature-api]         GET /chat/rooms → TChatRoom, useChatRooms (infinite cursor); keys chat.rooms
 - [ ] 11. [feature-api]         GET /chat/rooms/:roomId/messages → TChatMessage, useRoomMessages (infinite cursor, cũ dần); keys chat.messages(roomId)
