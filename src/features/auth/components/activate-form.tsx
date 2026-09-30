@@ -21,6 +21,7 @@ import { useAuthHandoff } from "../hooks/use-auth-handoff";
 import { useResendCode } from "../hooks/use-resend-code";
 import { activateSchema } from "../schemas/activate.schema";
 import type { TActivateFormValues, TLoginType } from "../types/auth.types";
+import { formatBlockUntil } from "../utils/otp.util";
 import { LoginTypeTabs } from "./login-type-tabs";
 import { ResendCodeAction } from "./resend-code-action";
 
@@ -29,14 +30,6 @@ const DEFAULT_VALUES: TActivateFormValues = { loginType: "EMAIL", identifier: ""
 type TActivateErrorCode = keyof typeof ACTIVATE_ERROR_FIELDS;
 
 const isKnownActivateError = (code: string): code is TActivateErrorCode => code in ACTIVATE_ERROR_FIELDS;
-
-/** `details.blockUntil` (ISO) của OTP_BLOCKED → "HH:mm"; không có / sai định dạng → null. */
-const formatBlockUntil = (details: unknown) => {
-  const blockUntil = (details as { blockUntil?: unknown } | undefined)?.blockUntil;
-  if (typeof blockUntil !== "string") return null;
-  const date = new Date(blockUntil);
-  return Number.isNaN(date.getTime()) ? null : date.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
-};
 
 export type TActivateFormProps = { className?: string };
 

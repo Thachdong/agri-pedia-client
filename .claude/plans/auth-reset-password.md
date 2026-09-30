@@ -16,7 +16,7 @@ Foundation: data-wrapper ✓ bff-forward ✓ (2 endpoint forward qua catch-all) 
 - [x] 3. [feature-api]           POST /auth/reset-password/confirm → TConfirmPasswordResetInput, confirmPasswordReset, useConfirmPasswordReset (silent, không invalidate)
 - [x] 4. [validation-schema]     resetPasswordSchema — loginType, identifier theo loginType
 - [x] 5. [validation-schema]     changePasswordSchema — loginType, identifier, password (rule), confirmPassword = password, code OTP_CODE_LENGTH chữ số
-- [ ] 6. [atomic-component]      organism  ResetPasswordForm   (new, feature auth) tabs EMAIL|PHONE (clear identifier), autofocus identifier, RESET loading; lỗi → field/form; OK hoặc OTP_ALREADY_REQUESTED → handoff → /auth/change-password
+- [x] 6. [atomic-component]      organism  ResetPasswordForm   (new, feature auth) tabs EMAIL|PHONE (clear identifier), autofocus identifier, RESET loading; lỗi → field/form; OK hoặc OTP_ALREADY_REQUESTED → handoff → /auth/change-password
 - [ ] 7. [atomic-component]      organism  ChangePasswordForm  (new, feature auth) init handoff (điền loginType+identifier, focus Password | EMAIL, focus identifier); identifier, PasswordInput x2, OtpCodeInput (xong → focus button), ResendCodeAction RESET_PASSWORD + countdown; lỗi → field/form; OK → clear handoff + handoff login → /auth/login
 - [ ] 8. [page]                  /auth/reset-password ← AuthLayout + AuthHeader + ResetPasswordForm + AuthFooterLinks(register, login, activate); metadata; loading/error
 - [ ] 9. [page]                  /auth/change-password ← AuthLayout + AuthHeader + ChangePasswordForm + AuthFooterLinks(register, login); metadata; loading/error

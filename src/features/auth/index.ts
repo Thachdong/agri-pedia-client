@@ -4,6 +4,7 @@ export { AuthFooterLinks, type TAuthFooterLinkKey } from "./components/auth-foot
 export { AuthHeader } from "./components/auth-header";
 export { LoginForm } from "./components/login-form";
 export { RegisterForm } from "./components/register-form";
+export { ResetPasswordForm } from "./components/reset-password-form";
 export { useActivate } from "./hooks/use-activate";
 export { useConfirmPasswordReset } from "./hooks/use-confirm-password-reset";
 export { useLogin } from "./hooks/use-login";

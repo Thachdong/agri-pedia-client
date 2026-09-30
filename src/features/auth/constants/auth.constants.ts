@@ -53,3 +53,10 @@ export const LOGIN_ERROR_MESSAGES = {
   USER_INVALID_CREDENTIALS: "Email/số điện thoại hoặc mật khẩu không đúng.",
   USER_NOT_ACTIVE: "Tài khoản chưa được kích hoạt.",
 } as const;
+
+/** Domain error của POST /auth/reset-password → field (hoặc root) + message. OTP_ALREADY_REQUESTED không phải lỗi (form coi như đã gửi code). */
+export const RESET_PASSWORD_ERROR_FIELDS = {
+  OTP_ACCOUNT_NOT_FOUND: { field: "identifier", message: "Không tìm thấy tài khoản với email/số điện thoại này" },
+  OTP_ACCOUNT_NOT_ACTIVE: { field: "root", message: "Tài khoản chưa được kích hoạt." },
+  OTP_BLOCKED: { field: "root", message: "Yêu cầu reset mật khẩu tạm thời bị khoá do nhập sai mã quá nhiều lần." },
+} as const;
