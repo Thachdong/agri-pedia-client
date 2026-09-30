@@ -21,6 +21,10 @@ export const queryKeys = {
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
     wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
   },
+  users: {
+    all: ["users"] as const,
+    me: () => [...queryKeys.users.all, "me"] as const,
+  },
   distributors: {
     all: ["distributors"] as const,
     nearbyLists: () => [...queryKeys.distributors.all, "nearby"] as const,

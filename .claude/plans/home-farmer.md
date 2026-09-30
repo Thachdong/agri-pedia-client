@@ -22,8 +22,8 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 1. [bff-auth]             server helper hasSession() trong shared/lib/auth (cookie access|refresh)
 - [x] 2. [data-wrapper]         realtime: socket.io-client → src/shared/lib/realtime — RealtimeProvider (connect khi có phiên, ticket qua BFF mỗi lần connect), useRealtimeEvent, emitWithAck; env NEXT_PUBLIC_REALTIME_URL
 - [x] 3. ~~[arch-lint-setup] cấm socket.io-client ngoài wrapper~~ — gộp vào step 2 (skill data-wrapper tự thêm vào WRAPPED)
-- [ ] 4. [feature-scaffold]     features `user`, `notification`, `chat` — layers: components, hooks, services, types (+ schemas cho chat)
-- [ ] 5. [feature-api]          GET /users/me → TUserProfile, getMe, meQuery, useMe; keys users.me
+- [x] 4. [feature-scaffold]     features `user`, `notification`, `chat` — layers: components, hooks, services, types (+ schemas cho chat)
+- [x] 5. [feature-api]          GET /users/me → TUserProfile, getMe, meQuery, useMe; keys users.me
 - [ ] 6. [feature-api]          POST /auth/logout (BFF) → useLogout (feature auth); onSuccess ngắt socket + xoá cache + refresh
 - [ ] 7. [feature-api]          GET /notifications → TNotification, useNotifications (infinite cursor); keys notifications.list
 - [ ] 8. [feature-api]          PATCH /notifications/:id/read → useMarkNotificationRead (optimistic setQueryData, rollback onError)
