@@ -32,3 +32,6 @@ export const requestPasswordReset = (input: TRequestPasswordResetInput, client: 
 /** 200, body rỗng — đặt mật khẩu mới bằng code RESET_PASSWORD; server thu hồi mọi phiên của user. */
 export const confirmPasswordReset = (input: TConfirmPasswordResetInput, client: IHttpClient = http) =>
   client.post<void, TConfirmPasswordResetInput>("/auth/reset-password/confirm", input);
+
+/** Gọi BFF route `/api/auth/logout` (không phải catch-all): thu hồi phiên ở NestJS (best effort) + xoá cookie. Luôn 204. */
+export const logout = (client: IHttpClient = http) => client.post<void>("/auth/logout");

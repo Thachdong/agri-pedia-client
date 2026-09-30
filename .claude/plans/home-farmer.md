@@ -16,7 +16,7 @@ Decisions:
   - Chat: header (2) → popover danh sách rooms → click room → Chat modal (M2): tin nhắn (infinite, cũ hơn khi cuộn lên), gửi qua socket (ack), enter khi mở / leave khi đóng.
     Chat modal dựng để trang /profile/<id> dùng lại (mở theo roomId hoặc receiverId).
   - Room có `otherUsername` (nullable → "Người dùng") + `otherUserAvatar` (media id như distributor → hiện chữ cái đầu tới khi có URL).
-  - Logout: POST /api/auth/logout (BFF) → ngắt socket → xoá cache → router.refresh() về UI guest.
+  - Logout: POST /api/auth/logout (BFF) → window.location.assign("/") (full reload: xoá cache, ngắt socket; tránh query đang mount refetch → 401 → /login).
 Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wrapper (socket.io-client), lint rule cho nó, shadcn popover + dropdown-menu.
 
 - [x] 1. [bff-auth]             server helper hasSession() trong shared/lib/auth (cookie access|refresh)
@@ -24,7 +24,7 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 3. ~~[arch-lint-setup] cấm socket.io-client ngoài wrapper~~ — gộp vào step 2 (skill data-wrapper tự thêm vào WRAPPED)
 - [x] 4. [feature-scaffold]     features `user`, `notification`, `chat` — layers: components, hooks, services, types (+ schemas cho chat)
 - [x] 5. [feature-api]          GET /users/me → TUserProfile, getMe, meQuery, useMe; keys users.me
-- [ ] 6. [feature-api]          POST /auth/logout (BFF) → useLogout (feature auth); onSuccess ngắt socket + xoá cache + refresh
+- [x] 6. [feature-api]          POST /auth/logout (BFF) → useLogout (feature auth); onSuccess tải lại toàn trang "/" (xoá cache + ngắt socket + nhánh guest)
 - [ ] 7. [feature-api]          GET /notifications → TNotification, useNotifications (infinite cursor); keys notifications.list
 - [ ] 8. [feature-api]          PATCH /notifications/:id/read → useMarkNotificationRead (optimistic setQueryData, rollback onError)
 - [ ] 9. [feature-api]          PATCH /notifications/read-all → useMarkAllNotificationsRead (optimistic, invalidates notifications.all)
