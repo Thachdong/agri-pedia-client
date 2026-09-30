@@ -1,9 +1,9 @@
 import { rules, schema, v } from "@/shared/lib/validation";
-import { LOGIN_TYPES } from "../constants/auth.constants";
+import { BUSINESS_TYPE_OPTIONS, LOGIN_TYPES, ROLE_OPTIONS } from "../constants/auth.constants";
 import type { TRegisterFormValues } from "../types/auth.types";
 
-const ROLES = ["FARMER", "DISTRIBUTOR"] as const;
-const BUSINESS_TYPES = ["AGRICULTURAL_CHEMICAL_SUPPLIES", "SEEDS_SEEDLINGS", "AQUACULTURE_SEEDLINGS"] as const;
+const ROLES = ROLE_OPTIONS.map((option) => option.value);
+const BUSINESS_TYPES = BUSINESS_TYPE_OPTIONS.map((option) => option.value);
 
 const selectRequired = (message: string) => ({ "any.required": message, "string.empty": message });
 
