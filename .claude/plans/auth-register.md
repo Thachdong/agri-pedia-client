@@ -18,8 +18,8 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 12. [atomic-component]     molecule  LoginTypeTabs      (new, feature auth)   EMAIL | PHONE, đổi tab clear identifier
 - [x] 13. [atomic-component]     molecule  AuthFooterLinks    (new, feature auth)   links đăng ký / đăng nhập / kích hoạt / reset (cấu hình theo page)
 - [x] 14. [atomic-component]     organism  MapPicker          (new, shared)   Leaflet client-only (dynamic ssr:false), click đặt marker, kéo marker, value/onChange {lat, long}
-- [ ] 15. [atomic-component]     organism  AuthHeader         (new, feature auth)   logo AgriPedia + "Back To Home"
-- [ ] 16. [atomic-component]     organism  LocationPickerField (new, feature location)   hiển thị lat/long + nút "Chọn trên bản đồ" → Dialog chứa MapPicker (Xác nhận / Huỷ) + nút "Dùng vị trí hiện tại"
+- [x] 15. [atomic-component]     organism  AuthHeader         (new, feature auth)   logo AgriPedia + "Back To Home"
+- [x] 16. [atomic-component]     organism  LocationPickerField (new, feature location)   hiển thị lat/long + nút "Chọn trên bản đồ" → Dialog chứa MapPicker (Xác nhận / Huỷ) + nút "Dùng vị trí hiện tại"
 - [ ] 17. [atomic-component]     organism  AddressFields      (new, feature location)   province/ward select + houseNumber + LocationPickerField
 - [ ] 18. [atomic-component]     organism  RegisterForm       (new, feature auth)   useAppForm + registerSchema + useRegister, lỗi server (USER_IDENTIFIER_ALREADY_USED → identifier), handoff + redirect theo role
 - [ ] 19. [atomic-component]     template  AuthLayout         (new, shared)   header slot + card căn giữa, body scroll-y, footer slot

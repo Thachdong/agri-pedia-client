@@ -35,6 +35,17 @@ function FlyTo({ focus }: { focus?: TCoordinates | null }) {
   return null;
 }
 
+/** Container đổi kích thước (dialog mở có animation, xoay màn hình) → Leaflet tính lại, tránh tile bị xám. */
+function InvalidateOnResize() {
+  const map = useMap();
+  useEffect(() => {
+    const observer = new ResizeObserver(() => map.invalidateSize());
+    observer.observe(map.getContainer());
+    return () => observer.disconnect();
+  }, [map]);
+  return null;
+}
+
 export default function MapPickerView({ value, onChange, focus, className, "aria-label": ariaLabel }: TMapPickerProps) {
   const initial = value ?? focus;
   const markerHandlers = useMemo(
@@ -56,6 +67,7 @@ export default function MapPickerView({ value, onChange, focus, className, "aria
         aria-label={ariaLabel}
       >
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
+        <InvalidateOnResize />
         <ClickToPick onChange={onChange} />
         <FlyTo focus={focus} />
         {value && (
