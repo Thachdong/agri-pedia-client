@@ -18,4 +18,11 @@ export const rules = {
       .messages({ "string.pattern.base": "Số điện thoại không hợp lệ" }),
   password: () => v.string().min(8).max(128),
   username: () => v.string().trim().min(1).max(100),
+  /** Code OTP (activate / reset password) — server cho phép 4..10 chữ số, client khoá đúng `length` đang cấu hình. */
+  otpCode: (length: number) =>
+    v
+      .string()
+      .trim()
+      .pattern(new RegExp(`^\\d{${length}}$`))
+      .messages({ "string.pattern.base": `Mã gồm ${length} chữ số`, "string.empty": `Vui lòng nhập đủ ${length} chữ số` }),
 };

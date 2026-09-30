@@ -8,6 +8,9 @@ export const LOGIN_TYPE_LABELS: Record<TLoginType, string> = {
   PHONE: "PHONE",
 };
 
+/** Khớp OTP_LENGTH của server (default 6). */
+export const OTP_CODE_LENGTH = 6;
+
 export const IDENTIFIER_LABELS: Record<TLoginType, string> = {
   EMAIL: "Email",
   PHONE: "Số điện thoại",

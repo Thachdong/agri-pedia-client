@@ -7,7 +7,7 @@ Foundation: data-wrapper ✓ bff-forward ✓ (/auth/activate, /auth/resend forwa
 - [x] 1. [bff-auth]              thêm /auth/activate vào GUEST_ONLY_PATHS
 - [x] 2. [feature-api]           POST /auth/activate → TActivateInput, activate, useActivate (không invalidate)
 - [x] 3. [feature-api]           POST /auth/resend → TResendCodeInput, resendCode, useResendCode (purpose truyền vào — tái dùng cho change-password)
-- [ ] 4. [validation-schema]     activateSchema — loginType, identifier theo loginType (email|phone), code đúng OTP_CODE_LENGTH chữ số
+- [x] 4. [validation-schema]     activateSchema — loginType, identifier theo loginType (email|phone), code đúng OTP_CODE_LENGTH chữ số
 - [ ] 5. [shared-unit]           hook useCountdown (shared) — start(untilMs), remainingSeconds, isRunning
 - [ ] 6. [atomic-component]      atom      InputOTP           (new, shared/ui)   shadcn generate (package input-otp): paste, autocomplete one-time-code, auto nhảy ô
 - [ ] 7. [atomic-component]      molecule  OtpCodeInput       (new, shared)      InputOTP N ô, chỉ số, onComplete (để focus button), autoFocus, aria-invalid

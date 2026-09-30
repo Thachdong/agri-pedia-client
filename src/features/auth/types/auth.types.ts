@@ -13,6 +13,9 @@ export type TBusinessType = NonNullable<TRegisterInput["bussinessType"]>;
 /** Giá trị form đăng ký — thêm `confirmPassword` (chỉ client, không gửi API). */
 export type TRegisterFormValues = TRegisterInput & { confirmPassword: string };
 
+/** Giá trị form kích hoạt — thêm `loginType` (chỉ để chọn rule identifier, không gửi API). */
+export type TActivateFormValues = TActivateInput & { loginType: TLoginType };
+
 /** Luồng có chuyển dữ liệu sang trang kế tiếp qua sessionStorage. */
 export type TAuthHandoffFlow = "register" | "reset-password";
 
