@@ -9,5 +9,7 @@ import type { TOtpPurpose, TResendCodeInput } from "../types/auth.types";
 export const useResendCode = (purpose: TOtpPurpose) =>
   useAppMutation({
     mutationFn: ({ identifier }: Pick<TResendCodeInput, "identifier">) => resendCode({ identifier, purpose }),
+    // Form tự hiển thị lỗi (field / root) → không báo lỗi global.
+    meta: { silent: true },
     invalidates: () => [],
   });

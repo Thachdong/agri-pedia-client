@@ -86,7 +86,7 @@ export function ActivateForm({ className }: TActivateFormProps) {
       });
       return;
     }
-    if (field === "code") form.setValue("code", "");
+    // Giữ nguyên code đã nhập để user thấy và sửa từng số.
     form.setError(field, { type: "server", message }, { shouldFocus: true });
   };
 

@@ -6,5 +6,7 @@ import type { TRegisterInput } from "../types/auth.types";
 export const useRegister = () =>
   useAppMutation({
     mutationFn: (input: TRegisterInput) => register(input),
+    // Form tự hiển thị lỗi (field / root) → không báo lỗi global.
+    meta: { silent: true },
     invalidates: () => [],
   });

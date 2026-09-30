@@ -6,5 +6,7 @@ import type { TActivateInput } from "../types/auth.types";
 export const useActivate = () =>
   useAppMutation({
     mutationFn: (input: TActivateInput) => activate(input),
+    // Form tự hiển thị lỗi (field / root) → không báo lỗi global.
+    meta: { silent: true },
     invalidates: () => [],
   });
