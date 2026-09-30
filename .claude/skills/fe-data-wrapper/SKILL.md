@@ -20,13 +20,17 @@ The only place reading `process.env`. Validates with joi at import; server-only 
 
 ### http — `src/shared/lib/http/`
 ```
+openapi.d.ts       # GENERATED from specs/openapi.json — `npm run gen:api`, never hand-edit
+api-types.ts       # TApiSchema<K extends keyof components['schemas']> = components['schemas'][K]
 http.types.ts      # IHttpClient { get, post, put, patch, delete }, TRequestOptions
 app-error.ts       # class AppError { status, code, message, details } + toAppError(res body)
 client.ts          # browser client: baseURL '/api' (BFF forward), credentials 'same-origin',
                    #   on 401 SESSION_EXPIRED → location.assign('/login?next=...')
 server.ts          # 'server-only': baseURL env.API_URL, Authorization from cookies (lib/auth)
-index.ts           # export { http } from client, types, AppError
+index.ts           # export { http } from client, types, TApiSchema, AppError
 ```
+- Type generation: dev dependency `openapi-typescript`; `package.json` script `"gen:api": "openapi-typescript specs/openapi.json -o src/shared/lib/http/openapi.d.ts"`. Re-run whenever `specs/openapi.json` is re-exported from the server.
+- `AppError` body types come from the generated `DomainErrorResponse` / `ValidationErrorResponse`.
 - Built on native `fetch`; JSON by default, `FormData` passthrough.
 - `toAppError` understands both NestJS shapes: domain `{ statusCode, code, message, details }` and validation `{ statusCode, message: string[], error }` (→ `code: 'VALIDATION_ERROR'`, `details: messages`).
 - Services accept the client as a parameter defaulting to browser `http`, so Server Components can pass the server client for prefetch.
@@ -101,7 +105,7 @@ Field UI = shadcn `form.tsx` (in `ui/`) wrapped by molecules (`FormField`, `Form
 
 ## Steps
 1. Decide which concerns are missing (`ls src/shared/lib`). Only build those.
-2. `npm install` the packages (`@tanstack/react-query @tanstack/react-query-devtools joi react-hook-form @hookform/resolvers server-only`, as needed).
+2. `npm install` the packages (`@tanstack/react-query @tanstack/react-query-devtools joi react-hook-form @hookform/resolvers server-only`, dev: `openapi-typescript`, as needed); add `gen:api` script and run it.
 3. Create files above; wire providers in `layout.tsx`.
 4. If `eslint.config.mjs` has architecture rules, make sure the new wrapper folder is in their allowlist.
 5. `npx tsc --noEmit && npm run lint && npm run build`.

@@ -9,12 +9,12 @@ description: Build or change the BFF auth flow — Next route handlers src/app/a
 
 Next.js 16: read `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/route.md`, `proxy.md`, and `04-functions/cookies.md` before writing. `cookies()` is async. `middleware.ts` is deprecated — the file is `src/proxy.ts` exporting `proxy`.
 
-## NestJS contract (verify in `../server/src/modules/user/infrastructure/http/auth.controller.ts`, `dto/`, `responses/`)
-- `POST /auth/login` → `{ accessToken, refreshToken, user }`
+## NestJS contract (verify with `python3 .claude/scripts/openapi.py op POST /auth/login` etc.)
+- `POST /auth/login` body `{ loginType, identifier, password }` → `{ accessToken, refreshToken, user }`
 - `POST /auth/refresh-token` body `{ refreshToken }` → new tokens
 - `POST /auth/logout` body `{ refreshToken }`
-- Errors: `{ statusCode, code, message, details }`
-Re-read the files; the contract wins over this list.
+- Errors: `DomainErrorResponse { statusCode, code, message, details? }`, `ValidationErrorResponse { statusCode, message: string[], error }`
+Re-check with the script; the spec wins over this list. Auth rules (token TTL, activation) → grep `specs/api.md`.
 
 ## Structure
 ```
@@ -44,7 +44,7 @@ src/proxy.ts              # route guard
   - Expired access token with valid refresh → let it through; `fe-bff-forward` refreshes on 401.
 
 ## Steps
-1. Read NestJS auth controller + DTOs + responses.
+1. Contract of the auth endpoints via `openapi.py op` (not the server source).
 2. Env keys (`API_URL`) in `src/shared/config/env.ts` + `.env.example`.
 3. `src/shared/lib/auth/*`.
 4. Route handlers.
@@ -53,4 +53,4 @@ src/proxy.ts              # route guard
 
 ## Report
 Routes, cookie names/flags, protected matcher, env keys. Self-test:
-`curl -i -X POST localhost:3000/api/auth/login -H 'Origin: http://localhost:3000' -H 'Content-Type: application/json' -d '{"username":"...","password":"..."}'` → `Set-Cookie ... HttpOnly`, body has no token; open a protected URL logged out → redirected to `/login`. Stop.
+`curl -i -X POST localhost:3000/api/auth/login -H 'Origin: http://localhost:3000' -H 'Content-Type: application/json' -d '{"loginType":"EMAIL","identifier":"...","password":"..."}'` → `Set-Cookie ... HttpOnly`, body has no token; open a protected URL logged out → redirected to `/login`. Stop.
