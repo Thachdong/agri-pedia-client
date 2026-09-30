@@ -34,7 +34,7 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 13. [validation-schema]   chatMessageSchema (message 1..2000 sau trim)
 - [x] 14. [shared-unit]         hook useNotificationRealtime (feature notification) — notification.created → prepend cache, reconnect → refetch; wrapper query thêm useAppQueryClient
 - [x] 15. [shared-unit]         hook useChatRealtime (feature chat) — chat.message.received → append messages cache + invalidate rooms
-- [ ] 16. [atomic-component]    atom      Popover + DropdownMenu   (new, shared — shadcn qua atoms)
+- [x] 16. [atomic-component]    atom      Popover + DropdownMenu   (new, shared — shadcn qua atoms)
 - [ ] 17. [atomic-component]    atom      CountBadge               (new, shared) — số đếm, "99+"
 - [ ] 18. [atomic-component]    molecule  IconBadgeButton          (new, shared) — icon button + CountBadge, aria-label kèm số
 - [ ] 19. [atomic-component]    molecule  NotificationItem         (new, feature notification)

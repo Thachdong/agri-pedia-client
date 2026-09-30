@@ -13,9 +13,19 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+export {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 export { Input } from "../ui/input";
 export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/input-otp";
 export { Label } from "../ui/label";
+export { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "../ui/popover";
 export { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
