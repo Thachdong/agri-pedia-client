@@ -38,7 +38,7 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 17. [atomic-component]    atom      CountBadge               (new, shared) — số đếm, "99+"
 - [x] 18. [atomic-component]    molecule  IconBadgeButton          (new, shared) — icon button + CountBadge, aria-label kèm số
 - [x] 19. [atomic-component]    molecule  NotificationItem         (new, feature notification) + util formatRelativeTime (shared — dùng lại cho chat + review)
-- [ ] 20. [atomic-component]    organism  NotificationMenu         (new, feature notification) — popover, click → mark read, đọc tất cả, infinite, loading/empty/error
+- [x] 20. [atomic-component]    organism  NotificationMenu         (new, feature notification) — popover, click → mark read, đọc tất cả, nút "Xem thêm" (thay infinite scroll trong popover), loading/empty/error
 - [ ] 21. [atomic-component]    molecule  ChatRoomItem             (new, feature chat)
 - [ ] 22. [atomic-component]    molecule  ChatMessageBubble        (new, feature chat)
 - [ ] 23. [atomic-component]    organism  ChatModal                (new, feature chat) — M2: messages infinite (cuộn lên), form gửi (useAppForm + schema), enter/leave room, loading/empty/error

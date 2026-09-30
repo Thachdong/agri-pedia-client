@@ -1,4 +1,5 @@
 // Public API của feature `notification` (danh sách + đánh dấu đã đọc + realtime).
+export { NotificationMenu } from "./components/notification-menu";
 export { notificationsQuery } from "./hooks/notification.queries";
 export { useMarkAllNotificationsRead } from "./hooks/use-mark-all-notifications-read";
 export { useMarkNotificationRead } from "./hooks/use-mark-notification-read";
