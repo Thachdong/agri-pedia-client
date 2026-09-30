@@ -13,7 +13,7 @@ import { SELECTED_ZOOM, type TMapPickerProps } from "./map-picker.types";
 /** Pin SVG dùng currentColor → màu từ token (text-highlight), không phụ thuộc ảnh marker mặc định của Leaflet. */
 const PIN_ICON = divIcon({
   className: "text-highlight",
-  html: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" stroke="white" stroke-width="1.5" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5" fill="white" stroke="none"/></svg>`,
+  html: `<svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" class="stroke-background" stroke-width="1.5" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Z"/><circle cx="12" cy="9" r="2.5" class="fill-background" stroke="none"/></svg>`,
   iconSize: [32, 32],
   iconAnchor: [16, 30],
 });
@@ -47,7 +47,7 @@ function InvalidateOnResize() {
   return null;
 }
 
-export default function MapPickerView({ value, onChange, focus, className, "aria-label": ariaLabel }: TMapPickerProps) {
+export function MapPickerView({ value, onChange, focus, className, "aria-label": ariaLabel }: TMapPickerProps) {
   const initial = value ?? focus;
   const markerHandlers = useMemo(
     () => ({

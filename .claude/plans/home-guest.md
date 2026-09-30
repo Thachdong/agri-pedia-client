@@ -24,6 +24,8 @@ Foundation: đủ — không cần data-wrapper / bff / design-token (dùng prim
 - [x] 10. [atomic-component]     organism  DistributorExplorer (new, feature) — xin định vị 1 lần khi mount (inline, dùng shared useGeolocation) + useNearbyDistributors + MarkerMap (map distributor → markers inline) + list, state selected chung → compound: DistributorExplorerProvider + DistributorExplorerMap + DistributorExplorerList (page đặt 2 panel vào slot template); chờ định vị tối đa 8s
 - [x] 11. [page]                 template MapListLayout + page / ← DistributorExplorer
 - [x] 12. [arch-review]
+- [x] 13. [atomic-component]     organism  MarkerMap + MapPicker (update, shared) — user marker nhấp nháy + nhãn "Bạn ở đây" luôn hiện (prop userLabel); fix arch-review: `white` trong SVG → token, named export cho *-view (dynamic .then)
+- [ ] 14. [atomic-component]     organism  MarkerMap + MapPicker (update, shared) — giới hạn bản đồ trong VN (maxBounds + minZoom, gồm Hoàng Sa/Trường Sa; constant VN_BOUNDS shared); fit bỏ qua vị trí user nằm ngoài VN
 
 Components (in order):
   [atom]      Avatar               new    shared

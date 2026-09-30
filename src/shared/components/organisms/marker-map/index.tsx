@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 
 /** Leaflet cần `window` → chỉ render phía client. */
-export const MarkerMap = dynamic(() => import("./marker-map-view"), {
+export const MarkerMap = dynamic(() => import("./marker-map-view").then((module) => module.MarkerMapView), {
   ssr: false,
   loading: () => (
     <div

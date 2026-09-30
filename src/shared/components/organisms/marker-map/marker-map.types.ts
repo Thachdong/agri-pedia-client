@@ -14,9 +14,13 @@ export type TMarkerMapProps = {
   onSelect?: (id: string) => void;
   /** Vị trí người xem — có thì hiện chấm vị trí + fit khung quanh nó. */
   userLocation?: TCoordinates | null;
+  /** Nhãn luôn hiện cạnh vị trí người xem. */
+  userLabel?: string;
   className?: string;
   "aria-label"?: string;
 };
+
+export const DEFAULT_USER_LABEL = "Bạn ở đây";
 
 /** Số marker đầu (gần nhất) được đưa vào khung nhìn cùng vị trí người xem. */
 export const FIT_NEAREST_COUNT = 5;
