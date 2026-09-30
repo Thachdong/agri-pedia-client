@@ -1,4 +1,5 @@
 // Atom có tuỳ biến riêng của project.
+export { Avatar, type TAvatarProps } from "./avatar";
 export { Button, type TButtonProps } from "./button";
 
 // Primitive shadcn dùng nguyên bản — import qua atoms, không import thẳng `ui/`.
