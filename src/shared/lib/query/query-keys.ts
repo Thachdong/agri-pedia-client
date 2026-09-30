@@ -32,6 +32,7 @@ export const queryKeys = {
   chat: {
     all: ["chat"] as const,
     rooms: () => [...queryKeys.chat.all, "rooms"] as const,
+    messages: (roomId: string) => [...queryKeys.chat.all, "messages", roomId] as const,
   },
   distributors: {
     all: ["distributors"] as const,

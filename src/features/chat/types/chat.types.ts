@@ -12,3 +12,9 @@ export type TChatRoomsView = {
   /** Tổng unread trên MỌI room (server tính, không chỉ trang đã tải). */
   totalUnread: number;
 };
+
+export type TChatMessage = TApiSchema<"RoomMessageResponse">;
+export type TChatMessagesPage = TApiSchema<"ListRoomMessagesResponse">;
+
+/** Cache infinite query tin nhắn: trang 0 = mới nhất, mỗi trang mới nhất trước. */
+export type TChatMessagesCache = { pages: TChatMessagesPage[]; pageParams: unknown[] };
