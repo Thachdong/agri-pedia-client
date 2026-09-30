@@ -10,8 +10,8 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 4. [feature-api]           GET /provinces/{provinceCode}/wards → TWard, getWards, useWards(provinceCode, enabled khi có province); keys location.wards
 - [x] 5. [feature-api]           POST /auth/register → TRegisterInput, register, useRegister (không invalidate)
 - [x] 6. [validation-schema]     registerSchema — identifier theo loginType (email|phone), password, confirmPassword, username?, role, bussinessType (required DISTRIBUTOR / null FARMER), bio?, address (province, ward, houseNumber, lat, long)
-- [ ] 7. [arch-lint-setup]       cài leaflet + react-leaflet (+ @types/leaflet); rule: chỉ MapPicker được import leaflet/react-leaflet
-- [ ] 8. [shared-unit]           hook useGeolocation (shared) — request, loading, coords, error
+- [x] 7. [arch-lint-setup]       cài leaflet + react-leaflet (+ @types/leaflet); rule: chỉ MapPicker được import leaflet/react-leaflet
+- [x] 8. [shared-unit]           hook useGeolocation (shared) — request, loading, coords, error
 - [ ] 9. [shared-unit]           util auth handoff (feature auth) — sessionStorage save/read/clear {loginType, identifier, registeredAt}
 - [ ] 10. [atomic-component]     atoms shadcn (shared/ui): Button, Input, Label, Textarea, Select, Tabs, RadioGroup, Dialog — gộp 1 step vì là shadcn generate
 - [ ] 11. [atomic-component]     molecule  FormField          (new, shared)   label + control + error

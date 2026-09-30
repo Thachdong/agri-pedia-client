@@ -9,6 +9,14 @@ import nextTs from "eslint-config-next/typescript";
 // Order matters: later objects win for the same rule.
 // ---------------------------------------------------------------------------
 
+/** Map packages — only the MapPicker organism may import them. */
+const MAP_MESSAGE = "Use MapPicker from @/shared/components/organisms/map-picker.";
+const MAP_PACKAGES = [
+  { name: "leaflet", message: MAP_MESSAGE },
+  { name: "react-leaflet", message: MAP_MESSAGE },
+];
+const MAP_PATTERNS = [{ group: ["leaflet/*", "react-leaflet/*"], message: MAP_MESSAGE }];
+
 /** Packages wrapped in src/shared/lib — import the wrapper instead. */
 const WRAPPED = [
   { name: "@tanstack/react-query", message: "Use @/shared/lib/query." },
@@ -16,8 +24,9 @@ const WRAPPED = [
   { name: "joi", message: "Use @/shared/lib/validation." },
   { name: "react-hook-form", message: "Use @/shared/lib/form." },
   { name: "@hookform/resolvers", message: "Use @/shared/lib/form." },
+  ...MAP_PACKAGES,
 ];
-const WRAPPED_PATTERNS = [{ group: ["@hookform/resolvers/*"], message: "Use @/shared/lib/form." }];
+const WRAPPED_PATTERNS = [{ group: ["@hookform/resolvers/*"], message: "Use @/shared/lib/form." }, ...MAP_PATTERNS];
 
 const DEEP_FEATURE = {
   group: ["@/features/*/*"],
@@ -40,9 +49,9 @@ const RESTRICTED_SYNTAX = [
   },
 ];
 
-const restrictImports = (patterns, paths = WRAPPED) => [
+const restrictImports = (patterns, paths = WRAPPED, basePatterns = WRAPPED_PATTERNS) => [
   "error",
-  { paths, patterns: [...WRAPPED_PATTERNS, ...patterns] },
+  { paths, patterns: [...basePatterns, ...patterns] },
 ];
 
 const architectureRules = [
@@ -104,7 +113,18 @@ const architectureRules = [
       ]),
     },
   },
-  // 5. Wrappers + shadcn vendor files may use the wrapped packages (keep LAST).
+  // 5. MapPicker is the map wrapper: leaflet / react-leaflet allowed, other wrapped packages still banned.
+  {
+    files: ["src/shared/components/organisms/map-picker/**/*.{ts,tsx}"],
+    rules: {
+      "@typescript-eslint/no-restricted-imports": restrictImports(
+        [SHARED_TO_FEATURE],
+        WRAPPED.filter((path) => !MAP_PACKAGES.includes(path)),
+        WRAPPED_PATTERNS.filter((pattern) => !MAP_PATTERNS.includes(pattern)),
+      ),
+    },
+  },
+  // 6. Wrappers + shadcn vendor files may use the wrapped packages (keep LAST).
   {
     files: ["src/shared/lib/**/*.{ts,tsx}", "src/shared/components/ui/**/*.{ts,tsx}"],
     rules: {
