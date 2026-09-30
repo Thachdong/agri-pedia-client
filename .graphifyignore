@@ -1,0 +1,53 @@
+# graphify ignore — gitignore syntax
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/
+
+# lockfiles
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# build / output
+.next/
+out/
+build/
+dist/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# graphify output
+graphify-out/
+
+# specs docs
+specs/
+
+# agent / editor config
+.git/
+.vercel/
+.claude/
+.vscode/
+.idea/
+.DS_Store
+
+# env / secrets
+.env*
+*.pem
+
+# logs
+*.log
+
+# static binary assets (low signal)
+public/**/*.svg
+public/**/*.ico
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.woff
+*.woff2
