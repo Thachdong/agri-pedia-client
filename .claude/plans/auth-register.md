@@ -20,7 +20,7 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 14. [atomic-component]     organism  MapPicker          (new, shared)   Leaflet client-only (dynamic ssr:false), click đặt marker, kéo marker, value/onChange {lat, long}
 - [x] 15. [atomic-component]     organism  AuthHeader         (new, feature auth)   logo AgriPedia + "Back To Home"
 - [x] 16. [atomic-component]     organism  LocationPickerField (new, feature location)   hiển thị lat/long + nút "Chọn trên bản đồ" → Dialog chứa MapPicker (Xác nhận / Huỷ) + nút "Dùng vị trí hiện tại"
-- [ ] 17. [atomic-component]     organism  AddressFields      (new, feature location)   province/ward select + houseNumber + LocationPickerField
+- [x] 17. [atomic-component]     organism  AddressFields      (new, feature location)   province/ward select + houseNumber + LocationPickerField
 - [ ] 18. [atomic-component]     organism  RegisterForm       (new, feature auth)   useAppForm + registerSchema + useRegister, lỗi server (USER_IDENTIFIER_ALREADY_USED → identifier), handoff + redirect theo role
 - [ ] 19. [atomic-component]     template  AuthLayout         (new, shared)   header slot + card căn giữa, body scroll-y, footer slot
 - [ ] 20. [page]                 /auth/register ← AuthLayout + AuthHeader + RegisterForm + AuthFooterLinks; prefetch provinces; metadata
