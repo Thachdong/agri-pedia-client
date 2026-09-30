@@ -22,8 +22,8 @@ Foundation: đủ — không cần data-wrapper / bff / design-token (dùng prim
 - [x] 8. [atomic-component]      organism  MarkerMap          (new, shared) — leaflet wrapper: markers + user marker + select + fit view; lint rule 5 mở cho marker-map (thay DistributorMap; mapping distributor → markers inline ở step 10)
 - [x] 9. [atomic-component]      organism  SiteHeader         (new, shared) — logo + Login / Register (guest); slot cho phần đã login sau này
 - [x] 10. [atomic-component]     organism  DistributorExplorer (new, feature) — xin định vị 1 lần khi mount (inline, dùng shared useGeolocation) + useNearbyDistributors + MarkerMap (map distributor → markers inline) + list, state selected chung → compound: DistributorExplorerProvider + DistributorExplorerMap + DistributorExplorerList (page đặt 2 panel vào slot template); chờ định vị tối đa 8s
-- [ ] 11. [page]                 template MapListLayout + page / ← DistributorExplorer
-- [ ] 12. [arch-review]
+- [x] 11. [page]                 template MapListLayout + page / ← DistributorExplorer
+- [x] 12. [arch-review]
 
 Components (in order):
   [atom]      Avatar               new    shared
