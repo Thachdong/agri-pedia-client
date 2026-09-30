@@ -16,7 +16,7 @@ import {
   SelectValue,
   Textarea,
 } from "@/shared/components/atoms";
-import { FormField } from "@/shared/components/molecules";
+import { FormField, PasswordInput } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { applyServerErrors, useAppForm } from "@/shared/lib/form";
 import { isAppError } from "@/shared/lib/http";
@@ -144,12 +144,12 @@ export function RegisterForm({ className }: TRegisterFormProps) {
           </FormField>
 
           <FormField id="password" label="Mật khẩu" description="8–128 ký tự" error={errors.password?.message} required>
-            {(control) => <Input {...control} {...form.register("password")} type="password" autoComplete="new-password" />}
+            {(control) => <PasswordInput {...control} {...form.register("password")} autoComplete="new-password" />}
           </FormField>
 
           <FormField id="confirmPassword" label="Xác nhận mật khẩu" error={errors.confirmPassword?.message} required>
             {(control) => (
-              <Input {...control} {...form.register("confirmPassword")} type="password" autoComplete="new-password" />
+              <PasswordInput {...control} {...form.register("confirmPassword")} autoComplete="new-password" />
             )}
           </FormField>
 

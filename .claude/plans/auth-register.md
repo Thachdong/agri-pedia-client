@@ -25,10 +25,12 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 19. [atomic-component]     template  AuthLayout         (new, shared)   header slot + card căn giữa, body scroll-y, footer slot
 - [x] 20. [page]                 /auth/register ← AuthLayout + AuthHeader + RegisterForm + AuthFooterLinks; prefetch provinces; metadata
 - [x] 21. [arch-review]
+- [x] 22. [atomic-component]     molecule  PasswordInput      (new, shared)   nút eye ẩn/hiện mật khẩu — dùng cho password + confirmPassword (thêm theo yêu cầu)
 
 Components (in order):
   [atom]      Button, Input, Label, Textarea, Select, Tabs, RadioGroup, Dialog   new  shared (shadcn)
   [molecule]  FormField           new    shared
+  [molecule]  PasswordInput       new    shared
   [molecule]  LoginTypeTabs       new    feature auth
   [molecule]  AuthFooterLinks     new    feature auth
   [organism]  MapPicker           new    shared
