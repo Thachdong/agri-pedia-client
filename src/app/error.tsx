@@ -19,5 +19,6 @@ export default function HomeError({ error, retry }: { error: Error & { digest?: 
     </div>
   );
 
-  return <MapListLayout header={<SiteHeader />} map={<div className="size-full bg-muted" />} list={message} />;
+  // actions rỗng: không biết phiên đang ở trạng thái nào.
+  return <MapListLayout header={<SiteHeader actions={<></>} />} map={<div className="size-full bg-muted" />} list={message} />;
 }

@@ -1,5 +1,12 @@
 import "server-only";
-import { dehydrate, HydrationBoundary, type DehydratedState, type FetchQueryOptions } from "@tanstack/react-query";
+import {
+  dehydrate,
+  hashKey,
+  HydrationBoundary,
+  type DehydratedState,
+  type FetchQueryOptions,
+  type QueryKey,
+} from "@tanstack/react-query";
 import { makeQueryClient } from "./query-client";
 
 /**
@@ -22,4 +29,14 @@ export async function prefetch(queries: TPrefetchOptions[]): Promise<DehydratedS
 
 export function HydrateQueries({ state, children }: { state: DehydratedState; children: React.ReactNode }) {
   return <HydrationBoundary state={state}>{children}</HydrationBoundary>;
+}
+
+/**
+ * Đọc data một query vừa prefetch (vd. role của /users/me để redirect trên server).
+ * `undefined` khi query lỗi / chưa có data (prefetch không ném lỗi).
+ */
+export function getPrefetchedData<TData>(state: DehydratedState, queryKey: QueryKey): TData | undefined {
+  const hash = hashKey(queryKey);
+  const query = state.queries.find((item) => item.queryHash === hash);
+  return query?.state.status === "success" ? (query.state.data as TData) : undefined;
 }
