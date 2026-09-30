@@ -61,6 +61,7 @@ export type TRegisterFormProps = { className?: string };
 export function RegisterForm({ className }: TRegisterFormProps) {
   const router = useRouter();
   const handoff = useAuthHandoff("register");
+  const loginHandoff = useAuthHandoff("login");
   const registerMutation = useRegister();
   const form = useAppForm<TRegisterFormValues>({ schema: registerSchema, defaultValues: DEFAULT_VALUES });
   const { errors, isSubmitted } = form.formState;
@@ -106,6 +107,7 @@ export function RegisterForm({ className }: TRegisterFormProps) {
           handoff.save({ loginType: input.loginType, identifier: input.identifier });
           router.push(ROUTES.auth.activate);
         } else {
+          loginHandoff.save({ loginType: input.loginType, identifier: input.identifier });
           router.push(ROUTES.auth.login);
         }
       },

@@ -48,6 +48,7 @@ export type TActivateFormProps = { className?: string };
 export function ActivateForm({ className }: TActivateFormProps) {
   const router = useRouter();
   const handoff = useAuthHandoff("register");
+  const loginHandoff = useAuthHandoff("login");
   const activateMutation = useActivate();
   const resendMutation = useResendCode("ACTIVATE_DISTRIBUTOR");
   const countdown = useCountdown();
@@ -128,6 +129,7 @@ export function ActivateForm({ className }: TActivateFormProps) {
       {
         onSuccess: () => {
           handoff.clear();
+          loginHandoff.save({ loginType: form.getValues("loginType"), identifier });
           router.push(ROUTES.auth.login);
         },
         onError: showDomainError,

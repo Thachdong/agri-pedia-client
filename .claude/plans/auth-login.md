@@ -5,9 +5,9 @@ Decisions: login không áp rule độ mạnh password (chỉ 1..128) | thành c
 Foundation: data-wrapper ✓ bff-auth ✓ (login route, /auth/login đã guest-only, LOGIN_NEXT_PARAM) bff-forward ✓ tokens ✓ arch-lint ✓
 
 - [x] 1. [feature-api]           POST /auth/login (qua BFF route) → TLoginInput, TLoginUser, login, useLogin (silent, invalidate toàn bộ)
-- [ ] 2. [validation-schema]     loginSchema — loginType, identifier theo loginType (email|phone), password bắt buộc (<=128)
-- [ ] 3. [shared-unit]           util getSafeNextPath (feature auth) — chỉ nhận path nội bộ "/..." (chặn "//", "http:", "/api"), fallback /
-- [ ] 4. [shared-unit]           handoff flow "login" (loginType + identifier) — ActivateForm (activate OK) + RegisterForm (FARMER OK) lưu trước khi redirect /auth/login
+- [x] 2. [validation-schema]     loginSchema — loginType, identifier theo loginType (email|phone), password bắt buộc (<=128)
+- [x] 3. [shared-unit]           util getSafeNextPath (feature auth) — chỉ nhận path nội bộ "/..." (chặn "//", "http:", "/api"), fallback /
+- [x] 4. [shared-unit]           handoff flow "login" (loginType + identifier) — ActivateForm (activate OK) + RegisterForm (FARMER OK) lưu trước khi redirect /auth/login
 - [ ] 5. [atomic-component]      organism  LoginForm          (new, feature auth) tabs EMAIL|PHONE (đổi tab clear identifier), identifier, PasswordInput, LOGIN loading; init từ handoff "login" (điền sẵn, focus password | focus identifier); lỗi → form; thành công → clear handoff + redirect next
 - [ ] 6. [page]                  /auth/login ← AuthLayout + AuthHeader + LoginForm(next từ searchParams) + AuthFooterLinks(register, activate, resetPassword); metadata; loading/error
 - [ ] 7. [arch-review]

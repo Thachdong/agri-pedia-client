@@ -20,7 +20,10 @@ export type TRegisterFormValues = TRegisterInput & { confirmPassword: string };
 export type TActivateFormValues = TActivateInput & { loginType: TLoginType };
 
 /** Luồng có chuyển dữ liệu sang trang kế tiếp qua sessionStorage. */
-export type TAuthHandoffFlow = "register" | "reset-password";
+export type TAuthHandoffFlow = "register" | "reset-password" | "login";
 
-/** register → /auth/activate; reset-password → /auth/change-password. `at` = epoch ms lúc gửi code. */
+/**
+ * register → /auth/activate; reset-password → /auth/change-password: `at` = epoch ms lúc gửi code.
+ * login → /auth/login (sau đăng ký FARMER / kích hoạt thành công): chỉ để điền sẵn, `at` không dùng.
+ */
 export type TAuthHandoff = { loginType: TLoginType; identifier: string; at: number };
