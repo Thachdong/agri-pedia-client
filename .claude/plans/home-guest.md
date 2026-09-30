@@ -13,7 +13,7 @@ Foundation: đủ — không cần data-wrapper / bff / design-token (dùng prim
 
 - [x] 1. [feature-scaffold]      feature `distributor` — layers: components, hooks, services, types, constants, utils
 - [x] 2. [feature-api]           GET /distributors/nearby → TNearbyDistributor, TNearbyParams, getNearbyDistributors, useNearbyDistributors (infinite, page-based); keys distributors.nearby(params)
-- [ ] 3. [shared-unit]           constant BUSINESS_TYPE_LABELS + util formatDistance (feature distributor)
+- [x] 3. [shared-unit]           constant BUSINESS_TYPE_OPTIONS/LABELS + type TBusinessType (chuyển từ auth sang shared) + util formatDistance (shared)
 - [ ] 4. [shared-unit]           hook useGuestLocation (feature distributor) — auto request định vị khi mount, trả status + coords (dựa trên shared useGeolocation)
 - [ ] 5. [atomic-component]      atom      Avatar             (new, shared)
 - [ ] 6. [atomic-component]      molecule  DistributorCard    (new, feature)

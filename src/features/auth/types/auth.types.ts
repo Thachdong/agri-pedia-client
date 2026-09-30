@@ -13,7 +13,7 @@ export type TLoginUser = TApiSchema<"UserProfileResponse">;
 export type TOtpPurpose = TResendCodeInput["purpose"];
 export type TLoginType = TRegisterInput["loginType"];
 export type TUserRole = TRegisterInput["role"];
-export type TBusinessType = NonNullable<TRegisterInput["bussinessType"]>;
+export type { TBusinessType } from "@/shared/types";
 
 /** Giá trị form đăng ký — thêm `confirmPassword` (chỉ client, không gửi API). */
 export type TRegisterFormValues = TRegisterInput & { confirmPassword: string };

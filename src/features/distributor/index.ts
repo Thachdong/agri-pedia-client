@@ -2,7 +2,6 @@
 export { nearbyDistributorsQuery } from "./hooks/distributor.queries";
 export { useNearbyDistributors } from "./hooks/use-nearby-distributors";
 export type {
-  TBusinessType,
   TNearbyDistributor,
   TNearbyDistributorsParams,
   TNearbyDistributorsView,

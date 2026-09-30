@@ -1,5 +1,6 @@
+import { BUSINESS_TYPE_OPTIONS } from "@/shared/constants";
 import { rules, schema, v } from "@/shared/lib/validation";
-import { BUSINESS_TYPE_OPTIONS, LOGIN_TYPES, ROLE_OPTIONS } from "../constants/auth.constants";
+import { LOGIN_TYPES, ROLE_OPTIONS } from "../constants/auth.constants";
 import type { TRegisterFormValues } from "../types/auth.types";
 
 const ROLES = ROLE_OPTIONS.map((option) => option.value);

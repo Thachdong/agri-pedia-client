@@ -3,7 +3,6 @@ import type { TApiPaths, TApiSchema } from "@/shared/lib/http";
 export type TNearbyDistributor = TApiSchema<"NearbyDistributorResponse">;
 export type TNearbyDistributorsResponse = TApiSchema<"FindNearbyDistributorsResponse">;
 export type TNearbyScope = TNearbyDistributorsResponse["scope"];
-export type TBusinessType = NonNullable<TNearbyDistributor["bussinessType"]>;
 
 type TNearbyQuery = NonNullable<TApiPaths["/distributors/nearby"]["get"]["parameters"]["query"]>;
 
