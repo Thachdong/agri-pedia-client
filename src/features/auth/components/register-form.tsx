@@ -127,107 +127,107 @@ export function RegisterForm({ className }: TRegisterFormProps) {
     <form onSubmit={onSubmit} noValidate className={cn("flex min-h-0 flex-1 flex-col gap-4", className)}>
       <LoginTypeTabs value={loginType} onValueChange={changeLoginType} disabled={isSubmitting} />
 
-      <fieldset
-        disabled={isSubmitting}
-        className="scrollbar-thin -mx-1 flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-1 pb-1"
-      >
-        <FormField id="identifier" label={IDENTIFIER_LABELS[loginType]} error={errors.identifier?.message} required>
-          {(control) => (
-            <Input
-              {...control}
-              {...form.register("identifier")}
-              type={loginType === "EMAIL" ? "email" : "tel"}
-              inputMode={loginType === "EMAIL" ? "email" : "tel"}
-              autoComplete={loginType === "EMAIL" ? "email" : "tel"}
-              placeholder={loginType === "EMAIL" ? "ban@example.com" : "0901 234 567"}
-            />
-          )}
-        </FormField>
-
-        <FormField id="password" label="Mật khẩu" description="8–128 ký tự" error={errors.password?.message} required>
-          {(control) => <Input {...control} {...form.register("password")} type="password" autoComplete="new-password" />}
-        </FormField>
-
-        <FormField id="confirmPassword" label="Xác nhận mật khẩu" error={errors.confirmPassword?.message} required>
-          {(control) => (
-            <Input {...control} {...form.register("confirmPassword")} type="password" autoComplete="new-password" />
-          )}
-        </FormField>
-
-        <FormField
-          id="username"
-          label="Tên hiển thị"
-          description="Bỏ trống sẽ dùng email/số điện thoại"
-          error={errors.username?.message}
-        >
-          {(control) => <Input {...control} {...form.register("username")} autoComplete="nickname" maxLength={100} />}
-        </FormField>
-
-        <fieldset className="flex flex-col gap-2">
-          <legend className="mb-2 text-sm font-medium">
-            Bạn là
-            <span className="text-destructive" aria-hidden>
-              *
-            </span>
-          </legend>
-          <RadioGroup
-            value={role}
-            onValueChange={(next) => changeRole(next as TUserRole)}
-            className="grid-cols-1 sm:grid-cols-2"
-          >
-            {ROLE_OPTIONS.map((option) => (
-              <Label
-                key={option.value}
-                htmlFor={`role-${option.value}`}
-                className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 has-data-checked:border-primary has-data-checked:bg-surface"
-              >
-                <RadioGroupItem id={`role-${option.value}`} value={option.value} className="mt-0.5" />
-                <span className="flex flex-col gap-0.5">
-                  <span>{option.label}</span>
-                  <span className="text-xs font-normal text-muted-foreground">{option.description}</span>
-                </span>
-              </Label>
-            ))}
-          </RadioGroup>
-        </fieldset>
-
-        {role === "DISTRIBUTOR" && (
-          <FormField id="bussinessType" label="Loại hình kinh doanh" error={errors.bussinessType?.message} required>
+      {/* Vùng cuộn phải là div: fieldset không co theo min-h-0/overflow trong flex (Chrome). */}
+      <div className="scrollbar-thin -mx-1 min-h-0 flex-1 overflow-y-auto px-1 pb-1">
+        <fieldset disabled={isSubmitting} className="flex min-w-0 flex-col gap-4">
+          <FormField id="identifier" label={IDENTIFIER_LABELS[loginType]} error={errors.identifier?.message} required>
             {(control) => (
-              <Select
-                value={bussinessType ?? ""}
-                onValueChange={(next) =>
-                  form.setValue("bussinessType", next as TBusinessType, { shouldDirty: true, shouldValidate: true })
-                }
-              >
-                <SelectTrigger className="w-full" {...control}>
-                  <SelectValue placeholder="Chọn loại hình kinh doanh" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {BUSINESS_TYPE_OPTIONS.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input
+                {...control}
+                {...form.register("identifier")}
+                type={loginType === "EMAIL" ? "email" : "tel"}
+                inputMode={loginType === "EMAIL" ? "email" : "tel"}
+                autoComplete={loginType === "EMAIL" ? "email" : "tel"}
+                placeholder={loginType === "EMAIL" ? "ban@example.com" : "0901 234 567"}
+              />
             )}
           </FormField>
-        )}
 
-        <FormField id="bio" label="Giới thiệu" error={errors.bio?.message}>
-          {(control) => <Textarea {...control} {...form.register("bio")} rows={3} maxLength={1000} />}
-        </FormField>
+          <FormField id="password" label="Mật khẩu" description="8–128 ký tự" error={errors.password?.message} required>
+            {(control) => <Input {...control} {...form.register("password")} type="password" autoComplete="new-password" />}
+          </FormField>
 
-        <AddressFields
-          idPrefix="address"
-          value={address}
-          onChange={changeAddress}
-          onBlur={(field) => void form.trigger(ADDRESS_FIELDS[field])}
-          errors={addressErrors}
-          disabled={isSubmitting}
-        />
-      </fieldset>
+          <FormField id="confirmPassword" label="Xác nhận mật khẩu" error={errors.confirmPassword?.message} required>
+            {(control) => (
+              <Input {...control} {...form.register("confirmPassword")} type="password" autoComplete="new-password" />
+            )}
+          </FormField>
+
+          <FormField
+            id="username"
+            label="Tên hiển thị"
+            description="Bỏ trống sẽ dùng email/số điện thoại"
+            error={errors.username?.message}
+          >
+            {(control) => <Input {...control} {...form.register("username")} autoComplete="nickname" maxLength={100} />}
+          </FormField>
+
+          <fieldset className="flex flex-col gap-2">
+            <legend className="mb-2 text-sm font-medium">
+              Bạn là
+              <span className="text-destructive" aria-hidden>
+                *
+              </span>
+            </legend>
+            <RadioGroup
+              value={role}
+              onValueChange={(next) => changeRole(next as TUserRole)}
+              className="grid-cols-1 sm:grid-cols-2"
+            >
+              {ROLE_OPTIONS.map((option) => (
+                <Label
+                  key={option.value}
+                  htmlFor={`role-${option.value}`}
+                  className="flex cursor-pointer items-start gap-3 rounded-lg border border-border p-3 has-data-checked:border-primary has-data-checked:bg-surface"
+                >
+                  <RadioGroupItem id={`role-${option.value}`} value={option.value} className="mt-0.5" />
+                  <span className="flex flex-col gap-0.5">
+                    <span>{option.label}</span>
+                    <span className="text-xs font-normal text-muted-foreground">{option.description}</span>
+                  </span>
+                </Label>
+              ))}
+            </RadioGroup>
+          </fieldset>
+
+          {role === "DISTRIBUTOR" && (
+            <FormField id="bussinessType" label="Loại hình kinh doanh" error={errors.bussinessType?.message} required>
+              {(control) => (
+                <Select
+                  value={bussinessType ?? ""}
+                  onValueChange={(next) =>
+                    form.setValue("bussinessType", next as TBusinessType, { shouldDirty: true, shouldValidate: true })
+                  }
+                >
+                  <SelectTrigger className="w-full" {...control}>
+                    <SelectValue placeholder="Chọn loại hình kinh doanh" />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {BUSINESS_TYPE_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </FormField>
+          )}
+
+          <FormField id="bio" label="Giới thiệu" error={errors.bio?.message}>
+            {(control) => <Textarea {...control} {...form.register("bio")} rows={3} maxLength={1000} />}
+          </FormField>
+
+          <AddressFields
+            idPrefix="address"
+            value={address}
+            onChange={changeAddress}
+            onBlur={(field) => void form.trigger(ADDRESS_FIELDS[field])}
+            errors={addressErrors}
+            disabled={isSubmitting}
+          />
+        </fieldset>
+      </div>
 
       <div className="flex flex-col gap-2">
         {rootError && (

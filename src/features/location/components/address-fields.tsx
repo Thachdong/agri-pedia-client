@@ -47,7 +47,7 @@ export function AddressFields({ idPrefix, value, onChange, onBlur, errors = {}, 
   const wardPlaceholder = !value.province ? "Chọn tỉnh/thành phố trước" : wards.isPending ? "Đang tải…" : "Chọn phường/xã";
 
   return (
-    <fieldset className={cn("flex flex-col gap-4", className)} disabled={disabled}>
+    <fieldset className={cn("flex min-w-0 flex-col gap-4", className)} disabled={disabled}>
       <legend className="mb-2 text-sm font-semibold">Địa chỉ</legend>
 
       <FormField id={ids.province} label="Tỉnh/Thành phố" error={errors.province} required>

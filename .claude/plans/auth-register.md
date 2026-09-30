@@ -24,7 +24,7 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 18. [atomic-component]     organism  RegisterForm       (new, feature auth)   useAppForm + registerSchema + useRegister, lỗi server (USER_IDENTIFIER_ALREADY_USED → identifier), handoff + redirect theo role
 - [x] 19. [atomic-component]     template  AuthLayout         (new, shared)   header slot + card căn giữa, body scroll-y, footer slot
 - [x] 20. [page]                 /auth/register ← AuthLayout + AuthHeader + RegisterForm + AuthFooterLinks; prefetch provinces; metadata
-- [ ] 21. [arch-review]
+- [x] 21. [arch-review]
 
 Components (in order):
   [atom]      Button, Input, Label, Textarea, Select, Tabs, RadioGroup, Dialog   new  shared (shadcn)
