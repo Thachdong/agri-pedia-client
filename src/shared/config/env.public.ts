@@ -5,4 +5,9 @@
 export const publicEnv = {
   isDev: process.env.NODE_ENV === "development",
   isProd: process.env.NODE_ENV === "production",
+  /** Tile server của map (Leaflet `{s}/{z}/{x}/{y}`). Mặc định OSM public — traffic lớn nên đổi provider. */
+  mapTileUrl: process.env.NEXT_PUBLIC_MAP_TILE_URL || "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  mapTileAttribution:
+    process.env.NEXT_PUBLIC_MAP_TILE_ATTRIBUTION ||
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 } as const;

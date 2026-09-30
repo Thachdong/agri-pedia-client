@@ -1,8 +1,13 @@
 import "server-only";
-import { dehydrate, HydrationBoundary, type DehydratedState, type QueryClient } from "@tanstack/react-query";
+import { dehydrate, HydrationBoundary, type DehydratedState, type FetchQueryOptions } from "@tanstack/react-query";
 import { makeQueryClient } from "./query-client";
 
-type TPrefetchOptions = Parameters<QueryClient["prefetchQuery"]>[0];
+/**
+ * Mỗi phần tử có data/key riêng → không gom được về một generic chung.
+ * `unknown` không nhận được options có kiểu cụ thể (staleTime/queryFn là hàm, tham số contravariant) → dùng `any`.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TPrefetchOptions = FetchQueryOptions<any, any, any, any>;
 
 /**
  * Prefetch trên server rồi dehydrate — dùng ở `page.tsx`:
