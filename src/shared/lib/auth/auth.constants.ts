@@ -17,6 +17,8 @@ export const GUEST_ONLY_PATHS: readonly string[] = [
   ROUTES.auth.login,
   ROUTES.auth.register,
   ROUTES.auth.activate,
+  ROUTES.auth.resetPassword,
+  ROUTES.auth.changePassword,
 ];
 
 /** Chưa đăng nhập mà vào các trang này (và trang con) → về LOGIN_PATH. Wireframe hiện chưa có trang private. */

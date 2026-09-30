@@ -5,6 +5,8 @@ export type TRegisterAddressInput = TApiSchema<"RegisterAddressDto">;
 export type TActivateInput = TApiSchema<"ActivateAccountDto">;
 export type TResendCodeInput = TApiSchema<"ResendCodeDto">;
 export type TLoginInput = TApiSchema<"LoginUserDto">;
+export type TRequestPasswordResetInput = TApiSchema<"RequestPasswordResetDto">;
+export type TConfirmPasswordResetInput = TApiSchema<"ConfirmPasswordResetDto">;
 /** Profile trả về khi đăng nhập — token nằm ở cookie httpOnly (BFF), browser không thấy. */
 export type TLoginUser = TApiSchema<"LoginUserProfileResponse">;
 /** Loại code: ACTIVATE_DISTRIBUTOR (gửi lúc đăng ký) | RESET_PASSWORD. */
