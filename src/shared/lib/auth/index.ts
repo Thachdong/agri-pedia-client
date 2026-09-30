@@ -4,6 +4,7 @@ export {
   clearAuthCookies,
   getAccessToken,
   getRefreshToken,
+  hasSession,
   setAuthCookies,
   type TTokenPair,
 } from "./auth-cookies";

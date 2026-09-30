@@ -46,3 +46,13 @@ export async function getAccessToken(): Promise<string | undefined> {
 export async function getRefreshToken(): Promise<string | undefined> {
   return (await cookies()).get(REFRESH_TOKEN_COOKIE)?.value;
 }
+
+/**
+ * Có phiên đăng nhập = còn cookie access hoặc refresh (cùng quy tắc với `src/proxy.ts`).
+ * Chỉ đọc cookie, không verify token — access hết hạn sẽ được BFF refresh khi gọi API.
+ * Dùng ở Server Component để rẽ nhánh UI guest / đã đăng nhập (làm route thành dynamic).
+ */
+export async function hasSession(): Promise<boolean> {
+  const store = await cookies();
+  return store.has(ACCESS_TOKEN_COOKIE) || store.has(REFRESH_TOKEN_COOKIE);
+}

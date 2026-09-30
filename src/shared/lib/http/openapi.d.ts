@@ -120,6 +120,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/auth/realtime-ticket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Issue a realtime ticket for the caller
+         * @description For browsers behind a BFF that must not hold the access token: the BFF calls this with the access token and hands only the ticket to the browser, which opens the socket.io connection with `auth: { ticket }`. The ticket expires after `expiresIn` seconds (default 30) and only needs to be valid at the handshake; fetch a new one for every connect/reconnect. It is not accepted as an access token. An invalid or expired ticket fails the handshake with connect_error AUTH_INVALID_ACCESS_TOKEN.
+         */
+        post: operations["AuthController_realtimeTicket"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/users/me": {
         parameters: {
             query?: never;
@@ -482,9 +502,29 @@ export interface paths {
         };
         /**
          * List the caller's chat rooms with unread counts
-         * @description Any logged-in user. Rooms the caller is a member of, most recent message first (`lastMessageAt` desc). `unreadCount` = messages from the other member not read by the caller; a message is read when it arrives while the caller has the room open (socket `chat.room.enter`), or once the caller enters the room later. The caller’s own messages never count. `totalUnread` covers all rooms, not only this page. `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` for the next page (null on the last page).
+         * @description Any logged-in user. Rooms the caller is a member of, most recent message first (`lastMessageAt` desc). Each room carries the other member: `otherUserId`, `otherUsername` (null if that user no longer exists) and `otherUserAvatar` (signed read URL that expires; null when none). `unreadCount` = messages from the other member not read by the caller; a message is read when it arrives while the caller has the room open (socket `chat.room.enter`), or once the caller enters the room later. The caller’s own messages never count. `totalUnread` covers all rooms, not only this page. `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` for the next page (null on the last page).
          */
         get: operations["ChatController_listMyRooms"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/chat/rooms/{roomId}/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the messages of a chat room
+         * @description Caller must be a member of the room. Newest message first (`createdAt` desc); `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` to get older messages (null on the last page). Read-only: does not mark messages read (socket `chat.room.enter` does). New messages arrive live through socket `chat.message.received`.
+         */
+        get: operations["ChatController_listMessages"];
         put?: never;
         post?: never;
         delete?: never;
@@ -589,6 +629,10 @@ export interface components {
         ChangePasswordDto: {
             oldPassword: string;
             newPassword: string;
+        };
+        IssueRealtimeTicketResponse: {
+            ticket: string;
+            expiresIn: number;
         };
         AvatarFileDto: {
             /** @enum {string} */
@@ -819,6 +863,8 @@ export interface components {
         ChatRoomResponse: {
             roomId: string;
             otherUserId: string;
+            otherUsername: string | null;
+            otherUserAvatar: string | null;
             lastMessage: components["schemas"]["ChatRoomLastMessageResponse"] | null;
             /** Format: date-time */
             lastMessageAt: string;
@@ -827,6 +873,17 @@ export interface components {
         ListMyChatRoomsResponse: {
             totalUnread: number;
             rooms: components["schemas"]["ChatRoomResponse"][];
+            nextCursor: string | null;
+        };
+        RoomMessageResponse: {
+            id: string;
+            senderId: string;
+            message: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ListRoomMessagesResponse: {
+            messages: components["schemas"]["RoomMessageResponse"][];
             nextCursor: string | null;
         };
     };
@@ -1056,6 +1113,52 @@ export interface operations {
             };
             /** @description AUTH_INVALID_ACCESS_TOKEN */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AuthController_realtimeTicket: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["IssueRealtimeTicketResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_ACTIVE */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -2069,6 +2172,66 @@ export interface operations {
             };
             /** @description AUTH_INVALID_ACCESS_TOKEN */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ChatController_listMessages: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                roomId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListRoomMessagesResponse"];
+                };
+            };
+            /** @description Request validation failed, or: CHAT_INVALID_CURSOR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description CHAT_NOT_ROOM_MEMBER */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description CHAT_ROOM_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

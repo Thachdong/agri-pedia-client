@@ -24,6 +24,7 @@ const WRAPPED = [
   { name: "joi", message: "Use @/shared/lib/validation." },
   { name: "react-hook-form", message: "Use @/shared/lib/form." },
   { name: "@hookform/resolvers", message: "Use @/shared/lib/form." },
+  { name: "socket.io-client", message: "Use @/shared/lib/realtime." },
   ...MAP_PACKAGES,
 ];
 const WRAPPED_PATTERNS = [{ group: ["@hookform/resolvers/*"], message: "Use @/shared/lib/form." }, ...MAP_PATTERNS];
