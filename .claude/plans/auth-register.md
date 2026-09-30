@@ -13,7 +13,7 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 7. [arch-lint-setup]       cài leaflet + react-leaflet (+ @types/leaflet); rule: chỉ MapPicker được import leaflet/react-leaflet
 - [x] 8. [shared-unit]           hook useGeolocation (shared) — request, loading, coords, error
 - [x] 9. [shared-unit]           hook useAuthHandoff(flow) (feature auth) — sessionStorage save/read/clear {loginType, identifier, at} (util → hook: util phải pure)
-- [ ] 10. [atomic-component]     atoms shadcn (shared/ui): Button, Input, Label, Textarea, Select, Tabs, RadioGroup, Dialog — gộp 1 step vì là shadcn generate
+- [x] 10. [atomic-component]     atoms shadcn (shared/ui): Button, Input, Label, Textarea, Select, Tabs, RadioGroup, Dialog — gộp 1 step vì là shadcn generate
 - [ ] 11. [atomic-component]     molecule  FormField          (new, shared)   label + control + error
 - [ ] 12. [atomic-component]     molecule  LoginTypeTabs      (new, feature auth)   EMAIL | PHONE, đổi tab clear identifier
 - [ ] 13. [atomic-component]     molecule  AuthFooterLinks    (new, feature auth)   links đăng ký / đăng nhập / kích hoạt / reset (cấu hình theo page)
