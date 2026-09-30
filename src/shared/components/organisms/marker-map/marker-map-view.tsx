@@ -5,8 +5,9 @@ import { divIcon, latLngBounds } from "leaflet";
 import { useEffect, useEffectEvent } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMap } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
-import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/shared/constants";
+import { VN_BOUNDS } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
+import { InvalidateOnResize, isWithinBounds, LockToBounds } from "@/shared/lib/map";
 import { cn } from "@/shared/lib/utils";
 import {
   DEFAULT_USER_LABEL,
@@ -46,12 +47,12 @@ const toLatLng = ({ lat, long }: TCoordinates): [number, number] => [lat, long];
 /**
  * Fit khung nhìn quanh người xem + các marker gần nhất.
  * Chỉ chạy lại khi vị trí người xem hoặc marker đầu đổi (kết quả mới) — tải thêm trang không làm map nhảy.
- * Không có vị trí người xem → giữ khung cả nước.
+ * Không có vị trí người xem, hoặc người xem ở ngoài Việt Nam → giữ khung cả nước.
  */
 function FitToUser({ userLocation, markers }: { userLocation?: TCoordinates | null; markers: TMapMarker[] }) {
   const map = useMap();
   const fit = useEffectEvent(() => {
-    if (!userLocation) return;
+    if (!userLocation || !isWithinBounds(VN_BOUNDS, userLocation)) return;
     const points = [userLocation, ...markers.slice(0, FIT_NEAREST_COUNT).map((marker) => marker.position)].map(toLatLng);
     if (points.length === 1) map.setView(points[0], USER_ONLY_ZOOM);
     else map.fitBounds(latLngBounds(points), { padding: [40, 40], maxZoom: FIT_MAX_ZOOM });
@@ -60,17 +61,6 @@ function FitToUser({ userLocation, markers }: { userLocation?: TCoordinates | nu
   useEffect(() => {
     fit();
   }, [userLocation, firstId]);
-  return null;
-}
-
-/** Container đổi kích thước (layout responsive, xoay màn hình) → Leaflet tính lại, tránh tile bị xám. */
-function InvalidateOnResize() {
-  const map = useMap();
-  useEffect(() => {
-    const observer = new ResizeObserver(() => map.invalidateSize());
-    observer.observe(map.getContainer());
-    return () => observer.disconnect();
-  }, [map]);
   return null;
 }
 
@@ -85,9 +75,10 @@ export function MarkerMapView({
 }: TMarkerMapProps) {
   return (
     <div className={cn("size-full overflow-hidden", className)}>
-      <MapContainer center={DEFAULT_MAP_CENTER} zoom={DEFAULT_MAP_ZOOM} className="size-full" aria-label={ariaLabel}>
+      <MapContainer bounds={VN_BOUNDS} maxBoundsViscosity={1} className="size-full" aria-label={ariaLabel}>
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
         <InvalidateOnResize />
+        <LockToBounds bounds={VN_BOUNDS} />
         <FitToUser userLocation={userLocation} markers={markers} />
         {userLocation && (
           <Marker position={toLatLng(userLocation)} icon={USER_ICON} interactive={false} zIndexOffset={-100} title={userLabel}>

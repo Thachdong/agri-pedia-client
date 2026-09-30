@@ -5,8 +5,9 @@ import { divIcon, type LeafletMouseEvent, type Marker as TLeafletMarker } from "
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
-import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/shared/constants";
+import { VN_BOUNDS } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
+import { InvalidateOnResize, LockToBounds } from "@/shared/lib/map";
 import { cn } from "@/shared/lib/utils";
 import { SELECTED_ZOOM, type TMapPickerProps } from "./map-picker.types";
 
@@ -36,17 +37,6 @@ function FlyTo({ focus }: { focus?: TCoordinates | null }) {
   return null;
 }
 
-/** Container đổi kích thước (dialog mở có animation, xoay màn hình) → Leaflet tính lại, tránh tile bị xám. */
-function InvalidateOnResize() {
-  const map = useMap();
-  useEffect(() => {
-    const observer = new ResizeObserver(() => map.invalidateSize());
-    observer.observe(map.getContainer());
-    return () => observer.disconnect();
-  }, [map]);
-  return null;
-}
-
 export function MapPickerView({ value, onChange, focus, className, "aria-label": ariaLabel }: TMapPickerProps) {
   const initial = value ?? focus;
   const markerHandlers = useMemo(
@@ -62,13 +52,14 @@ export function MapPickerView({ value, onChange, focus, className, "aria-label":
   return (
     <div className={cn("h-80 w-full overflow-hidden rounded-lg border border-border", className)}>
       <MapContainer
-        center={initial ? toLatLng(initial) : DEFAULT_MAP_CENTER}
-        zoom={initial ? SELECTED_ZOOM : DEFAULT_MAP_ZOOM}
+        {...(initial ? { center: toLatLng(initial), zoom: SELECTED_ZOOM } : { bounds: VN_BOUNDS })}
+        maxBoundsViscosity={1}
         className="size-full"
         aria-label={ariaLabel}
       >
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
         <InvalidateOnResize />
+        <LockToBounds bounds={VN_BOUNDS} />
         <ClickToPick onChange={onChange} />
         <FlyTo focus={focus} />
         {value && (
