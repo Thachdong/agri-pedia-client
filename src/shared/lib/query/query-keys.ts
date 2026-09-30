@@ -12,6 +12,8 @@
  * Type filter lấy từ feature bằng `import type` qua index của feature.
  */
 export const queryKeys = {
+  /** Prefix của MỌI query — chỉ dùng khi đổi phiên (login/logout) làm cả cache stale. */
+  all: [] as const,
   location: {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
