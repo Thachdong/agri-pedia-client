@@ -11,8 +11,8 @@ Foundation: đủ. `npm run gen:api` đã đổi LoginUserProfileResponse → Us
 - [x] 1. [feature-api]           POST /auth/login — TLoginUser = UserProfileResponse (sửa lỗi tsc sau gen:api), BFF route tự nhận `id` qua LoginUserResponse["user"]
 - [x] 2. [shared-unit]           constant ROUTES.profile(id) (shared)
 - [x] 3. [shared-unit]           util getPostLoginPath(user, next) (feature auth) — next an toàn nếu có, không thì theo role
-- [ ] 4. [atomic-component]      organism  LoginForm  (update, feature auth) onSuccess dùng user trả về + getPostLoginPath
-- [ ] 5. [arch-review]
+- [x] 4. [atomic-component]      organism  LoginForm  (update, feature auth) onSuccess dùng user trả về + getPostLoginPath
+- [x] 5. [arch-review]
 
 Components (in order):
   [organism]  LoginForm   update  feature auth
