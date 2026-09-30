@@ -60,3 +60,12 @@ export const RESET_PASSWORD_ERROR_FIELDS = {
   OTP_ACCOUNT_NOT_ACTIVE: { field: "root", message: "Tài khoản chưa được kích hoạt." },
   OTP_BLOCKED: { field: "root", message: "Yêu cầu reset mật khẩu tạm thời bị khoá do nhập sai mã quá nhiều lần." },
 } as const;
+
+/** Domain error của POST /auth/reset-password/confirm và POST /auth/resend (RESET_PASSWORD) → field (hoặc root) + message. */
+export const CHANGE_PASSWORD_ERROR_FIELDS = {
+  OTP_INVALID_CODE: { field: "code", message: "Mã xác nhận không đúng" },
+  OTP_EXPIRED: { field: "code", message: "Mã đã hết hạn, bấm Gửi lại để nhận mã mới" },
+  OTP_NOT_FOUND: { field: "identifier", message: "Chưa có yêu cầu reset mật khẩu cho tài khoản này" },
+  OTP_ALREADY_CONSUMED: { field: "root", message: "Mã đã được sử dụng." },
+  OTP_BLOCKED: { field: "root", message: "Mã tạm thời bị khoá do nhập sai hoặc gửi lại quá nhiều lần." },
+} as const;
