@@ -21,6 +21,9 @@ export type TRegisterFormValues = TRegisterInput & { confirmPassword: string };
 /** Giá trị form kích hoạt — thêm `loginType` (chỉ để chọn rule identifier, không gửi API). */
 export type TActivateFormValues = TActivateInput & { loginType: TLoginType };
 
+/** Giá trị form đổi mật khẩu bằng code — thêm `loginType` (chọn rule identifier) và `confirmPassword`; cả 2 chỉ client, không gửi API. */
+export type TChangePasswordFormValues = TConfirmPasswordResetInput & { loginType: TLoginType; confirmPassword: string };
+
 /** Luồng có chuyển dữ liệu sang trang kế tiếp qua sessionStorage. */
 export type TAuthHandoffFlow = "register" | "reset-password" | "login";
 
