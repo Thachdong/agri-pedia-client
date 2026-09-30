@@ -11,10 +11,10 @@ Foundation: data-wrapper ✓ bff-forward ✓ (/auth/activate, /auth/resend forwa
 - [x] 5. [shared-unit]           hook useCountdown (shared) — start(untilMs), remainingSeconds, isRunning
 - [x] 6. [atomic-component]      atom      InputOTP           (new, shared/ui)   shadcn generate (package input-otp): paste, autocomplete one-time-code, auto nhảy ô
 - [x] 7. [atomic-component]      molecule  OtpCodeInput       (new, shared)      InputOTP N ô, chỉ số, onComplete (để focus button), autoFocus, aria-invalid
-- [ ] 8. [atomic-component]      molecule  ResendCodeAction   (new, feature auth) "Chưa nhận được code? resend" + countdown mm:ss, disabled khi đếm/pending
-- [ ] 9. [atomic-component]      organism  ActivateForm       (new, feature auth) init từ handoff (loginType+identifier, focus code | default EMAIL, focus identifier), countdown theo `at`, resend (validate identifier trước), map lỗi OTP_* → field/form, thành công → clear handoff + /auth/login
-- [ ] 10. [page]                 /auth/activate ← AuthLayout + AuthHeader + ActivateForm + AuthFooterLinks(register, login, resetPassword); metadata; loading/error
-- [ ] 11. [arch-review]
+- [x] 8. [atomic-component]      molecule  ResendCodeAction   (new, feature auth) "Chưa nhận được code? resend" + countdown mm:ss, disabled khi đếm/pending
+- [x] 9. [atomic-component]      organism  ActivateForm       (new, feature auth) init từ handoff (loginType+identifier, focus code | default EMAIL, focus identifier), countdown theo `at`, resend (validate identifier trước), map lỗi OTP_* → field/form, thành công → clear handoff + /auth/login
+- [x] 10. [page]                 /auth/activate ← AuthLayout + AuthHeader + ActivateForm + AuthFooterLinks(register, login, resetPassword); metadata; loading/error
+- [x] 11. [arch-review]
 
 Components (in order):
   [atom]      InputOTP          new    shared (shadcn)

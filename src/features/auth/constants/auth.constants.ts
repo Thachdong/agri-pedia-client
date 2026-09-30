@@ -35,3 +35,15 @@ export const REGISTER_ERROR_FIELDS = {
   USER_BUSINESS_TYPE_REQUIRED: { field: "bussinessType", message: "Vui lòng chọn loại hình kinh doanh" },
   USER_BUSINESS_TYPE_NOT_ALLOWED: { field: "bussinessType", message: "Nông dân không chọn loại hình kinh doanh" },
 } as const;
+
+/** Chờ giữa 2 lần gửi code, tính từ lúc đăng ký / lần gửi lại gần nhất (ui-ux.md §2). */
+export const RESEND_CODE_COOLDOWN_MS = 3 * 60 * 1000;
+
+/** Domain error của POST /auth/activate và POST /auth/resend → field (hoặc root) + message hiển thị. */
+export const ACTIVATE_ERROR_FIELDS = {
+  OTP_INVALID_CODE: { field: "code", message: "Mã kích hoạt không đúng" },
+  OTP_EXPIRED: { field: "code", message: "Mã đã hết hạn, bấm Gửi lại để nhận mã mới" },
+  OTP_NOT_FOUND: { field: "identifier", message: "Không tìm thấy mã kích hoạt cho tài khoản này" },
+  OTP_ALREADY_CONSUMED: { field: "root", message: "Tài khoản đã được kích hoạt." },
+  OTP_BLOCKED: { field: "root", message: "Mã tạm thời bị khoá do nhập sai hoặc gửi lại quá nhiều lần." },
+} as const;
