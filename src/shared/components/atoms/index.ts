@@ -1,6 +1,7 @@
 // Atom có tuỳ biến riêng của project.
 export { Avatar, type TAvatarProps } from "./avatar";
 export { Button, type TButtonProps } from "./button";
+export { CountBadge, formatCount, type TCountBadgeProps } from "./count-badge";
 
 // Primitive shadcn dùng nguyên bản — import qua atoms, không import thẳng `ui/`.
 export {
