@@ -5,9 +5,10 @@ import { divIcon, type LeafletMouseEvent, type Marker as TLeafletMarker } from "
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
+import { DEFAULT_MAP_CENTER, DEFAULT_MAP_ZOOM } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
-import { DEFAULT_MAP_CENTER, DEFAULT_ZOOM, SELECTED_ZOOM, type TMapPickerProps } from "./map-picker.types";
+import { SELECTED_ZOOM, type TMapPickerProps } from "./map-picker.types";
 
 /** Pin SVG dùng currentColor → màu từ token (text-highlight), không phụ thuộc ảnh marker mặc định của Leaflet. */
 const PIN_ICON = divIcon({
@@ -62,7 +63,7 @@ export default function MapPickerView({ value, onChange, focus, className, "aria
     <div className={cn("h-80 w-full overflow-hidden rounded-lg border border-border", className)}>
       <MapContainer
         center={initial ? toLatLng(initial) : DEFAULT_MAP_CENTER}
-        zoom={initial ? SELECTED_ZOOM : DEFAULT_ZOOM}
+        zoom={initial ? SELECTED_ZOOM : DEFAULT_MAP_ZOOM}
         className="size-full"
         aria-label={ariaLabel}
       >

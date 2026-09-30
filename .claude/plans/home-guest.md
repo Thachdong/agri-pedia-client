@@ -18,10 +18,10 @@ Foundation: đủ — không cần data-wrapper / bff / design-token (dùng prim
 - [x] 4. ~~[shared-unit] hook useGuestLocation~~ — bỏ: chỉ dùng 1 chỗ, gộp inline vào step 10
 - [x] 5. [atomic-component]      atom      Avatar             (new, shared)
 - [x] 6. [atomic-component]      molecule  DistributorCard    (new, feature)
-- [ ] 7. [atomic-component]      organism  DistributorList    (new, feature) — infinite scroll, highlight + scroll tới item chọn, loading/empty/error, note scope; tra tên tỉnh từ codename qua useProvinces (@/features/location)
-- [ ] 8. [atomic-component]      organism  DistributorMap     (new, feature) — marker distributor + marker user, click marker chọn, center theo user / VN
+- [x] 7. [atomic-component]      organism  DistributorList    (new, feature) — infinite scroll, highlight + scroll tới item chọn, loading/empty/error, note scope; tra tên tỉnh từ codename qua useProvinces (@/features/location)
+- [x] 8. [atomic-component]      organism  MarkerMap          (new, shared) — leaflet wrapper: markers + user marker + select + fit view; lint rule 5 mở cho marker-map (thay DistributorMap; mapping distributor → markers inline ở step 10)
 - [ ] 9. [atomic-component]      organism  SiteHeader         (new, shared) — logo + Login / Register (guest); slot cho phần đã login sau này
-- [ ] 10. [atomic-component]     organism  DistributorExplorer (new, feature) — xin định vị 1 lần khi mount (inline, dùng shared useGeolocation) + useNearbyDistributors + map + list, state selected chung
+- [ ] 10. [atomic-component]     organism  DistributorExplorer (new, feature) — xin định vị 1 lần khi mount (inline, dùng shared useGeolocation) + useNearbyDistributors + MarkerMap (map distributor → markers inline) + list, state selected chung
 - [ ] 11. [page]                 template MapListLayout + page / ← DistributorExplorer
 - [ ] 12. [arch-review]
 
@@ -30,7 +30,7 @@ Components (in order):
   [atom]      Button               reuse  shared
   [molecule]  DistributorCard      new    feature distributor
   [organism]  DistributorList      new    feature distributor
-  [organism]  DistributorMap       new    feature distributor
+  [organism]  MarkerMap            new    shared (thay DistributorMap — leaflet chỉ được import trong wrapper shared)
   [organism]  SiteHeader           new    shared
   [organism]  DistributorExplorer  new    feature distributor
   [template]  MapListLayout        new    shared
