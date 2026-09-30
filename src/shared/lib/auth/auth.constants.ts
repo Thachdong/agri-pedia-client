@@ -13,7 +13,11 @@ export const HOME_PATH = ROUTES.home;
 export const LOGIN_NEXT_PARAM = "next";
 
 /** Đã đăng nhập mà vào các trang này → về HOME_PATH. */
-export const GUEST_ONLY_PATHS: readonly string[] = [ROUTES.auth.login, ROUTES.auth.register];
+export const GUEST_ONLY_PATHS: readonly string[] = [
+  ROUTES.auth.login,
+  ROUTES.auth.register,
+  ROUTES.auth.activate,
+];
 
 /** Chưa đăng nhập mà vào các trang này (và trang con) → về LOGIN_PATH. Wireframe hiện chưa có trang private. */
 export const PROTECTED_PATHS: readonly string[] = [];
