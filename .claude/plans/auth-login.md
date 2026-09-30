@@ -8,7 +8,7 @@ Foundation: data-wrapper ✓ bff-auth ✓ (login route, /auth/login đã guest-o
 - [x] 2. [validation-schema]     loginSchema — loginType, identifier theo loginType (email|phone), password bắt buộc (<=128)
 - [x] 3. [shared-unit]           util getSafeNextPath (feature auth) — chỉ nhận path nội bộ "/..." (chặn "//", "http:", "/api"), fallback /
 - [x] 4. [shared-unit]           handoff flow "login" (loginType + identifier) — ActivateForm (activate OK) + RegisterForm (FARMER OK) lưu trước khi redirect /auth/login
-- [ ] 5. [atomic-component]      organism  LoginForm          (new, feature auth) tabs EMAIL|PHONE (đổi tab clear identifier), identifier, PasswordInput, LOGIN loading; init từ handoff "login" (điền sẵn, focus password | focus identifier); lỗi → form; thành công → clear handoff + redirect next
+- [x] 5. [atomic-component]      organism  LoginForm          (new, feature auth) tabs EMAIL|PHONE (đổi tab clear identifier), identifier, PasswordInput, LOGIN loading; init từ handoff "login" (điền sẵn, focus password | focus identifier); lỗi → form; thành công → clear handoff + redirect next
 - [ ] 6. [page]                  /auth/login ← AuthLayout + AuthHeader + LoginForm(next từ searchParams) + AuthFooterLinks(register, activate, resetPassword); metadata; loading/error
 - [ ] 7. [arch-review]
 

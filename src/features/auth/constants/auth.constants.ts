@@ -47,3 +47,9 @@ export const ACTIVATE_ERROR_FIELDS = {
   OTP_ALREADY_CONSUMED: { field: "root", message: "Tài khoản đã được kích hoạt." },
   OTP_BLOCKED: { field: "root", message: "Mã tạm thời bị khoá do nhập sai hoặc gửi lại quá nhiều lần." },
 } as const;
+
+/** Domain error của POST /auth/login → message hiển thị dưới form (server không nói sai identifier hay password). */
+export const LOGIN_ERROR_MESSAGES = {
+  USER_INVALID_CREDENTIALS: "Email/số điện thoại hoặc mật khẩu không đúng.",
+  USER_NOT_ACTIVE: "Tài khoản chưa được kích hoạt.",
+} as const;
