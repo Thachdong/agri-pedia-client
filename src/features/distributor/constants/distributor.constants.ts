@@ -21,3 +21,9 @@ export const LIST_SKELETON_COUNT = 5;
  * Quá hạn → tải danh sách toàn quốc; vị trí về sau vẫn được dùng (query đổi key, tải lại).
  */
 export const LOCATE_WAIT_MS = 8_000;
+
+/** Nhãn marker người xem theo nguồn vị trí. */
+export const USER_LABELS = {
+  geolocation: "Bạn ở đây",
+  profile: "Địa chỉ của bạn",
+} as const;

@@ -44,7 +44,7 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 23. [atomic-component]    organism  ChatModal                (new, feature chat) — M2: messages infinite (cuộn lên), form gửi (useAppForm + schema), enter/leave room (hook useRoomPresence), loading/empty/error
 - [x] 24. [atomic-component]    organism  ChatRoomsMenu            (new, feature chat) — popover rooms, badge totalUnread, click → ChatModal
 - [x] 25. [atomic-component]    organism  UserMenu                 (new, feature user) — username + avatar, dropdown: Trang cá nhân, Đăng xuất
-- [ ] 26. [atomic-component]    organism  DistributorExplorerProvider (update, feature distributor) — origin "geolocation" (guest) | "profile" (useMe → address)
+- [x] 26. [atomic-component]    organism  DistributorExplorerProvider (update, feature distributor) — origin "geolocation" (guest) | "profile" (useMe → address)
 - [ ] 27. [page]                page / — rẽ nhánh hasSession: guest như cũ | FARMER: RealtimeProvider + SiteHeader actions (NotificationMenu, ChatRoomsMenu, UserMenu) + explorer "profile" | DISTRIBUTOR: redirect /profile/<id>
 - [ ] 28. [arch-review]
 
