@@ -11,4 +11,9 @@
  *
  * Type filter lấy từ feature bằng `import type` qua index của feature.
  */
-export const queryKeys = {} as const;
+export const queryKeys = {
+  location: {
+    all: ["location"] as const,
+    provinces: () => [...queryKeys.location.all, "provinces"] as const,
+  },
+} as const;
