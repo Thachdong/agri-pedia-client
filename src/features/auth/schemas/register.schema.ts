@@ -1,7 +1,7 @@
 import { rules, schema, v } from "@/shared/lib/validation";
+import { LOGIN_TYPES } from "../constants/auth.constants";
 import type { TRegisterFormValues } from "../types/auth.types";
 
-const LOGIN_TYPES = ["EMAIL", "PHONE"] as const;
 const ROLES = ["FARMER", "DISTRIBUTOR"] as const;
 const BUSINESS_TYPES = ["AGRICULTURAL_CHEMICAL_SUPPLIES", "SEEDS_SEEDLINGS", "AQUACULTURE_SEEDLINGS"] as const;
 
