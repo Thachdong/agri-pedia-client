@@ -8,8 +8,8 @@ Foundation: data-wrapper ✓ bff-forward ✓ (/auth/activate, /auth/resend forwa
 - [x] 2. [feature-api]           POST /auth/activate → TActivateInput, activate, useActivate (không invalidate)
 - [x] 3. [feature-api]           POST /auth/resend → TResendCodeInput, resendCode, useResendCode (purpose truyền vào — tái dùng cho change-password)
 - [x] 4. [validation-schema]     activateSchema — loginType, identifier theo loginType (email|phone), code đúng OTP_CODE_LENGTH chữ số
-- [ ] 5. [shared-unit]           hook useCountdown (shared) — start(untilMs), remainingSeconds, isRunning
-- [ ] 6. [atomic-component]      atom      InputOTP           (new, shared/ui)   shadcn generate (package input-otp): paste, autocomplete one-time-code, auto nhảy ô
+- [x] 5. [shared-unit]           hook useCountdown (shared) — start(untilMs), remainingSeconds, isRunning
+- [x] 6. [atomic-component]      atom      InputOTP           (new, shared/ui)   shadcn generate (package input-otp): paste, autocomplete one-time-code, auto nhảy ô
 - [ ] 7. [atomic-component]      molecule  OtpCodeInput       (new, shared)      InputOTP N ô, chỉ số, onComplete (để focus button), autoFocus, aria-invalid
 - [ ] 8. [atomic-component]      molecule  ResendCodeAction   (new, feature auth) "Chưa nhận được code? resend" + countdown mm:ss, disabled khi đếm/pending
 - [ ] 9. [atomic-component]      organism  ActivateForm       (new, feature auth) init từ handoff (loginType+identifier, focus code | default EMAIL, focus identifier), countdown theo `at`, resend (validate identifier trước), map lỗi OTP_* → field/form, thành công → clear handoff + /auth/login

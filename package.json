@@ -16,6 +16,7 @@
     "@tanstack/react-query-devtools": "^5.104.0",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.4.0",
+    "input-otp": "^1.5.0",
     "joi": "^18.2.9",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.49.0",
