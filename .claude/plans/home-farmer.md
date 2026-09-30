@@ -40,8 +40,8 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 19. [atomic-component]    molecule  NotificationItem         (new, feature notification) + util formatRelativeTime (shared — dùng lại cho chat + review)
 - [x] 20. [atomic-component]    organism  NotificationMenu         (new, feature notification) — popover, click → mark read, đọc tất cả, nút "Xem thêm" (thay infinite scroll trong popover), loading/empty/error
 - [x] 21. [atomic-component]    molecule  ChatRoomItem             (new, feature chat)
-- [ ] 22. [atomic-component]    molecule  ChatMessageBubble        (new, feature chat)
-- [ ] 23. [atomic-component]    organism  ChatModal                (new, feature chat) — M2: messages infinite (cuộn lên), form gửi (useAppForm + schema), enter/leave room, loading/empty/error
+- [x] 22. [atomic-component]    molecule  ChatMessageBubble        (new, feature chat)
+- [x] 23. [atomic-component]    organism  ChatModal                (new, feature chat) — M2: messages infinite (cuộn lên), form gửi (useAppForm + schema), enter/leave room (hook useRoomPresence), loading/empty/error
 - [ ] 24. [atomic-component]    organism  ChatRoomsMenu            (new, feature chat) — popover rooms, badge totalUnread, click → ChatModal
 - [ ] 25. [atomic-component]    organism  UserMenu                 (new, feature user) — username + avatar, dropdown: Trang cá nhân, Đăng xuất
 - [ ] 26. [atomic-component]    organism  DistributorExplorerProvider (update, feature distributor) — origin "geolocation" (guest) | "profile" (useMe → address)
