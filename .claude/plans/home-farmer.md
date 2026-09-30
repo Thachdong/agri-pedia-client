@@ -31,8 +31,8 @@ Foundation: có http/query/form, BFF auth + forward, proxy. Thiếu: realtime wr
 - [x] 10. [feature-api]         GET /chat/rooms → TChatRoom, useChatRooms (infinite cursor); keys chat.rooms
 - [x] 11. [feature-api]         GET /chat/rooms/:roomId/messages → TChatMessage, useRoomMessages (infinite cursor, cũ dần); keys chat.messages(roomId)
 - [x] 12. [feature-api]         socket chat.message.send → useSendMessage (emitWithAck; cập nhật messages + invalidate chat.rooms; room mới khi gửi bằng receiverId)
-- [ ] 13. [validation-schema]   chatMessageSchema (message 1..2000 sau trim)
-- [ ] 14. [shared-unit]         hook useNotificationRealtime (feature notification) — notification.created → prepend cache
+- [x] 13. [validation-schema]   chatMessageSchema (message 1..2000 sau trim)
+- [x] 14. [shared-unit]         hook useNotificationRealtime (feature notification) — notification.created → prepend cache, reconnect → refetch; wrapper query thêm useAppQueryClient
 - [ ] 15. [shared-unit]         hook useChatRealtime (feature chat) — chat.message.received → append messages cache + invalidate rooms
 - [ ] 16. [atomic-component]    atom      Popover + DropdownMenu   (new, shared — shadcn qua atoms)
 - [ ] 17. [atomic-component]    atom      CountBadge               (new, shared) — số đếm, "99+"

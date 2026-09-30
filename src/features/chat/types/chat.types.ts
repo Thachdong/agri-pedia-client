@@ -26,3 +26,6 @@ export type TChatMessagesCache = { pages: TChatMessagesPage[]; pageParams: unkno
 export type TSendMessageInput = { roomId?: string; receiverId?: string; message: string };
 /** Ack thành công; `createdAt` là ISO string (qua JSON). */
 export type TSendMessageAck = { messageId: string; roomId: string; createdAt: string };
+
+/** Giá trị form gửi tin trong Chat modal (room / receiver do modal quyết định). */
+export type TChatMessageFormValues = Pick<TSendMessageInput, "message">;
