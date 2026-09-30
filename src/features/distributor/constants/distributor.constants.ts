@@ -15,3 +15,9 @@ export const NEARBY_SCOPE_NOTES: Partial<Record<TNearbyScope, string>> = {
 
 /** Số card skeleton khi đang tải trang đầu. */
 export const LIST_SKELETON_COUNT = 5;
+
+/**
+ * Chờ tối đa bấy nhiêu cho quyền/vị trí từ trình duyệt (người dùng có thể bỏ mặc hộp thoại xin quyền).
+ * Quá hạn → tải danh sách toàn quốc; vị trí về sau vẫn được dùng (query đổi key, tải lại).
+ */
+export const LOCATE_WAIT_MS = 8_000;
