@@ -29,6 +29,10 @@ export const queryKeys = {
     all: ["notifications"] as const,
     list: () => [...queryKeys.notifications.all, "list"] as const,
   },
+  chat: {
+    all: ["chat"] as const,
+    rooms: () => [...queryKeys.chat.all, "rooms"] as const,
+  },
   distributors: {
     all: ["distributors"] as const,
     nearbyLists: () => [...queryKeys.distributors.all, "nearby"] as const,
