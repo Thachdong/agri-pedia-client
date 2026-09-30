@@ -3,6 +3,9 @@ import type { TApiSchema } from "@/shared/lib/http";
 export type TRegisterInput = TApiSchema<"RegisterUserDto">;
 export type TRegisterAddressInput = TApiSchema<"RegisterAddressDto">;
 export type TActivateInput = TApiSchema<"ActivateAccountDto">;
+export type TResendCodeInput = TApiSchema<"ResendCodeDto">;
+/** Loại code: ACTIVATE_DISTRIBUTOR (gửi lúc đăng ký) | RESET_PASSWORD. */
+export type TOtpPurpose = TResendCodeInput["purpose"];
 export type TLoginType = TRegisterInput["loginType"];
 export type TUserRole = TRegisterInput["role"];
 export type TBusinessType = NonNullable<TRegisterInput["bussinessType"]>;
