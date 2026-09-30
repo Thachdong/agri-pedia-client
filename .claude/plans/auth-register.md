@@ -7,7 +7,7 @@ Foundation: data-wrapper ✓ bff-auth ✓ (/auth/register đã guest-only) bff-f
 - [x] 1. [feature-scaffold]      feature `auth` — layers: components, hooks, services, schemas, types, utils, constants
 - [x] 2. [feature-scaffold]      feature `location` — layers: components, hooks, services, types
 - [x] 3. [feature-api]           GET /provinces → TProvince, getProvinces, useProvinces; keys location.provinces
-- [ ] 4. [feature-api]           GET /provinces/{provinceCode}/wards → TWard, getWards, useWards(provinceCode, enabled khi có province); keys location.wards
+- [x] 4. [feature-api]           GET /provinces/{provinceCode}/wards → TWard, getWards, useWards(provinceCode, enabled khi có province); keys location.wards
 - [ ] 5. [feature-api]           POST /auth/register → TRegisterInput, register, useRegister (không invalidate)
 - [ ] 6. [validation-schema]     registerSchema — identifier theo loginType (email|phone), password, confirmPassword, username?, role, bussinessType (required DISTRIBUTOR / null FARMER), bio?, address (province, ward, houseNumber, lat, long)
 - [ ] 7. [arch-lint-setup]       cài leaflet + react-leaflet (+ @types/leaflet); rule: chỉ MapPicker được import leaflet/react-leaflet

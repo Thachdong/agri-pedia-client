@@ -15,5 +15,6 @@ export const queryKeys = {
   location: {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
+    wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
   },
 } as const;
