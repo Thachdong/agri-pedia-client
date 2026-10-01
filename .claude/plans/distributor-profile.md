@@ -40,7 +40,8 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 - [x] 18. [atomic-component]    organism  DistributorProfileActions (new, feature distributor) — owner: Edit → EditProfileDialog; FARMER: Chat → ChatModal, Đánh giá → ReviewShopDialog
 - [x] 19. [atomic-component]    template  ProfileLayout           (new, shared) — header + vùng thông tin + slot tabs (để trống, làm sau)
 - [x] 20. [page]                page /profile/[id] — hasSession branching, prefetch, notFound, generateMetadata, loading/error/not-found
-- [ ] 21. [arch-review]
+- [x] 21. [arch-review]
+- [x] 22. [feature-api]          fix arch-review MED: TPresignUrlsResponse alias từ GetPresignUrlResponse (chỉ override `items`)
 
 Components (in order):
   [atom]      StarRatingInput            new    shared

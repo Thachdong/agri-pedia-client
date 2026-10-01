@@ -5,7 +5,7 @@ export type TMediaType = TPresignFileInput["type"];
 
 /** Spec không khai báo kiểu cho `headers` (sinh ra `Record<string, never>`) — thực tế là Content-Type + `x-goog-content-length-range`. */
 export type TPresignedMedia = Omit<TApiSchema<"PresignedMediaResponse">, "headers"> & { headers: Record<string, string> };
-export type TPresignUrlsResponse = { items: TPresignedMedia[] };
+export type TPresignUrlsResponse = Omit<TApiSchema<"GetPresignUrlResponse">, "items"> & { items: TPresignedMedia[] };
 
 /** Một file cần upload và loại media server dùng để kiểm tra đuôi file. */
 export type TUploadFileInput<TType extends TMediaType = TMediaType> = { file: File; type: TType };
