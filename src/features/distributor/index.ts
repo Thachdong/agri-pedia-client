@@ -11,9 +11,9 @@ export {
   type TDistributorProfileActionsProps,
 } from "./components/distributor-profile-actions";
 export {
-  DistributorProductsTab,
-  type TDistributorProductsTabProps,
-} from "./components/distributor-products-tab";
+  DistributorProfileTabs,
+  type TDistributorProfileTabsProps,
+} from "./components/distributor-profile-tabs";
 export {
   DistributorProfileInfo,
   type TDistributorProfileInfoProps,
