@@ -1,3 +1,4 @@
+import type { TFileUpload } from "@/shared/types";
 import { v } from "./joi";
 
 /** Số VN: +84 | 84 | 0 + 9 số; chấp nhận khoảng trắng . - ( ) — khớp rule `identifier` (PHONE) của API. */
@@ -25,7 +26,10 @@ export const rules = {
       .pattern(VN_PHONE)
       .messages({ "string.pattern.base": "Số điện thoại không hợp lệ" }),
   password: () => v.string().min(8).max(128),
-  /** File chọn từ `<input type="file">` (trước khi upload) — kiểm tra đuôi + dung lượng như server/storage sẽ kiểm. */
+  /**
+   * File chọn từ `<input type="file">` (trước khi upload) — kiểm tra đuôi + dung lượng như server/storage sẽ kiểm.
+   * @deprecated Dùng `uploadedFile` (upload ngay khi chọn) — bỏ khi các form đã chuyển xong.
+   */
   file: ({ extensions, maxBytes }: TFileRuleOptions) =>
     v.any().custom((value: unknown, helpers) => {
       if (!(value instanceof File)) return helpers.error("file.base");
@@ -33,6 +37,17 @@ export const rules = {
       const extension = dot > 0 ? value.name.slice(dot + 1).toLowerCase() : "";
       if (!extensions.includes(extension)) return helpers.error("file.extension", { allowed: extensions.join(", ") });
       if (value.size > maxBytes) return helpers.error("file.maxSize", { limit: formatMegabytes(maxBytes) });
+      return value;
+    }),
+  /**
+   * Item upload-ngay-khi-chọn (`TFileUpload`) — phải upload xong mới cho submit.
+   * Đuôi / dung lượng đã kiểm lúc chọn (useMediaUploads), file lỗi bị bỏ khỏi form nên không kiểm lại ở đây.
+   */
+  uploadedFile: () =>
+    v.any().custom((value: unknown, helpers) => {
+      const upload = value as Partial<TFileUpload> | null;
+      if (!upload || typeof upload !== "object" || !(upload.file instanceof File)) return helpers.error("file.base");
+      if (upload.status !== "done") return helpers.error("file.uploading");
       return value;
     }),
   username: () => v.string().trim().min(1).max(100),

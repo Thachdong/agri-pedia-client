@@ -22,5 +22,6 @@ export const messages: LanguageMessages = {
   "file.base": "File không hợp lệ",
   "file.extension": "Chỉ chấp nhận file {#allowed}",
   "file.maxSize": "File tối đa {#limit}",
+  "file.uploading": "File đang tải lên, vui lòng đợi",
   "object.unknown": "Trường không được phép",
 };
