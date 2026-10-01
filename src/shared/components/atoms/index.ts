@@ -2,6 +2,7 @@
 export { Avatar, type TAvatarProps } from "./avatar";
 export { Button, type TButtonProps } from "./button";
 export { CountBadge, formatCount, type TCountBadgeProps } from "./count-badge";
+export { StarRatingInput, type TStarRatingInputProps } from "./star-rating-input";
 
 // Primitive shadcn dùng nguyên bản — import qua atoms, không import thẳng `ui/`.
 export {

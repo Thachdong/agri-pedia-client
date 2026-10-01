@@ -30,7 +30,7 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 - [x] 8. [validation-schema]    reviewSchema (feature review) — star 1..5, content 1..1000 sau trim
 - [x] 9. [design-token]         màu sao rating (`rating` / `rating-muted`) light + dark
 - [x] 10. [shared-unit]         hook useAddressLabel (feature location) — codename → "số nhà, xã, tỉnh"
-- [ ] 11. [atomic-component]    atom      StarRatingInput         (new, shared) — radio 1..5 sao, keyboard, aria
+- [x] 11. [atomic-component]    atom      StarRatingInput         (new, shared) — radio 1..5 sao, keyboard, aria
 - [ ] 12. [atomic-component]    molecule  FileInputField          (new, shared) — chọn file (accept), hiện tên/ảnh xem trước, xoá chọn
 - [ ] 13. [atomic-component]    molecule  InfoTable               (new, shared) — các hàng label / value (bảng thông tin wireframe), responsive
 - [ ] 14. [atomic-component]    molecule  AddressList             (new, feature location) — list address (useAddressLabel), badge primary
