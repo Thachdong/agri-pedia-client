@@ -16,14 +16,28 @@ import { makeQueryClient } from "./query-client";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TPrefetchOptions = FetchQueryOptions<any, any, any, any>;
 
+export type TPrefetchConfig = {
+  /**
+   * Query bắt buộc của trang — lỗi thì NÉM ra (AppError) thay vì nuốt như `queries`,
+   * để page phân biệt 404 (→ `notFound()`) với lỗi khác.
+   */
+  required?: TPrefetchOptions[];
+};
+
 /**
  * Prefetch trên server rồi dehydrate — dùng ở `page.tsx`:
  *   const state = await prefetch([cropDetailQuery(id, serverHttp)]);
  *   return <HydrateQueries state={state}>...</HydrateQueries>;
  */
-export async function prefetch(queries: TPrefetchOptions[]): Promise<DehydratedState> {
+export async function prefetch(
+  queries: TPrefetchOptions[],
+  { required = [] }: TPrefetchConfig = {},
+): Promise<DehydratedState> {
   const queryClient = makeQueryClient();
-  await Promise.all(queries.map((query) => queryClient.prefetchQuery(query)));
+  await Promise.all([
+    ...queries.map((query) => queryClient.prefetchQuery(query)),
+    ...required.map((query) => queryClient.fetchQuery(query)),
+  ]);
   return dehydrate(queryClient);
 }
 
