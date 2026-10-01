@@ -38,5 +38,6 @@ export const queryKeys = {
     all: ["distributors"] as const,
     nearbyLists: () => [...queryKeys.distributors.all, "nearby"] as const,
     nearby: (params: TNearbyDistributorsParams) => [...queryKeys.distributors.nearbyLists(), params] as const,
+    detail: (distributorId: string) => [...queryKeys.distributors.all, "detail", distributorId] as const,
   },
 } as const;

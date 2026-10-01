@@ -1,6 +1,8 @@
 import type { TApiPaths, TApiSchema } from "@/shared/lib/http";
 
 export type TNearbyDistributor = TApiSchema<"NearbyDistributorResponse">;
+/** Profile public (trang /profile/<id>) — `avatar` là media id, `bussinessLicense` là signed URL (hết hạn). */
+export type TDistributorProfile = TApiSchema<"DistributorProfileResponse">;
 export type TNearbyDistributorsResponse = TApiSchema<"FindNearbyDistributorsResponse">;
 export type TNearbyScope = TNearbyDistributorsResponse["scope"];
 

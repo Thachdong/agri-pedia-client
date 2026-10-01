@@ -51,7 +51,7 @@ export interface paths {
         put?: never;
         /**
          * Log in with identifier and password
-         * @description Responds 200 with an access token (JWT), a refresh token and the user profile. Unknown identifier, login type mismatch and wrong password all return USER_INVALID_CREDENTIALS. USER_NOT_ACTIVE (distributor not activated yet) is returned only after the password matched.
+         * @description Responds 200 with an access token (JWT), a refresh token and the user profile (same shape as GET /users/me: `email` / `phone` login identifier, `bussinessLicense` signed URL). Unknown identifier, login type mismatch and wrong password all return USER_INVALID_CREDENTIALS. USER_NOT_ACTIVE (distributor not activated yet) is returned only after the password matched.
          */
         post: operations["AuthController_login"];
         delete?: never;
@@ -149,7 +149,7 @@ export interface paths {
         };
         /**
          * Get the profile of the caller
-         * @description Profile as returned by POST /auth/login (user), including the primary address (null if none). Works for any user with a valid access token, whatever its status.
+         * @description Profile as returned by POST /auth/login (user), including the primary address (null if none). `email` / `phone`: the login identifier (the other one is null). `bussinessLicense`: signed read URL of the business license (expires; null if none). Works for any user with a valid access token, whatever its status.
          */
         get: operations["UserController_getMe"];
         put?: never;
@@ -164,6 +164,70 @@ export interface paths {
         patch: operations["UserController_updateMe"];
         trace?: never;
     };
+    "/users/me/addresses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the addresses of the caller
+         * @description Every address of the caller, primary first. Works for any user with a valid access token, whatever its status.
+         */
+        get: operations["UserController_getMyAddresses"];
+        put?: never;
+        /**
+         * Add an address for the caller
+         * @description Responds 201 with the new address id. `province` = a province `codename` from GET /provinces; `ward` = a ward `codename` of that province from GET /provinces/{provinceCode}/wards. `isPrimary` (default false): true makes it the primary address and the current primary becomes a normal one.
+         */
+        post: operations["UserController_createMyAddress"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/me/addresses/{addressId}/primary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Set one of the caller's addresses as primary
+         * @description The current primary becomes a normal address. Already primary: 200, nothing changes. An address of another user answers 404 like an unknown one.
+         */
+        patch: operations["UserController_setMyPrimaryAddress"];
+        trace?: never;
+    };
+    "/users/me/addresses/{addressId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete one of the caller's addresses
+         * @description Hard delete. The primary address cannot be deleted: set another address as primary first (PATCH /users/me/addresses/{addressId}/primary), so a user always keeps one. An address of another user answers 404 like an unknown one.
+         */
+        delete: operations["UserController_deleteMyAddress"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/distributors/nearby": {
         parameters: {
             query?: never;
@@ -176,6 +240,26 @@ export interface paths {
          * @description No login needed; the access token is optional (an invalid one → 401). Location, first match wins: `lat` + `long` (GPS or a point picked on the map); `provinceCode` [+ `wardCode`] (codenames from GET /provinces and GET /provinces/{provinceCode}/wards); none: the caller's primary address (guest, or no address: every distributor by username). A point and an area cannot be combined. Stages run in order and the first one with any distributor is paginated — point: `radius` (within DISTRIBUTOR_SEARCH_RADIUS_KM, default 30 km) → `nationwide_by_distance`, nearest first; area: `province` (the given ward first, then by username) → `nationwide`, by username. `scope` names the stage, `source` where the location came from. `distanceMeters` is set for the distance scopes only. Only ACTIVE distributors are listed, at their primary address. No match at all: 200 with empty `items`.
          */
         get: operations["DistributorController_findNearby"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/distributors/{distributorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the public profile of a distributor (public)
+         * @description No login needed. Returns the distributor with its primary address (null if none); the full address list is GET /users/me/addresses (owner only). `email` / `phone`: the login identifier (the other one is null). `bussinessLicense`: signed read URL of the business license (expires; null if none). `avatar` is a media id. Unknown id, not a DISTRIBUTOR, or not ACTIVE → 404 USER_DISTRIBUTOR_NOT_FOUND.
+         */
+        get: operations["DistributorController_getProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -218,6 +302,26 @@ export interface paths {
         get: operations["LocationController_listWards"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/media/presign-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get signed URLs to upload 1..10 files to TMP storage
+         * @description Send 1..10 `files`; returns one `items` entry per file, in the same order. Allowed extensions: IMAGE jpg/jpeg/png/webp, VIDEO mp4/mov, FILE pdf (case-insensitive, leading dot ignored). All-or-nothing: if any file has an extension not allowed for its type, responds 400 `MEDIA_INVALID_EXTENSION` with `details.files: [{ index, type, extension, allowed }]` listing every invalid file, and no URL is issued. Upload each file with `PUT <presignUrl>` sending exactly its `headers` (Content-Type and `x-goog-content-length-range`); the storage rejects a different Content-Type, a file over 10 MB, or an expired URL. Keep each `key` to confirm the upload later.
+         */
+        post: operations["MediaController_presignUrl"];
         delete?: never;
         options?: never;
         head?: never;
@@ -298,26 +402,6 @@ export interface paths {
          * @description Checks the latest RESET_PASSWORD code of the identifier (email or phone, any format) and consumes it. A wrong code is counted; too many wrong codes block the code for a while (OTP_BLOCKED, details { blockUntil }). Responds 200 with an empty body: the password is replaced and every session of the user is logged out (refresh tokens revoked).
          */
         post: operations["PasswordResetController_confirmReset"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/media/presign-url": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Get signed URLs to upload 1..10 files to TMP storage
-         * @description Send 1..10 `files`; returns one `items` entry per file, in the same order. Allowed extensions: IMAGE jpg/jpeg/png/webp, VIDEO mp4/mov, FILE pdf (case-insensitive, leading dot ignored). All-or-nothing: if any file has an extension not allowed for its type, responds 400 `MEDIA_INVALID_EXTENSION` with `details.files: [{ index, type, extension, allowed }]` listing every invalid file, and no URL is issued. Upload each file with `PUT <presignUrl>` sending exactly its `headers` (Content-Type and `x-goog-content-length-range`); the storage rejects a different Content-Type, a file over 10 MB, or an expired URL. Keep each `key` to confirm the upload later.
-         */
-        post: operations["MediaController_presignUrl"];
         delete?: never;
         options?: never;
         head?: never;
@@ -597,6 +681,8 @@ export interface components {
             id: string;
             /** @enum {string} */
             loginType: "EMAIL" | "PHONE";
+            email: string | null;
+            phone: string | null;
             username: string;
             /** @enum {string} */
             role: "FARMER" | "DISTRIBUTOR";
@@ -633,6 +719,29 @@ export interface components {
         IssueRealtimeTicketResponse: {
             ticket: string;
             expiresIn: number;
+        };
+        MyAddressResponse: {
+            id: string;
+            province: string;
+            ward: string;
+            houseNumber: string;
+            lat: number;
+            long: number;
+            isPrimary: boolean;
+        };
+        ListMyAddressesResponse: {
+            addresses: components["schemas"]["MyAddressResponse"][];
+        };
+        CreateAddressDto: {
+            province: string;
+            ward: string;
+            houseNumber: string;
+            lat: number;
+            long: number;
+            isPrimary?: boolean;
+        };
+        CreateAddressResponse: {
+            addressId: string;
         };
         AvatarFileDto: {
             /** @enum {string} */
@@ -690,6 +799,20 @@ export interface components {
             items: components["schemas"]["NearbyDistributorResponse"][];
             total: number;
         };
+        DistributorProfileResponse: {
+            id: string;
+            email: string | null;
+            phone: string | null;
+            username: string;
+            avatar: string | null;
+            bio: string | null;
+            /** @enum {string|null} */
+            bussinessType: "AGRICULTURAL_CHEMICAL_SUPPLIES" | "SEEDS_SEEDLINGS" | "AQUACULTURE_SEEDLINGS" | null;
+            bussinessLicense: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            address: components["schemas"]["UserAddressResponse"] | null;
+        };
         LocationItemResponse: {
             codename: string;
             name: string;
@@ -699,6 +822,23 @@ export interface components {
         };
         ListWardsResponse: {
             wards: components["schemas"]["LocationItemResponse"][];
+        };
+        PresignFileDto: {
+            filename: string;
+            extension: string;
+            /** @enum {string} */
+            type: "IMAGE" | "VIDEO" | "FILE";
+        };
+        GetPresignUrlDto: {
+            files: components["schemas"]["PresignFileDto"][];
+        };
+        PresignedMediaResponse: {
+            presignUrl: string;
+            key: string;
+            headers: Record<string, never>;
+        };
+        GetPresignUrlResponse: {
+            items: components["schemas"]["PresignedMediaResponse"][];
         };
         ActivateAccountDto: {
             identifier: string;
@@ -718,23 +858,6 @@ export interface components {
             identifier: string;
             code: string;
             newPassword: string;
-        };
-        PresignFileDto: {
-            filename: string;
-            extension: string;
-            /** @enum {string} */
-            type: "IMAGE" | "VIDEO" | "FILE";
-        };
-        GetPresignUrlDto: {
-            files: components["schemas"]["PresignFileDto"][];
-        };
-        PresignedMediaResponse: {
-            presignUrl: string;
-            key: string;
-            headers: Record<string, never>;
-        };
-        GetPresignUrlResponse: {
-            items: components["schemas"]["PresignedMediaResponse"][];
         };
         DistributorProductResponse: {
             id: string;
@@ -1264,6 +1387,194 @@ export interface operations {
             };
         };
     };
+    UserController_getMyAddresses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListMyAddressesResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_createMyAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAddressDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateAddressResponse"];
+                };
+            };
+            /** @description Request validation failed, or: USER_INVALID_COORDINATES, USER_LOCATION_INVALID */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_setMyPrimaryAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_deleteMyAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_PRIMARY_NOT_DELETABLE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
     DistributorController_findNearby: {
         parameters: {
             query?: {
@@ -1299,6 +1610,45 @@ export interface operations {
             };
             /** @description AUTH_INVALID_ACCESS_TOKEN */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DistributorController_getProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                distributorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DistributorProfileResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description USER_DISTRIBUTOR_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1357,6 +1707,47 @@ export interface operations {
             };
             /** @description LOCATION_PROVINCE_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    MediaController_presignUrl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GetPresignUrlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPresignUrlResponse"];
+                };
+            };
+            /** @description Request validation failed, or: MEDIA_INVALID_EXTENSION */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1567,47 +1958,6 @@ export interface operations {
             };
             /** @description OTP_ALREADY_CONSUMED, OTP_EXPIRED, OTP_BLOCKED */
             422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainErrorResponse"];
-                };
-            };
-        };
-    };
-    MediaController_presignUrl: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GetPresignUrlDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetPresignUrlResponse"];
-                };
-            };
-            /** @description Request validation failed, or: MEDIA_INVALID_EXTENSION */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
-                };
-            };
-            /** @description AUTH_INVALID_ACCESS_TOKEN */
-            401: {
                 headers: {
                     [name: string]: unknown;
                 };
