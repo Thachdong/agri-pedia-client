@@ -13,5 +13,9 @@ export type TProductDetail = Omit<TApiSchema<"GetProductDetailResponse">, "media
 export type TProductStatus = TProductDetail["status"];
 export type TProductUnit = TProductDetail["unit"];
 
+/** Body POST /products — `media` (1..10) là file đã upload lên TMP (TUploadedMedia + sortOrder tuỳ chọn). */
+export type TCreateProductInput = TApiSchema<"CreateProductDto">;
+export type TCreateProductResponse = TApiSchema<"CreateProductResponse">;
+
 export type TCategory = TApiSchema<"CategoryResponse">;
 export type TCategoriesResponse = TApiSchema<"ListCategoriesResponse">;
