@@ -27,7 +27,7 @@ Decisions:
 - [x] 6. [validation-schema]    updateFarmerProfileSchema (feature user) — username 1..100, bio ≤1000, avatar uploadedFile
 - [x] 7. [atomic-component]     molecule  AddressRadioList        (new, feature location) — radio theo address id (useAddressLabel), value = primary, slot action từng dòng, disabled
 - [x] 8. [atomic-component]     organism  PrimaryAddressPicker    (new, feature user) — useMyAddresses + AddressRadioList + useSetMyPrimaryAddress (dùng ở trang info cả 2 role)
-- [ ] 9. [atomic-component]     organism  AddAddressForm          (new, feature user) — AddressFields + Lưu / Huỷ, POST address, lỗi server
+- [x] 9. [atomic-component]     organism  AddAddressForm          (new, feature user) — AddressFields + Lưu / Huỷ, POST address, lỗi server
 - [ ] 10. [atomic-component]    organism  ManageAddressesSection  (new, feature user) — AddressRadioList (set primary) + xoá (ConfirmDialog) + AddAddressForm; loading/error/empty
 - [ ] 11. [atomic-component]    organism  EditProfileDialog       (update, feature user) — theo role (FARMER bỏ bussinessType/giấy phép), email/phone read-only, gắn ManageAddressesSection
 - [ ] 12. [atomic-component]    organism  FarmerProfileInfo       (new, feature user) — title + nút Chỉnh sửa + InfoTable (Email / Phone, Giới thiệu, Địa chỉ = PrimaryAddressPicker); loading/error
