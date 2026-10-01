@@ -26,7 +26,7 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 - [x] 4. [feature-api]          POST /media/presign-url → presignUrls; uploadMedia(files) = presign + putToSignedUrl song song → [{ key, type, extension, filename }] (shape AvatarFileDto / BusinessLicenseFileDto); useUploadMedia (invalidates: false)
 - [x] 5. [feature-api]          PATCH /users/me → TUpdateProfileInput, useUpdateMe; invalidates users.me + distributors.detail(me.id)
 - [x] 6. [feature-api]          POST /reviews → TCreateReviewInput, useCreateReview; keys reviews.all (namespace mới); invalidates reviews.all
-- [ ] 7. [validation-schema]    updateProfileSchema (feature user) — username 1..100, bio ≤1000, bussinessType, file avatar/license (đuôi cho phép)
+- [x] 7. [validation-schema]    updateProfileSchema (feature user) — username 1..100, bio ≤1000, bussinessType, file avatar/license (đuôi cho phép)
 - [ ] 8. [validation-schema]    createReviewSchema (feature review) — star 1..5, content 1..1000 sau trim
 - [ ] 9. [design-token]         màu sao rating (`rating` / `rating-muted`) light + dark
 - [ ] 10. [shared-unit]         hook useAddressLabel (feature location) — codename → "số nhà, xã, tỉnh"

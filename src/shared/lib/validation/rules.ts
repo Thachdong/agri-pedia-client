@@ -4,6 +4,14 @@ import { v } from "./joi";
 const VN_PHONE = /^(\+84|84|0)\d{9}$/;
 const PHONE_SEPARATORS = /[\s.\-()]/g;
 
+export type TFileRuleOptions = {
+  /** Đuôi cho phép, viết thường, không dấu chấm (vd. ["jpg", "png"]). */
+  extensions: readonly string[];
+  maxBytes: number;
+};
+
+const formatMegabytes = (bytes: number) => `${Math.round((bytes / 1024 / 1024) * 10) / 10}MB`;
+
 /** Rule dùng chung, khớp constraint của NestJS DTO (specs/openapi.json + specs/api.md). */
 export const rules = {
   id: () => v.string().guid(),
@@ -17,6 +25,16 @@ export const rules = {
       .pattern(VN_PHONE)
       .messages({ "string.pattern.base": "Số điện thoại không hợp lệ" }),
   password: () => v.string().min(8).max(128),
+  /** File chọn từ `<input type="file">` (trước khi upload) — kiểm tra đuôi + dung lượng như server/storage sẽ kiểm. */
+  file: ({ extensions, maxBytes }: TFileRuleOptions) =>
+    v.any().custom((value: unknown, helpers) => {
+      if (!(value instanceof File)) return helpers.error("file.base");
+      const dot = value.name.lastIndexOf(".");
+      const extension = dot > 0 ? value.name.slice(dot + 1).toLowerCase() : "";
+      if (!extensions.includes(extension)) return helpers.error("file.extension", { allowed: extensions.join(", ") });
+      if (value.size > maxBytes) return helpers.error("file.maxSize", { limit: formatMegabytes(maxBytes) });
+      return value;
+    }),
   username: () => v.string().trim().min(1).max(100),
   /** Code OTP (activate / reset password) — server cho phép 4..10 chữ số, client khoá đúng `length` đang cấu hình. */
   otpCode: (length: number) =>
