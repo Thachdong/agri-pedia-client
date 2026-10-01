@@ -439,7 +439,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Get a product detail (public)
+         * @description No login needed. Returns the product in any status (ACTIVE / INACTIVE / OUT_OF_STOCK) with its seller `distributorId` and every media (IMAGE / VIDEO / FILE) ordered by `sortOrder`. Each `url` is a signed URL (expires after the configured TTL, default 1h). A deleted product → 404. Rating: `GET /reviews/summary`.
+         */
+        get: operations["ProductController_getDetail"];
         put?: never;
         post?: never;
         /**
@@ -491,6 +495,46 @@ export interface paths {
          * @description Caller must be a FARMER whose account is ACTIVE, otherwise 403 `REVIEW_REVIEWER_NOT_ALLOWED`. `targetType` USER: `targetId` is a distributor user id; it must be an ACTIVE DISTRIBUTOR. `targetType` PRODUCT: `targetId` is a product id; the product must be ACTIVE (deleted → 404, INACTIVE / OUT_OF_STOCK → 422). A farmer reviews each target once (second time → 409). `star` integer 1..5; `content` 1..1000 characters after trimming. On success the distributor (the shop itself, or the seller of the product) gets a REVIEW notification with `referenceId` = `reviewId`.
          */
         post: operations["ReviewController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the rating of a product or a distributor (public)
+         * @description No login needed. `targetType=PRODUCT`: reviews of that product. `targetType=USER`: reviews of the distributor itself only (not of its products; the whole shop summary is in `GET /reviews`). `avgRating` has 1 decimal and is 0 when there is no review. A target without reviews, or that does not exist, returns all zero.
+         */
+        get: operations["ReviewController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews/products/{productId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List reviews of a product (public)
+         * @description No login needed. Reviews of one product (any status; a deleted or unknown product → 404), newest first. Filter with `star`. `limit` 1..50, default 20. To get the next page pass the returned `nextCursor` as `cursor` with the same `star`; `nextCursor` is null on the last page. `user.avatar` is a signed URL (expires after the configured TTL, default 1h), or null. Rating of the product: `GET /reviews/summary`.
+         */
+        get: operations["ReviewController_listByProduct"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -606,7 +650,7 @@ export interface paths {
         };
         /**
          * List the messages of a chat room
-         * @description Caller must be a member of the room. Newest message first (`createdAt` desc); `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` to get older messages (null on the last page). Read-only: does not mark messages read (socket `chat.room.enter` does). New messages arrive live through socket `chat.message.received`.
+         * @description Caller must be a member of the room. Newest message first (`createdAt` desc); `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` to get older messages (null on the last page). Each message carries its sender's `senderUsername` (null when the user no longer exists) and `senderAvatar` (signed read URL that expires; null when none). Read-only: does not mark messages read (socket `chat.room.enter` does). New messages arrive live through socket `chat.message.received` (same sender fields).
          */
         get: operations["ChatController_listMessages"];
         put?: never;
@@ -874,6 +918,25 @@ export interface components {
             products: components["schemas"]["DistributorProductResponse"][];
             nextCursor: string | null;
         };
+        ProductMediaResponse: {
+            id: string;
+            type: Record<string, never>;
+            url: string;
+        };
+        GetProductDetailResponse: {
+            id: string;
+            name: string;
+            description: string;
+            price: number;
+            quantity: number;
+            /** @enum {string} */
+            unit: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton";
+            categoryId: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK";
+            distributorId: string;
+            media: components["schemas"]["ProductMediaResponse"][];
+        };
         ProductMediaDto: {
             key: string;
             /** @enum {string} */
@@ -949,6 +1012,27 @@ export interface components {
             reviews: components["schemas"]["DistributorReviewResponse"][];
             nextCursor: string | null;
         };
+        GetReviewSummaryResponse: {
+            avgRating: number;
+            reviewCount: number;
+            oneStarCount: number;
+            twoStarCount: number;
+            threeStarCount: number;
+            fourStarCount: number;
+            fiveStarCount: number;
+        };
+        ProductReviewResponse: {
+            id: string;
+            star: number;
+            content: string;
+            /** Format: date-time */
+            createdAt: string;
+            user: components["schemas"]["ReviewerResponse"];
+        };
+        ListProductReviewsResponse: {
+            reviews: components["schemas"]["ProductReviewResponse"][];
+            nextCursor: string | null;
+        };
         CreateReviewDto: {
             /** @enum {string} */
             targetType: "PRODUCT" | "USER";
@@ -1001,6 +1085,8 @@ export interface components {
         RoomMessageResponse: {
             id: string;
             senderId: string;
+            senderUsername: string | null;
+            senderAvatar: string | null;
             message: string;
             /** Format: date-time */
             createdAt: string;
@@ -2067,6 +2153,45 @@ export interface operations {
             };
         };
     };
+    ProductController_getDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                productId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetProductDetailResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description PRODUCT_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
     ProductController_delete: {
         parameters: {
             query?: never;
@@ -2311,6 +2436,80 @@ export interface operations {
             };
             /** @description REVIEW_INVALID_TARGET */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ReviewController_summary: {
+        parameters: {
+            query: {
+                targetType: "PRODUCT" | "USER";
+                targetId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetReviewSummaryResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    ReviewController_listByProduct: {
+        parameters: {
+            query?: {
+                star?: number;
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                productId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProductReviewsResponse"];
+                };
+            };
+            /** @description Request validation failed, or: REVIEW_INVALID_CURSOR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description REVIEW_TARGET_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

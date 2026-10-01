@@ -42,6 +42,12 @@ export const queryKeys = {
     nearby: (params: TNearbyDistributorsParams) => [...queryKeys.distributors.nearbyLists(), params] as const,
     detail: (distributorId: string) => [...queryKeys.distributors.all, "detail", distributorId] as const,
   },
+  products: {
+    all: ["products"] as const,
+    lists: () => [...queryKeys.products.all, "list"] as const,
+    /** Product ACTIVE của 1 distributor (infinite, cursor). */
+    list: (distributorId: string) => [...queryKeys.products.lists(), distributorId] as const,
+  },
   reviews: {
     all: ["reviews"] as const,
     /** Prefix mọi query review của 1 shop (list theo filter thêm sau — tab "Đánh giá"). */

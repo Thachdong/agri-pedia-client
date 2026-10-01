@@ -16,7 +16,8 @@ export function useChatRealtime() {
 
   useRealtimeEvent<TChatMessageReceivedEvent>(CHAT_EVENTS.received, ({ messageId, roomId, senderId, message, createdAt }) => {
     client.setQueryData<TChatMessagesCache>(queryKeys.chat.messages(roomId), (cache) =>
-      prependMessage(cache, { id: messageId, senderId, message, createdAt }),
+      // Event socket không kèm username / avatar người gửi — modal hiển thị theo `otherUsername`.
+      prependMessage(cache, { id: messageId, senderId, senderUsername: null, senderAvatar: null, message, createdAt }),
     );
     void client.invalidateQueries({ queryKey: queryKeys.chat.rooms() });
   });
