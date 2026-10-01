@@ -56,3 +56,19 @@ Resolved:
   1. Route farmer: /profile/me.
   2. Radio set primary trên trang info: cả farmer và distributor (owner).
   3. Set primary, create, delete address: mỗi cái 1 API call riêng, gọi ngay.
+
+## Change 1 (đã duyệt) — address quản lý ngay trên page, confirm khi đổi primary
+Áp dụng: /profile/me (FARMER) + /profile/<distributor_id> (owner).
+Decisions:
+  - Dòng "Địa chỉ" của InfoTable (owner) = ManageAddressesSection: radio + nút xoá từng dòng + nút "Thêm địa chỉ".
+  - "Thêm địa chỉ" mở dialog chứa AddAddressForm (map trong ô bảng quá hẹp ở mobile) — vẫn ngay trên page, không qua dialog Chỉnh sửa.
+  - Đổi radio → ConfirmDialog "Đặt làm địa chỉ mặc định?" (hiện địa chỉ) → xác nhận mới PATCH; huỷ → radio giữ primary cũ.
+  - Dialog Chỉnh sửa: bỏ section địa chỉ, trả lại bố cục cũ (form là vùng cuộn, sm:max-w-lg).
+
+- [x] 17. [atomic-component]    organism  PrimaryAddressPicker    (update) — ConfirmDialog trước khi PATCH primary; lỗi hiện trong confirm
+- [x] 18. [atomic-component]    organism  AddAddressDialog        (new, feature user) — Dialog bọc AddAddressForm, thành công → đóng
+- [x] 19. [atomic-component]    organism  ManageAddressesSection  (update) — bỏ heading (nhãn đã có trong bảng), "Thêm địa chỉ" mở AddAddressDialog; export cho distributor
+- [x] 20. [atomic-component]    organism  EditProfileDialog       (update) — bỏ ManageAddressesSection, bỏ wrapper cuộn
+- [x] 21. [atomic-component]    organism  FarmerProfileInfo       (update) — dòng Địa chỉ = ManageAddressesSection
+- [x] 22. [atomic-component]    organism  DistributorProfileInfo  (update) — owner: dòng Địa chỉ = ManageAddressesSection
+- [x] 23. [arch-review]

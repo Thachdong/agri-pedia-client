@@ -89,7 +89,7 @@ export function AddAddressForm({ userId, onDone, onCancel, className }: TAddAddr
       onSubmit={onSubmit}
       noValidate
       aria-label="Thêm địa chỉ"
-      className={cn("flex flex-col gap-4 rounded-lg border border-border-subtle p-3 sm:p-4", className)}
+      className={cn("flex flex-col gap-4", className)}
     >
       <AddressFields
         idPrefix="new-address"

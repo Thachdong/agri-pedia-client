@@ -8,13 +8,13 @@ import { cn } from "@/shared/lib/utils";
 import { FARMER_PROFILE_INFO_LABELS } from "../constants/profile.constants";
 import { useMe } from "../hooks/use-me";
 import { EditProfileDialog } from "./edit-profile-dialog";
-import { PrimaryAddressPicker } from "./primary-address-picker";
+import { ManageAddressesSection } from "./manage-addresses-section";
 
 export type TFarmerProfileInfoProps = { className?: string };
 
 /**
  * Phần thông tin trang /profile/me (FARMER) — bố cục như thông tin distributor (ui-ux.md §7) nhưng không có tabs:
- * avatar + username + "Chỉnh sửa" (M6 + M7), bảng Email / Phone, Giới thiệu, Địa chỉ (radio → đặt mặc định ngay).
+ * avatar + username + "Chỉnh sửa" (M6), bảng Email / Phone, Giới thiệu, Địa chỉ (M7: đặt mặc định / thêm / xoá ngay trên trang).
  */
 export function FarmerProfileInfo({ className }: TFarmerProfileInfoProps) {
   const me = useMe();
@@ -38,7 +38,7 @@ export function FarmerProfileInfo({ className }: TFarmerProfileInfoProps) {
   const items: TInfoTableItem[] = [
     { label: FARMER_PROFILE_INFO_LABELS.contact, value: email ?? phone },
     { label: FARMER_PROFILE_INFO_LABELS.bio, value: bio },
-    { label: FARMER_PROFILE_INFO_LABELS.address, value: <PrimaryAddressPicker userId={id} /> },
+    { label: FARMER_PROFILE_INFO_LABELS.address, value: <ManageAddressesSection userId={id} /> },
   ];
 
   return (

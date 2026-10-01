@@ -2,7 +2,7 @@
 
 import { ExternalLinkIcon } from "lucide-react";
 import { AddressList, type TAddressListItem } from "@/features/location";
-import { PrimaryAddressPicker } from "@/features/user";
+import { ManageAddressesSection } from "@/features/user";
 import { Avatar, Button } from "@/shared/components/atoms";
 import { InfoTable, type TInfoTableItem } from "@/shared/components/molecules";
 import { BUSINESS_TYPE_LABELS } from "@/shared/constants";
@@ -12,7 +12,7 @@ import { useDistributorProfile } from "../hooks/use-distributor-profile";
 
 export type TDistributorProfileInfoProps = {
   distributorId: string;
-  /** Người xem là chủ profile → địa chỉ là đủ danh sách (/users/me/addresses) dạng radio, đổi mặc định ngay. */
+  /** Người xem là chủ profile → địa chỉ là đủ danh sách (/users/me/addresses) để đặt mặc định / thêm / xoá ngay trên trang. */
   isOwner?: boolean;
   /** Nút cạnh tiêu đề (Chat / Đánh giá / Chỉnh sửa) — do trang quyết định theo người xem. */
   actions?: React.ReactNode;
@@ -62,7 +62,7 @@ export function DistributorProfileInfo({ distributorId, isOwner = false, actions
     },
     {
       label: PROFILE_INFO_LABELS.address,
-      value: isOwner ? <PrimaryAddressPicker userId={distributorId} /> : <AddressList addresses={addresses} />,
+      value: isOwner ? <ManageAddressesSection userId={distributorId} /> : <AddressList addresses={addresses} />,
     },
     { label: PROFILE_INFO_LABELS.businessType, value: bussinessType && BUSINESS_TYPE_LABELS[bussinessType] },
     { label: PROFILE_INFO_LABELS.bio, value: bio },

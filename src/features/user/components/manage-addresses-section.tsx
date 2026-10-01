@@ -1,7 +1,7 @@
 "use client";
 
 import { PlusIcon, Trash2Icon } from "lucide-react";
-import { useId, useState } from "react";
+import { useState } from "react";
 import { useAddressLabel } from "@/features/location";
 import { Button } from "@/shared/components/atoms";
 import { ConfirmDialog } from "@/shared/components/molecules";
@@ -11,7 +11,7 @@ import { cn } from "@/shared/lib/utils";
 import { ADDRESS_ERROR_MESSAGES } from "../constants/address.constants";
 import { useDeleteMyAddress } from "../hooks/use-delete-my-address";
 import type { TMyAddress } from "../types/user.types";
-import { AddAddressForm } from "./add-address-form";
+import { AddAddressDialog } from "./add-address-dialog";
 import { PrimaryAddressPicker } from "./primary-address-picker";
 
 export type TManageAddressesSectionProps = {
@@ -21,12 +21,11 @@ export type TManageAddressesSectionProps = {
 };
 
 /**
- * M7 — quản lý address trong dialog Chỉnh sửa: radio đặt mặc định, xoá (xác nhận), thêm (form inline).
- * Mỗi thao tác gọi API ngay, độc lập với nút "Lưu" của hồ sơ. Address mặc định không xoá được (server 409).
- * Chứa `<form>` thêm address → không đặt lồng trong form khác.
+ * M7 — quản lý address ngay trên trang profile (ô "Địa chỉ" của bảng thông tin, chỉ chủ profile):
+ * radio đặt mặc định (xác nhận), xoá (xác nhận), "Thêm địa chỉ" (dialog). Mỗi thao tác gọi API riêng.
+ * Address mặc định không xoá được (server 409). Nhãn "Địa chỉ" do bảng hiển thị nên không có tiêu đề riêng.
  */
 export function ManageAddressesSection({ userId, className }: TManageAddressesSectionProps) {
-  const titleId = useId();
   const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState<TMyAddress | null>(null);
   const deleteAddress = useDeleteMyAddress();
@@ -52,22 +51,7 @@ export function ManageAddressesSection({ userId, className }: TManageAddressesSe
     : undefined;
 
   return (
-    <section aria-labelledby={titleId} className={cn("flex flex-col gap-3", className)}>
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div className="min-w-0">
-          <h3 id={titleId} className="text-sm font-semibold">
-            Địa chỉ
-          </h3>
-          <p className="text-xs text-muted-foreground">Chọn một địa chỉ để đặt làm mặc định. Địa chỉ mặc định không xoá được.</p>
-        </div>
-        {!adding && (
-          <Button type="button" variant="outline" size="sm" onClick={() => setAdding(true)}>
-            <PlusIcon aria-hidden />
-            Thêm địa chỉ
-          </Button>
-        )}
-      </div>
-
+    <div className={cn("flex flex-col gap-3", className)}>
       <PrimaryAddressPicker
         userId={userId}
         disabled={deleteAddress.isPending}
@@ -87,7 +71,15 @@ export function ManageAddressesSection({ userId, className }: TManageAddressesSe
         )}
       />
 
-      {adding && <AddAddressForm userId={userId} onDone={() => setAdding(false)} onCancel={() => setAdding(false)} />}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-xs text-muted-foreground">Chọn để đổi địa chỉ mặc định. Địa chỉ mặc định không xoá được.</p>
+        <Button type="button" variant="outline" size="sm" onClick={() => setAdding(true)}>
+          <PlusIcon aria-hidden />
+          Thêm địa chỉ
+        </Button>
+      </div>
+
+      <AddAddressDialog open={adding} onOpenChange={setAdding} userId={userId} />
 
       <ConfirmDialog
         open={deleting !== null}
@@ -100,7 +92,7 @@ export function ManageAddressesSection({ userId, className }: TManageAddressesSe
         loading={deleteAddress.isPending}
         error={deleteError}
       />
-    </section>
+    </div>
   );
 }
 

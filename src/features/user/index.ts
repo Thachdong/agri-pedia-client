@@ -2,7 +2,7 @@
 export { DistributorHomeRedirect } from "./components/distributor-home-redirect";
 export { EditProfileDialog, type TEditProfileDialogProps } from "./components/edit-profile-dialog";
 export { FarmerProfileInfo, type TFarmerProfileInfoProps } from "./components/farmer-profile-info";
-export { PrimaryAddressPicker, type TPrimaryAddressPickerProps } from "./components/primary-address-picker";
+export { ManageAddressesSection, type TManageAddressesSectionProps } from "./components/manage-addresses-section";
 export { UserMenu } from "./components/user-menu";
 export { meQuery, myAddressesQuery } from "./hooks/user.queries";
 export { useCreateMyAddress } from "./hooks/use-create-my-address";
