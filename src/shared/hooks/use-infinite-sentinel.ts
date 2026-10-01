@@ -8,8 +8,8 @@ export type TInfiniteSentinelOptions = {
   /** Trang kế lỗi → không tự tải lại (tránh vòng lặp gọi lỗi); để người dùng bấm thử lại. */
   isFetchNextPageError: boolean;
   fetchNextPage: () => unknown;
-  /** Khung cuộn chứa sentinel (vd. body của dialog); bỏ trống = viewport. */
-  root?: React.RefObject<Element | null>;
+  /** Khung cuộn chứa sentinel (vd. body của dialog); bỏ trống / null = viewport. */
+  root?: Element | null;
   /** Tải sớm trước khi sentinel thật sự hiện ra. */
   rootMargin?: string;
 };
@@ -33,7 +33,7 @@ export function useInfiniteSentinel<TElement extends Element = HTMLDivElement>({
   useEffect(() => {
     if (!sentinel || !canLoadMore) return;
     const observer = new IntersectionObserver(([entry]) => entry?.isIntersecting && fetchNextPage(), {
-      root: root?.current ?? null,
+      root: root ?? null,
       rootMargin,
     });
     observer.observe(sentinel);

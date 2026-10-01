@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -26,7 +26,7 @@ export type TProductDetailDialogProps = {
   /** Nút cạnh tên sản phẩm (owner: Sửa / Xoá). */
   renderActions?: (product: TProductDetail) => React.ReactNode;
   /** Phần đánh giá dưới thông tin; `scrollRoot` = khung cuộn của dialog (cho infinite scroll). */
-  renderReviews?: (product: TProductDetail, scrollRoot: React.RefObject<HTMLDivElement | null>) => React.ReactNode;
+  renderReviews?: (product: TProductDetail, scrollRoot: HTMLDivElement | null) => React.ReactNode;
 };
 
 /**
@@ -47,7 +47,8 @@ export function ProductDetailDialog({ open, onOpenChange, productId, renderActio
 type TProductDetailBodyProps = Pick<TProductDetailDialogProps, "productId" | "renderActions" | "renderReviews">;
 
 function ProductDetailBody({ productId, renderActions, renderReviews }: TProductDetailBodyProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  // Element (không phải ref) → slot reviews nhận được khung cuộn và render lại khi khung đã gắn.
+  const [scrollRoot, setScrollRoot] = useState<HTMLDivElement | null>(null);
   const detail = useProductDetail(productId);
   const categories = useCategories();
   const product = detail.data;
@@ -101,7 +102,7 @@ function ProductDetailBody({ productId, renderActions, renderReviews }: TProduct
         </div>
       </DialogHeader>
 
-      <div ref={scrollRef} className="scrollbar-thin flex min-h-0 flex-col gap-6 overflow-y-auto p-6">
+      <div ref={setScrollRoot} className="scrollbar-thin flex min-h-0 flex-col gap-6 overflow-y-auto p-6">
         <MediaGallery media={product.media} label={product.name} />
 
         <InfoTable
@@ -113,7 +114,7 @@ function ProductDetailBody({ productId, renderActions, renderReviews }: TProduct
           ]}
         />
 
-        {renderReviews?.(product, scrollRef)}
+        {renderReviews?.(product, scrollRoot)}
       </div>
     </>
   );

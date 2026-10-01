@@ -15,7 +15,7 @@ export type TProductReviewsPanelProps = {
   /** Được phép đánh giá: FARMER và product đang ACTIVE (server từ chối product khác ACTIVE). */
   canReview?: boolean;
   /** Khung cuộn chứa panel (body dialog) — cho infinite scroll. */
-  scrollRoot?: React.RefObject<Element | null>;
+  scrollRoot?: Element | null;
   className?: string;
 };
 

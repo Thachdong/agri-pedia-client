@@ -23,7 +23,7 @@ export type TReviewListProps = {
   fetchNextPage: () => unknown;
   refetch: () => unknown;
   /** Khung cuộn chứa list (vd. body dialog); bỏ trống = viewport. */
-  scrollRoot?: React.RefObject<Element | null>;
+  scrollRoot?: Element | null;
   emptyText?: string;
   className?: string;
 };
