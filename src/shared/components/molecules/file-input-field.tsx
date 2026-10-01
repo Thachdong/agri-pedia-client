@@ -2,7 +2,8 @@
 
 import { CircleCheckIcon, FileIcon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useImagePreview } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import type { TFileUpload } from "@/shared/types";
 import { Button } from "../atoms";
@@ -29,24 +30,6 @@ export type TFileInputFieldProps = Omit<React.ComponentProps<"div">, "onChange" 
 };
 
 const PREVIEW_SIZE = 48;
-
-/**
- * Data URL để xem trước ảnh đã chọn. Đọc bất đồng bộ; kết quả gắn với đúng file đã đọc
- * nên đổi / bỏ file thì preview cũ tự mất, không cần reset state.
- */
-function useImagePreview(file: File | null) {
-  const [preview, setPreview] = useState<{ file: File; url: string } | null>(null);
-  useEffect(() => {
-    if (!file?.type.startsWith("image/")) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") setPreview({ file, url: reader.result });
-    };
-    reader.readAsDataURL(file);
-    return () => reader.abort();
-  }, [file]);
-  return preview && preview.file === file ? preview.url : null;
-}
 
 /** Thanh tiến trình + % khi đang tải, dấu "Đã tải lên" khi xong. */
 function UploadStatus({ upload }: { upload: TFileUpload }) {

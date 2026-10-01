@@ -1,4 +1,3 @@
-import { MEDIA_ALLOWED_EXTENSIONS, MEDIA_MAX_FILE_BYTES } from "@/features/media";
 import { rules, schema, v } from "@/shared/lib/validation";
 import {
   PRODUCT_DESCRIPTION_MAX,
@@ -18,7 +17,8 @@ const QUANTITY_REQUIRED = "Vui lòng nhập số lượng";
 // So round-trip qua toFixed(2) (không nhân 100) để đúng cả với giá lớn tới PRODUCT_PRICE_MAX.
 const hasAtMostTwoDecimals = (value: number) => Number(value.toFixed(2)) === value;
 
-const productImage = () => rules.file({ extensions: MEDIA_ALLOWED_EXTENSIONS.IMAGE, maxBytes: MEDIA_MAX_FILE_BYTES });
+/** Ảnh mới phải upload xong (đuôi / dung lượng đã kiểm lúc chọn). */
+const productImage = () => rules.uploadedFile();
 
 /** Field chung create / update — mirror CreateProductDto + action 13 (specs/api.md). */
 const baseFields = {

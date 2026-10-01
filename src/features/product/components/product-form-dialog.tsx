@@ -1,6 +1,6 @@
 "use client";
 
-import { MEDIA_ALLOWED_EXTENSIONS, useUploadMedia } from "@/features/media";
+import { getMediaAccept, useMediaUploads } from "@/features/media";
 import {
   Button,
   Dialog,
@@ -46,7 +46,8 @@ export type TProductFormDialogProps = {
 };
 
 const FORM_ID = "product-form";
-const IMAGE_ACCEPT = MEDIA_ALLOWED_EXTENSIONS.IMAGE.map((extension) => `.${extension}`).join(",");
+const IMAGE_TYPES = ["IMAGE"] as const;
+const IMAGE_ACCEPT = getMediaAccept(IMAGE_TYPES);
 
 /** Lỗi domain gắn được vào 1 field cụ thể. */
 const FIELD_ERRORS: Partial<Record<string, "price" | "quantity" | "categoryId">> = {
@@ -60,7 +61,7 @@ const toNumberOrNull = (value: unknown) => (value === "" || value === null ? nul
 
 /**
  * M8 / M9 — tạo / sửa sản phẩm của chính mình (ui-ux.md §7, owner).
- * Submit: upload ảnh mới lên TMP → POST /products (media) hoặc PATCH /products/:id (addMedia + removeMediaIds).
+ * Ảnh mới upload lên TMP ngay khi chọn; submit (chờ upload xong) → POST /products (media) hoặc PATCH /products/:id (addMedia + removeMediaIds).
  */
 export function ProductFormDialog({ open, onOpenChange, distributorId, product, onSaved }: TProductFormDialogProps) {
   const editing = !!product;
@@ -98,7 +99,6 @@ type TProductFormProps = {
 
 function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormProps) {
   const categories = useCategories();
-  const upload = useUploadMedia<"IMAGE">();
   const createProduct = useCreateProduct(distributorId);
   const updateProduct = useUpdateProduct(distributorId);
   const form = useAppForm<TProductFormValues>({
@@ -131,10 +131,41 @@ function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormP
   );
   const keptMediaCount = (product?.media.length ?? 0) - removeMediaIds.length;
   const setOptions = { shouldDirty: true, shouldValidate: isSubmitted };
+  const isUploading = images.some((image) => image.status === "uploading");
+
+  // Kết quả upload chỉ ghi vào ảnh còn trong form (đã bỏ thì bỏ qua).
+  const uploads = useMediaUploads({
+    types: IMAGE_TYPES,
+    onUpdate: (upload) => {
+      const current = form.getValues("images");
+      if (!current.some((image) => image.id === upload.id)) return;
+      form.setValue(
+        "images",
+        current.map((image) => (image.id === upload.id ? upload : image)),
+        { shouldValidate: form.formState.isSubmitted },
+      );
+    },
+    onFail: (id) => removeImage(id),
+  });
+  const selectImages = (files: File[]) => {
+    const started = uploads.start(files);
+    if (started.length > 0) form.setValue("images", [...form.getValues("images"), ...started], setOptions);
+  };
+  const removeImage = (id: string) => {
+    uploads.cancel(id);
+    const current = form.getValues("images");
+    if (!current.some((image) => image.id === id)) return;
+    form.setValue(
+      "images",
+      current.filter((image) => image.id !== id),
+      { shouldDirty: true, shouldValidate: form.formState.isSubmitted },
+    );
+  };
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
-      const uploaded = values.images.length > 0 ? await upload.mutateAsync(values.images.map((file) => ({ file, type: "IMAGE" }))) : [];
+      // Schema đã bắt mọi ảnh phải upload xong; giữ đúng thứ tự tile.
+      const uploaded = values.images.flatMap((image) => (image.status === "done" ? [image.media] : []));
       const fields = {
         name: values.name,
         description: values.description,
@@ -321,7 +352,8 @@ function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormP
             <MultiImageInput
               {...control}
               value={images}
-              onChange={(files) => form.setValue("images", files, setOptions)}
+              onSelect={selectImages}
+              onRemove={removeImage}
               existing={existingImages}
               onRemoveExisting={(mediaId) => form.setValue("removeMediaIds", [...removeMediaIds, mediaId], setOptions)}
               max={product ? existingImages.length + PRODUCT_MEDIA_MAX : PRODUCT_MEDIA_MAX}
@@ -342,8 +374,8 @@ function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormP
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
           Huỷ
         </Button>
-        <Button type="submit" form={FORM_ID} variant="highlight" loading={isSubmitting}>
-          {upload.isPending ? "Đang tải ảnh…" : product ? "Lưu thay đổi" : "Thêm sản phẩm"}
+        <Button type="submit" form={FORM_ID} variant="highlight" loading={isSubmitting} disabled={isUploading}>
+          {isUploading ? "Đang tải ảnh…" : product ? "Lưu thay đổi" : "Thêm sản phẩm"}
         </Button>
       </DialogFooter>
     </>

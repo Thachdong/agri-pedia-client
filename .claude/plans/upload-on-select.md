@@ -13,7 +13,7 @@ chặn submit khi còn file đang tải; bỏ file hoặc đóng dialog → abor
 - [x] 4. [feature-api]         media: uploadMedia nhận signal + onProgress; hook useMediaUploads (per-file state, pre-check đuôi/size, 1 presign/lô chọn, abort khi remove/unmount, lỗi → bỏ item + toast) thay useUploadMedia
 - [x] 5. [validation-schema]   rules.uploadedFile (item phải done; uploading → "Đang tải file…") (schema + form types chuyển sang bước 6/7 để tsc luôn xanh)
 - [x] 6. [atomic-component]    molecule FileInputField (update, value TFileUpload | null, hiện %) + organism EditProfileDialog (upload khi chọn, submit dùng media có sẵn) + updateProfileSchema / TUpdateProfileFormValues
-- [ ] 7. [atomic-component]    molecule MultiImageInput (update, value TFileUpload[], overlay %) + organism ProductFormDialog (như trên, sortOrder theo thứ tự tile) + create/updateProductSchema / TProductFormValues
+- [x] 7. [atomic-component]    molecule MultiImageInput (update, value TFileUpload[], overlay %) + organism ProductFormDialog (như trên, sortOrder theo thứ tự tile) + create/updateProductSchema / TProductFormValues
 - [ ] 8. [cleanup]             bỏ uploadMedia, useUploadMedia, rules.file (deprecated)
 - [ ] 9. [arch-review]
 

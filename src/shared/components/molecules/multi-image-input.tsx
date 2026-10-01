@@ -2,19 +2,24 @@
 
 import { ImagePlusIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
+import { useImagePreview } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
+import type { TFileUpload } from "@/shared/types";
 import { Button } from "../atoms";
 
 /** Ảnh đã có trên server (vd. media của product) — `url` là signed URL. */
 export type TExistingImage = { id: string; url: string };
 
-export type TMultiImageInputProps = Omit<React.ComponentProps<"div">, "onChange" | "defaultValue"> & {
+export type TMultiImageInputProps = Omit<React.ComponentProps<"div">, "onChange" | "onSelect" | "defaultValue"> & {
   /** id của ô "Thêm ảnh" — label của FormField trỏ tới. */
   id?: string;
-  /** Ảnh mới chọn (chưa upload). */
-  value: File[];
-  onChange: (files: File[]) => void;
+  /** Ảnh mới chọn — upload ngay khi chọn (bên gọi chạy upload, molecule chỉ hiển thị trạng thái). */
+  value: TFileUpload[];
+  /** Ảnh vừa chọn (đã cắt theo số chỗ còn lại). */
+  onSelect: (files: File[]) => void;
+  /** Bỏ 1 ảnh mới (đang tải thì bên gọi huỷ upload). */
+  onRemove: (id: string) => void;
   onBlur?: () => void;
   /** Ảnh cũ còn giữ (bên gọi tự bỏ những ảnh đã đánh dấu xoá). */
   existing?: TExistingImage[];
@@ -28,66 +33,12 @@ export type TMultiImageInputProps = Omit<React.ComponentProps<"div">, "onChange"
   "aria-describedby"?: string;
 };
 
-/**
- * Data URL để xem trước các file mới. Đọc bất đồng bộ; kết quả gắn với đúng mảng file đã đọc
- * nên đổi danh sách thì preview cũ tự bỏ, không cần reset state.
- */
-function useImagePreviews(files: File[]) {
-  const [previews, setPreviews] = useState<{ files: File[]; urls: Map<File, string> } | null>(null);
-  useEffect(() => {
-    const readers = files.map((file) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (typeof reader.result !== "string") return;
-        const url = reader.result;
-        setPreviews((current) => {
-          const urls = new Map(current?.files === files ? current.urls : undefined);
-          urls.set(file, url);
-          return { files, urls };
-        });
-      };
-      reader.readAsDataURL(file);
-      return reader;
-    });
-    return () => readers.forEach((reader) => reader.abort());
-  }, [files]);
-  return previews?.files === files ? previews.urls : null;
-}
-
 const TILE = "relative aspect-square overflow-hidden rounded-lg border border-border-subtle bg-muted";
 
-/**
- * Chọn nhiều ảnh: lưới ảnh cũ (xoá được) + ảnh mới (bỏ chọn được) + ô "Thêm ảnh" (chọn nhiều file một lần).
- * Đủ `max` ảnh thì ẩn ô thêm. Input file thật bị ẩn; ô thêm nhận focus, label và aria của field.
- */
-export function MultiImageInput({
-  id,
-  value,
-  onChange,
-  onBlur,
-  existing = [],
-  onRemoveExisting,
-  max,
-  accept = "image/*",
-  disabled = false,
-  className,
-  "aria-invalid": ariaInvalid,
-  "aria-describedby": ariaDescribedBy,
-  ...props
-}: TMultiImageInputProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const previews = useImagePreviews(value);
-  const total = existing.length + value.length;
-  const remaining = Math.max(max - total, 0);
+type TRemoveButtonProps = { label: string; onClick: () => void; disabled: boolean };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const picked = Array.from(event.target.files ?? []).slice(0, remaining);
-    // Reset để chọn lại cùng file vẫn bắn change.
-    event.target.value = "";
-    if (picked.length > 0) onChange([...value, ...picked]);
-  };
-
-  const removeButton = (label: string, onClick: () => void) => (
+function RemoveButton({ label, onClick, disabled }: TRemoveButtonProps) {
+  return (
     <Button
       type="button"
       variant="secondary"
@@ -100,6 +51,77 @@ export function MultiImageInput({
       <XIcon aria-hidden />
     </Button>
   );
+}
+
+type TUploadTileProps = { upload: TFileUpload; onRemove: () => void; disabled: boolean };
+
+/** Tile ảnh mới: xem trước + lớp phủ % khi đang tải. Preview đọc theo `file` nên tiến trình đổi không đọc lại ảnh. */
+function UploadTile({ upload, onRemove, disabled }: TUploadTileProps) {
+  const preview = useImagePreview(upload.file);
+  const uploading = upload.status === "uploading";
+
+  return (
+    <li className={TILE} aria-busy={uploading}>
+      {preview && (
+        <Image src={preview} alt={`Xem trước ${upload.file.name}`} fill sizes="128px" unoptimized className="object-cover" />
+      )}
+      {uploading && (
+        <div className="absolute inset-0 flex flex-col items-center justify-end gap-1 bg-background/70 p-2">
+          <span className="text-xs font-medium tabular-nums">{upload.progress}%</span>
+          <span
+            role="progressbar"
+            aria-label={`Đang tải ${upload.file.name}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={upload.progress}
+            className="h-1.5 w-full overflow-hidden rounded-full bg-muted"
+          >
+            <span
+              className="block h-full rounded-full bg-highlight transition-[width] duration-200"
+              style={{ width: `${upload.progress}%` }}
+            />
+          </span>
+        </div>
+      )}
+      <RemoveButton
+        label={uploading ? `Huỷ tải ${upload.file.name}` : `Bỏ chọn ${upload.file.name}`}
+        onClick={onRemove}
+        disabled={disabled}
+      />
+    </li>
+  );
+}
+
+/**
+ * Chọn nhiều ảnh (upload ngay khi chọn): lưới ảnh cũ (xoá được) + ảnh mới (tiến trình, bỏ chọn được) + ô "Thêm ảnh".
+ * Đủ `max` ảnh thì ẩn ô thêm. Input file thật bị ẩn; ô thêm nhận focus, label và aria của field.
+ */
+export function MultiImageInput({
+  id,
+  value,
+  onSelect,
+  onRemove,
+  onBlur,
+  existing = [],
+  onRemoveExisting,
+  max,
+  accept = "image/*",
+  disabled = false,
+  className,
+  "aria-invalid": ariaInvalid,
+  "aria-describedby": ariaDescribedBy,
+  ...props
+}: TMultiImageInputProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const total = existing.length + value.length;
+  const remaining = Math.max(max - total, 0);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const picked = Array.from(event.target.files ?? []).slice(0, remaining);
+    // Reset để chọn lại cùng file vẫn bắn change.
+    event.target.value = "";
+    if (picked.length > 0) onSelect(picked);
+  };
 
   return (
     <div className={cn("flex flex-col gap-2", className)} {...props}>
@@ -119,20 +141,18 @@ export function MultiImageInput({
         {existing.map((image, index) => (
           <li key={image.id} className={TILE}>
             <Image src={image.url} alt={`Ảnh ${index + 1}`} fill sizes="128px" unoptimized className="object-cover" />
-            {onRemoveExisting && removeButton(`Xoá ảnh ${index + 1}`, () => onRemoveExisting(image.id))}
+            {onRemoveExisting && (
+              <RemoveButton
+                label={`Xoá ảnh ${index + 1}`}
+                onClick={() => onRemoveExisting(image.id)}
+                disabled={disabled}
+              />
+            )}
           </li>
         ))}
-        {value.map((file, index) => {
-          const preview = previews?.get(file);
-          return (
-            <li key={`${file.name}-${file.lastModified}-${index}`} className={TILE}>
-              {preview && (
-                <Image src={preview} alt={`Xem trước ${file.name}`} fill sizes="128px" unoptimized className="object-cover" />
-              )}
-              {removeButton(`Bỏ chọn ${file.name}`, () => onChange(value.filter((_, position) => position !== index)))}
-            </li>
-          );
-        })}
+        {value.map((upload) => (
+          <UploadTile key={upload.id} upload={upload} onRemove={() => onRemove(upload.id)} disabled={disabled} />
+        ))}
         {remaining > 0 && (
           <li>
             <button

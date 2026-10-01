@@ -1,4 +1,4 @@
-import type { TMediaType } from "@/features/media";
+import type { TMediaType, TMediaUpload } from "@/features/media";
 import type { TApiSchema } from "@/shared/lib/http";
 
 /** Item list GET /products — chỉ ACTIVE; `thumbnail` là signed URL ảnh đầu (hết hạn) hoặc null. */
@@ -25,7 +25,7 @@ export type TCategoriesResponse = TApiSchema<"ListCategoriesResponse">;
 
 /**
  * Giá trị form tạo (M8) / sửa (M9) product — 1 shape cho cả 2 để dùng chung field.
- * `price` / `quantity` null = chưa nhập; `unit` "" = chưa chọn; `images` là ảnh mới (chưa upload).
+ * `price` / `quantity` null = chưa nhập; `unit` "" = chưa chọn; `images` là ảnh mới (upload ngay khi chọn).
  * `status` / `removeMediaIds` chỉ dùng khi sửa (schema tạo bỏ qua).
  */
 export type TProductFormValues = {
@@ -36,6 +36,6 @@ export type TProductFormValues = {
   categoryId: string;
   unit: TProductUnit | "";
   status: TProductStatus;
-  images: File[];
+  images: TMediaUpload<"IMAGE">[];
   removeMediaIds: string[];
 };
