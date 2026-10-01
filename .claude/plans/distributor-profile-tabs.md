@@ -42,7 +42,7 @@ Decisions:
 - [x] 17. [atomic-component]    molecule  MediaGallery           (new, shared) — ảnh lớn + thumbnails, video / file fallback
 - [x] 18. [atomic-component]    molecule  ProductCard            (new, feature product) — thumbnail, name, price / unit, quantity; clickable
 - [x] 19. [atomic-component]    molecule  ReviewItem             (new, feature review) — avatar, username, sao, nội dung, tag product (tuỳ), thời gian tương đối; highlight "Đánh giá của bạn"
-- [ ] 20. [atomic-component]    molecule  RatingSummary          (new, feature review) — điểm TB / tổng, 5 hàng đếm + thanh (TReviewSummary — 1 shape)
+- [x] 20. [atomic-component]    molecule  RatingSummary          (new, feature review) — điểm TB / tổng, 5 hàng đếm + thanh (TReviewSummary — 1 shape)
 - [ ] 21. [atomic-component]    organism  ReviewForm             (new, feature review) — form inline sao + nội dung cho target bất kỳ, xử lý 409 / 403; ReviewShopDialog dùng lại
 - [ ] 22. [atomic-component]    organism  ProductReviewsPanel    (new, feature review) — summary PRODUCT + list review product (infinite), highlight của farmer, chưa có → ReviewForm
 - [ ] 23. [atomic-component]    organism  ShopReviewsPanel       (new, feature review) — RatingSummary shop + list review shop & product (infinite), highlight của farmer
