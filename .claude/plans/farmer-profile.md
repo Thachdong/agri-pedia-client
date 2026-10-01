@@ -30,7 +30,7 @@ Decisions:
 - [x] 9. [atomic-component]     organism  AddAddressForm          (new, feature user) — AddressFields + Lưu / Huỷ, POST address, lỗi server
 - [x] 10. [atomic-component]    organism  ManageAddressesSection  (new, feature user) — AddressRadioList (set primary) + xoá (ConfirmDialog) + AddAddressForm; loading/error/empty
 - [x] 11. [atomic-component]    organism  EditProfileDialog       (update, feature user) — theo role (FARMER bỏ bussinessType/giấy phép), email/phone read-only, gắn ManageAddressesSection
-- [ ] 12. [atomic-component]    organism  FarmerProfileInfo       (new, feature user) — title + nút Chỉnh sửa + InfoTable (Email / Phone, Giới thiệu, Địa chỉ = PrimaryAddressPicker); loading/error
+- [x] 12. [atomic-component]    organism  FarmerProfileInfo       (new, feature user) — title + nút Chỉnh sửa + InfoTable (Email / Phone, Giới thiệu, Địa chỉ = PrimaryAddressPicker); loading/error
 - [ ] 13. [atomic-component]    organism  DistributorProfileInfo  (update, feature distributor) — owner: Địa chỉ = PrimaryAddressPicker thay AddressList
 - [ ] 14. [atomic-component]    organism  UserMenu                (update, feature user) — "Trang cá nhân" theo role
 - [ ] 15. [page]                page /profile/me — prefetch me + addresses, DISTRIBUTOR → redirect /profile/<id>, ProfileLayout không tabs, metadata, loading/error
