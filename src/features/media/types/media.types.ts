@@ -1,4 +1,5 @@
 import type { TApiSchema } from "@/shared/lib/http";
+import type { TFileUpload } from "@/shared/types";
 
 export type TPresignFileInput = TApiSchema<"PresignFileDto">;
 export type TMediaType = TPresignFileInput["type"];
@@ -15,3 +16,6 @@ export type TUploadedMedia<TType extends TMediaType = TMediaType> = Omit<TPresig
   type: TType;
   key: string;
 };
+
+/** Item form của ô chọn file upload-ngay-khi-chọn — `media` (khi done) gửi thẳng vào request lưu. */
+export type TMediaUpload<TType extends TMediaType = TMediaType> = TFileUpload<TUploadedMedia<TType>>;
