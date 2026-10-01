@@ -47,7 +47,8 @@ export function UserMenu() {
         <DropdownMenuSeparator />
         {me && (
           <DropdownMenuItem asChild>
-            <Link href={ROUTES.profile(me.id)}>
+            {/* FARMER không có profile public → trang hồ sơ riêng; DISTRIBUTOR → profile public (có tabs). */}
+            <Link href={me.role === "FARMER" ? ROUTES.myProfile : ROUTES.profile(me.id)}>
               <UserIcon aria-hidden />
               Trang cá nhân
             </Link>
