@@ -38,7 +38,7 @@ Decisions:
 - [x] 13. [shared-unit]         util formatPrice (shared, VND) + PRODUCT_UNIT_LABELS / PRODUCT_STATUS_LABELS (feature product constants)
 - [x] 14. [atomic-component]    atom      StarRating             (new, shared) — hiển thị sao readonly (giá trị lẻ), aria-label
 - [x] 15. [atomic-component]    molecule  ConfirmDialog          (new, shared) — tiêu đề, mô tả, nút xác nhận destructive + loading
-- [ ] 16. [atomic-component]    molecule  MultiImageInput        (new, shared) — ảnh hiện có (xoá được) + chọn thêm ảnh mới, preview lưới, giới hạn số lượng
+- [x] 16. [atomic-component]    molecule  MultiImageInput        (new, shared) — ảnh hiện có (xoá được) + chọn thêm ảnh mới, preview lưới, giới hạn số lượng
 - [ ] 17. [atomic-component]    molecule  MediaGallery           (new, shared) — ảnh lớn + thumbnails, video / file fallback
 - [ ] 18. [atomic-component]    molecule  ProductCard            (new, feature product) — thumbnail, name, price / unit, quantity; clickable
 - [ ] 19. [atomic-component]    molecule  ReviewItem             (new, feature review) — avatar, username, sao, nội dung, tag product (tuỳ), thời gian tương đối; highlight "Đánh giá của bạn"
