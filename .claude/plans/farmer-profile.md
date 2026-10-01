@@ -25,7 +25,7 @@ Decisions:
 - [x] 4. [feature-api]          DELETE /users/me/addresses/:id → deleteMyAddress, useDeleteMyAddress; invalidates users.addresses; message 409
 - [x] 5. [validation-schema]    createAddressSchema (feature user) — province, ward, houseNumber ≤255 (trim), lat/long trong khoảng, bắt chọn vị trí
 - [x] 6. [validation-schema]    updateFarmerProfileSchema (feature user) — username 1..100, bio ≤1000, avatar uploadedFile
-- [ ] 7. [atomic-component]     molecule  AddressRadioList        (new, feature location) — radio theo address id (useAddressLabel), value = primary, slot action từng dòng, disabled
+- [x] 7. [atomic-component]     molecule  AddressRadioList        (new, feature location) — radio theo address id (useAddressLabel), value = primary, slot action từng dòng, disabled
 - [ ] 8. [atomic-component]     organism  PrimaryAddressPicker    (new, feature user) — useMyAddresses + AddressRadioList + useSetMyPrimaryAddress (dùng ở trang info cả 2 role)
 - [ ] 9. [atomic-component]     organism  AddAddressForm          (new, feature user) — AddressFields + Lưu / Huỷ, POST address, lỗi server
 - [ ] 10. [atomic-component]    organism  ManageAddressesSection  (new, feature user) — AddressRadioList (set primary) + xoá (ConfirmDialog) + AddAddressForm; loading/error/empty
