@@ -1,3 +1,4 @@
+import type { TMediaUpload } from "@/features/media";
 import type { TApiSchema } from "@/shared/lib/http";
 import type { TBusinessType } from "@/shared/types";
 
@@ -12,13 +13,13 @@ export type TUpdateProfileInput = TApiSchema<"UpdateProfileDto">;
 export type TUpdateProfileResponse = TApiSchema<"UpdateProfileResponse">;
 
 /**
- * Giá trị form Edit profile (M6) — file giữ nguyên `File` đã chọn (null = giữ file cũ), upload lúc submit
- * rồi mới đổi sang `TUpdateProfileInput`. Form chỉ dành cho DISTRIBUTOR nên bussinessType bắt buộc.
+ * Giá trị form Edit profile (M6) — file là item upload ngay khi chọn (null = giữ file cũ); submit lấy `media` (key TMP)
+ * đổi sang `TUpdateProfileInput`. Form chỉ dành cho DISTRIBUTOR nên bussinessType bắt buộc.
  */
 export type TUpdateProfileFormValues = {
   username: string;
   bio: string;
   bussinessType: TBusinessType;
-  avatar: File | null;
-  bussinessLicense: File | null;
+  avatar: TMediaUpload<"IMAGE"> | null;
+  bussinessLicense: TMediaUpload<"IMAGE" | "FILE"> | null;
 };

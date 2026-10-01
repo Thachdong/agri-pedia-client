@@ -1,6 +1,6 @@
 "use client";
 
-import { getFileExtension, MEDIA_ALLOWED_EXTENSIONS, type TMediaType, useUploadMedia } from "@/features/media";
+import { getMediaAccept, useMediaUploads } from "@/features/media";
 import {
   Avatar,
   Button,
@@ -32,22 +32,19 @@ export type TEditProfileDialogProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-/** Loại media profile dùng — avatar luôn IMAGE, giấy phép IMAGE | FILE. */
-type TProfileMediaType = Extract<TMediaType, "IMAGE" | "FILE">;
-
 const FORM_ID = "edit-profile-form";
 const BIO_MAX = 1000;
-const toAccept = (extensions: readonly string[]) => extensions.map((extension) => `.${extension}`).join(",");
-const AVATAR_ACCEPT = toAccept(MEDIA_ALLOWED_EXTENSIONS.IMAGE);
-const LICENSE_ACCEPT = toAccept([...MEDIA_ALLOWED_EXTENSIONS.IMAGE, ...MEDIA_ALLOWED_EXTENSIONS.FILE]);
+/** Avatar luôn IMAGE; giấy phép là ảnh → IMAGE, pdf → FILE (loại server dùng để kiểm tra đuôi). */
+const AVATAR_TYPES = ["IMAGE"] as const;
+const LICENSE_TYPES = ["IMAGE", "FILE"] as const;
+const AVATAR_ACCEPT = getMediaAccept(AVATAR_TYPES);
+const LICENSE_ACCEPT = getMediaAccept(LICENSE_TYPES);
 
-/** Giấy phép là pdf → FILE, còn lại (ảnh) → IMAGE — đúng loại server dùng để kiểm tra đuôi. */
-const licenseMediaType = (file: File): TProfileMediaType =>
-  (MEDIA_ALLOWED_EXTENSIONS.FILE as readonly string[]).includes(getFileExtension(file.name)) ? "FILE" : "IMAGE";
+type TFileField = "avatar" | "bussinessLicense";
 
 /**
  * M6 — sửa hồ sơ của chính mình (ui-ux.md §7, DISTRIBUTOR): username, avatar, bio, lĩnh vực, giấy phép.
- * Submit: upload file mới (nếu có) lên TMP → PATCH /users/me với key vừa nhận.
+ * File upload lên TMP ngay khi chọn; submit (chờ upload xong) → PATCH /users/me với key đã nhận.
  */
 export function EditProfileDialog({ open, onOpenChange }: TEditProfileDialogProps) {
   const { data: me } = useMe();
@@ -69,7 +66,6 @@ export function EditProfileDialog({ open, onOpenChange }: TEditProfileDialogProp
 type TEditProfileFormProps = { me: TUserProfile; onDone: () => void; onCancel: () => void };
 
 function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
-  const upload = useUploadMedia<TProfileMediaType>();
   const updateMe = useUpdateMe(me.id);
   const form = useAppForm<TUpdateProfileFormValues>({
     schema: updateProfileSchema,
@@ -89,27 +85,51 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
   const bioLength = form.watch("bio").length;
   const username = form.watch("username");
 
-  const setFile = (field: "avatar" | "bussinessLicense", file: File | null) =>
-    form.setValue(field, file, { shouldDirty: true, shouldValidate: true });
+  const isUploading = avatar?.status === "uploading" || license?.status === "uploading";
+
+  // Kết quả upload chỉ ghi vào field nếu item đó vẫn đang được chọn (đã đổi / bỏ file thì bỏ qua).
+  const syncUpload = (field: TFileField, id: string, next: TUpdateProfileFormValues[TFileField]) => {
+    if (form.getValues(field)?.id !== id) return;
+    form.setValue(field, next, { shouldValidate: form.formState.isSubmitted });
+  };
+  const avatarUploads = useMediaUploads({
+    types: AVATAR_TYPES,
+    onUpdate: (upload) => syncUpload("avatar", upload.id, upload),
+    onFail: (id) => syncUpload("avatar", id, null),
+  });
+  const licenseUploads = useMediaUploads({
+    types: LICENSE_TYPES,
+    onUpdate: (upload) => syncUpload("bussinessLicense", upload.id, upload),
+    onFail: (id) => syncUpload("bussinessLicense", id, null),
+  });
+
+  const selectAvatar = (file: File) => {
+    const [upload] = avatarUploads.start([file]);
+    // File sai đã bị loại (toast) → giữ file đang chọn.
+    if (!upload) return;
+    const previous = form.getValues("avatar");
+    if (previous) avatarUploads.cancel(previous.id);
+    form.setValue("avatar", upload, { shouldDirty: true, shouldValidate: form.formState.isSubmitted });
+  };
+  const selectLicense = (file: File) => {
+    const [upload] = licenseUploads.start([file]);
+    if (!upload) return;
+    const previous = form.getValues("bussinessLicense");
+    if (previous) licenseUploads.cancel(previous.id);
+    form.setValue("bussinessLicense", upload, { shouldDirty: true, shouldValidate: form.formState.isSubmitted });
+  };
+  const removeFile = (field: TFileField, cancel: (id: string) => void) => {
+    const previous = form.getValues(field);
+    if (previous) cancel(previous.id);
+    form.setValue(field, null, { shouldDirty: true, shouldValidate: form.formState.isSubmitted });
+  };
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
-      const files = [
-        values.avatar && { field: "avatar" as const, file: values.avatar, type: "IMAGE" as const },
-        values.bussinessLicense && {
-          field: "bussinessLicense" as const,
-          file: values.bussinessLicense,
-          type: licenseMediaType(values.bussinessLicense),
-        },
-      ].filter((item) => !!item);
-      const uploaded = files.length > 0 ? await upload.mutateAsync(files) : [];
-
       const input: TUpdateProfileInput = { username: values.username, bio: values.bio, bussinessType: values.bussinessType };
-      files.forEach(({ field }, index) => {
-        const media = uploaded[index];
-        if (field === "avatar") input.avatar = { ...media, type: "IMAGE" };
-        else input.bussinessLicense = media;
-      });
+      // Schema đã bắt mọi file phải upload xong.
+      if (values.avatar?.status === "done") input.avatar = values.avatar.media;
+      if (values.bussinessLicense?.status === "done") input.bussinessLicense = values.bussinessLicense.media;
 
       await updateMe.mutateAsync(input);
       onDone();
@@ -142,7 +162,8 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
             <FileInputField
               {...control}
               value={avatar}
-              onChange={(file) => setFile("avatar", file)}
+              onSelect={selectAvatar}
+              onRemove={() => removeFile("avatar", avatarUploads.cancel)}
               accept={AVATAR_ACCEPT}
               disabled={isSubmitting}
               buttonLabel="Chọn ảnh"
@@ -189,7 +210,8 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
             <FileInputField
               {...control}
               value={license}
-              onChange={(file) => setFile("bussinessLicense", file)}
+              onSelect={selectLicense}
+              onRemove={() => removeFile("bussinessLicense", licenseUploads.cancel)}
               accept={LICENSE_ACCEPT}
               disabled={isSubmitting}
               placeholder={
@@ -240,8 +262,8 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
           Huỷ
         </Button>
-        <Button type="submit" form={FORM_ID} loading={isSubmitting}>
-          {upload.isPending ? "Đang tải file…" : "Lưu thay đổi"}
+        <Button type="submit" form={FORM_ID} loading={isSubmitting} disabled={isUploading}>
+          {isUploading ? "Đang tải file…" : "Lưu thay đổi"}
         </Button>
       </DialogFooter>
     </>
