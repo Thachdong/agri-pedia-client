@@ -13,7 +13,7 @@ export type TChatRoomItemProps = Omit<React.ComponentProps<"button">, "children"
 
 /** Một room trong danh sách chat: avatar, tên, tin cuối, thời gian, số chưa đọc. */
 export function ChatRoomItem({ room, currentUserId, onSelect, className, ...props }: TChatRoomItemProps) {
-  const { otherUsername, lastMessage, lastMessageAt, unreadCount } = room;
+  const { otherUsername, otherUserAvatar, lastMessage, lastMessageAt, unreadCount } = room;
   const name = otherUsername ?? CHAT_UNKNOWN_USER_NAME;
   const unread = unreadCount > 0;
   const preview = lastMessage
@@ -31,8 +31,7 @@ export function ChatRoomItem({ room, currentUserId, onSelect, className, ...prop
       )}
       {...props}
     >
-      {/* otherUserAvatar là media id, chưa có endpoint đổi sang URL → chữ cái đầu. */}
-      <Avatar name={name} size="lg" />
+      <Avatar src={otherUserAvatar} name={name} size="lg" />
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="flex items-baseline justify-between gap-2">
           <span className={cn("truncate text-sm", unread && "font-semibold")}>{name}</span>

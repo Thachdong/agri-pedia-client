@@ -21,7 +21,7 @@ export type TDistributorProfileInfoProps = {
 
 /**
  * Phần thông tin distributor (ui-ux.md §7, image-5): tiêu đề username + nút, bảng Email/Phone, Giấy phép,
- * Địa chỉ, Lĩnh vực, Giới thiệu. Avatar là media id (chưa có URL) → chữ cái đầu.
+ * Địa chỉ, Lĩnh vực, Giới thiệu. Avatar: signed URL, không có / lỗi → chữ cái đầu.
  */
 export function DistributorProfileInfo({ distributorId, isOwner = false, actions, className }: TDistributorProfileInfoProps) {
   const profile = useDistributorProfile(distributorId);
@@ -41,7 +41,7 @@ export function DistributorProfileInfo({ distributorId, isOwner = false, actions
     );
   }
 
-  const { username, email, phone, bussinessLicense, bussinessType, bio, address } = profile.data;
+  const { username, avatar, email, phone, bussinessLicense, bussinessType, bio, address } = profile.data;
   // Owner: danh sách đầy đủ; đang tải / lỗi → tạm dùng primary address của profile.
   const addresses: TAddressListItem[] =
     isOwner && myAddresses.data ? myAddresses.data : address ? [{ ...address, isPrimary: true }] : [];
@@ -71,7 +71,7 @@ export function DistributorProfileInfo({ distributorId, isOwner = false, actions
     <section aria-labelledby="distributor-profile-title" className={cn("flex flex-col gap-4", className)}>
       <header className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <Avatar name={username} size="lg" />
+          <Avatar src={avatar} name={username} size="lg" />
           <h1 id="distributor-profile-title" className="truncate text-xl font-semibold">
             {username}
           </h1>

@@ -39,8 +39,7 @@ export function UserMenu() {
         aria-label={`Tài khoản: ${name}`}
       >
         <span className="hidden max-w-32 truncate text-sm font-medium sm:inline">{name}</span>
-        {/* avatar là media id, chưa có endpoint đổi sang URL → chữ cái đầu. */}
-        <Avatar name={name} />
+        <Avatar src={me?.avatar} name={name} />
         <ChevronDownIcon className="size-4 text-muted-foreground" aria-hidden />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">

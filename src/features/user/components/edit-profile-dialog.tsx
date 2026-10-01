@@ -169,7 +169,7 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
               buttonLabel="Chọn ảnh"
               placeholder={
                 <span className="flex items-center gap-2">
-                  <Avatar name={username || me.username} size="sm" />
+                  <Avatar src={me.avatar} name={username || me.username} size="sm" />
                   {me.avatar ? "Giữ ảnh hiện tại" : "Chưa có ảnh đại diện"}
                 </span>
               }
