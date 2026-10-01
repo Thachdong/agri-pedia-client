@@ -7,6 +7,8 @@ export const APP_ERROR_CODE = {
   VALIDATION_ERROR: "VALIDATION_ERROR",
   SESSION_EXPIRED: "SESSION_EXPIRED",
   NETWORK_ERROR: "NETWORK_ERROR",
+  /** Storage từ chối file khi PUT lên signed URL (sai Content-Type, quá dung lượng, URL hết hạn). */
+  UPLOAD_FAILED: "UPLOAD_FAILED",
   UNKNOWN_ERROR: "UNKNOWN_ERROR",
 } as const;
 

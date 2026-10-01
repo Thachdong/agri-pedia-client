@@ -21,8 +21,9 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 
 - [x] 1. [feature-api]          `npm run gen:api` + GET /distributors/:id → TDistributorProfile, getDistributorProfile, distributorProfileQuery, useDistributorProfile; keys distributors.detail(id)
 - [x] 2. [feature-api]          GET /users/me/addresses → TMyAddress, myAddressesQuery, useMyAddresses; keys users.addresses
-- [ ] 3. [feature-scaffold]     features `media` (services, hooks, types) và `review` (components, hooks, services, schemas, types)
-- [ ] 4. [feature-api]          POST /media/presign-url + PUT signed URL → uploadMedia, useUploadMedia (mutation, không invalidate)
+- [x] 3. [feature-scaffold]     features `media` (services, hooks, types) và `review` (components, hooks, services, schemas, types)
+- [x] 4a. [data-wrapper]        http: putToSignedUrl(url, file, { headers, signal }) — PUT Blob lên URL tuyệt đối, đúng headers presign, không credentials; lỗi → AppError (0 NETWORK_ERROR | UPLOAD_FAILED)
+- [ ] 4. [feature-api]          POST /media/presign-url → presignUrls; uploadMedia(files) = presign + putToSignedUrl song song → [{ key, type, extension, filename }] (shape AvatarFileDto / BusinessLicenseFileDto); useUploadMedia (invalidates: false)
 - [ ] 5. [feature-api]          PATCH /users/me → TUpdateProfileInput, useUpdateMe; invalidates users.me + distributors.detail(me.id)
 - [ ] 6. [feature-api]          POST /reviews → TCreateReviewInput, useCreateReview; keys reviews.all (namespace mới); invalidates reviews.all
 - [ ] 7. [validation-schema]    updateProfileSchema (feature user) — username 1..100, bio ≤1000, bussinessType, file avatar/license (đuôi cho phép)
