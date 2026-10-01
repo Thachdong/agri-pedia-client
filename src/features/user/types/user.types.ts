@@ -29,3 +29,6 @@ export type TUpdateProfileFormValues = {
   avatar: TMediaUpload<"IMAGE"> | null;
   bussinessLicense: TMediaUpload<"IMAGE" | "FILE"> | null;
 };
+
+/** Giá trị form Edit profile của FARMER — không có bussinessType / giấy phép (server: USER_BUSINESS_TYPE_NOT_ALLOWED). */
+export type TUpdateFarmerProfileFormValues = Pick<TUpdateProfileFormValues, "username" | "bio" | "avatar">;
