@@ -33,8 +33,8 @@ Decisions:
 - [x] 12. [atomic-component]    organism  FarmerProfileInfo       (new, feature user) — title + nút Chỉnh sửa + InfoTable (Email / Phone, Giới thiệu, Địa chỉ = PrimaryAddressPicker); loading/error
 - [x] 13. [atomic-component]    organism  DistributorProfileInfo  (update, feature distributor) — owner: Địa chỉ = PrimaryAddressPicker thay AddressList
 - [x] 14. [atomic-component]    organism  UserMenu                (update, feature user) — "Trang cá nhân" theo role
-- [ ] 15. [page]                page /profile/me — prefetch me + addresses, DISTRIBUTOR → redirect /profile/<id>, ProfileLayout không tabs, metadata, loading/error
-- [ ] 16. [arch-review]
+- [x] 15. [page]                page /profile/me — prefetch me + addresses, DISTRIBUTOR → redirect /profile/<id>, ProfileLayout không tabs, metadata, loading/error
+- [x] 16. [arch-review]
 
 Components (in order):
   [atom]      RadioGroup, RadioGroupItem, Button, Avatar, Dialog, Input, Textarea, Select  reuse  shared
