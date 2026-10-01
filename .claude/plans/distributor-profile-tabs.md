@@ -28,7 +28,7 @@ Decisions:
 - [x] 3. [feature-api]          GET /products/:id → TProductDetail, productDetailQuery, useProductDetail; keys products.detail(id)
 - [x] 4. [feature-api]          GET /categories → TCategory, categoriesQuery, useCategories; keys products.categories (staleTime dài)
 - [x] 5. [feature-api]          POST /products → TCreateProductInput, useCreateProduct; invalidates products.list(distributorId)
-- [ ] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
+- [x] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
 - [ ] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list + reviews.distributor
 - [ ] 8. [feature-api]          GET /reviews → TDistributorReview, TShopReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
 - [ ] 9. [feature-api]          GET /reviews/products/:id → TProductReview, productReviewsQuery (infinite), useProductReviews; keys reviews.product(productId)

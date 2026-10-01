@@ -4,6 +4,7 @@ export { useCategories } from "./hooks/use-categories";
 export { useCreateProduct } from "./hooks/use-create-product";
 export { useDistributorProducts } from "./hooks/use-distributor-products";
 export { useProductDetail } from "./hooks/use-product-detail";
+export { useUpdateProduct } from "./hooks/use-update-product";
 export type {
   TCategory,
   TCreateProductInput,
@@ -12,4 +13,5 @@ export type {
   TProductMedia,
   TProductStatus,
   TProductUnit,
+  TUpdateProductInput,
 } from "./types/product.types";

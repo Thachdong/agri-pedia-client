@@ -17,5 +17,8 @@ export type TProductUnit = TProductDetail["unit"];
 export type TCreateProductInput = TApiSchema<"CreateProductDto">;
 export type TCreateProductResponse = TApiSchema<"CreateProductResponse">;
 
+/** Body PATCH /products/:id — field bỏ trống giữ nguyên (không gửi `null`); `addMedia` / `removeMediaIds` 0..10. */
+export type TUpdateProductInput = TApiSchema<"UpdateProductDto">;
+
 export type TCategory = TApiSchema<"CategoryResponse">;
 export type TCategoriesResponse = TApiSchema<"ListCategoriesResponse">;

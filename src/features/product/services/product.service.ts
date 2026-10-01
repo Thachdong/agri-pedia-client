@@ -5,6 +5,7 @@ import type {
   TCreateProductResponse,
   TDistributorProductsPage,
   TProductDetail,
+  TUpdateProductInput,
 } from "../types/product.types";
 
 /** Public — `distributorId` không phải DISTRIBUTOR → 404 PRODUCT_DISTRIBUTOR_NOT_FOUND. */
@@ -27,3 +28,7 @@ export const getCategories = (client: IHttpClient = http) => client.get<TCategor
  */
 export const createProduct = (input: TCreateProductInput, client: IHttpClient = http) =>
   client.post<TCreateProductResponse>("/products", input);
+
+/** Chỉ seller của product (403 PRODUCT_SELLER_NOT_ALLOWED / PRODUCT_NOT_OWNER); đã xoá → 404 PRODUCT_NOT_FOUND. Body rỗng. */
+export const updateProduct = (productId: string, input: TUpdateProductInput, client: IHttpClient = http) =>
+  client.patch<void>(`/products/${encodeURIComponent(productId)}`, input);
