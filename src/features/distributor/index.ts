@@ -6,6 +6,10 @@ export {
   type TDistributorExplorerProviderProps,
   type TExplorerOrigin,
 } from "./components/distributor-explorer";
+export {
+  DistributorProfileInfo,
+  type TDistributorProfileInfoProps,
+} from "./components/distributor-profile-info";
 export { distributorProfileQuery, nearbyDistributorsQuery } from "./hooks/distributor.queries";
 export { useDistributorProfile } from "./hooks/use-distributor-profile";
 export { useNearbyDistributors } from "./hooks/use-nearby-distributors";
