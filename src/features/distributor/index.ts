@@ -7,6 +7,10 @@ export {
   type TExplorerOrigin,
 } from "./components/distributor-explorer";
 export {
+  DistributorProfileActions,
+  type TDistributorProfileActionsProps,
+} from "./components/distributor-profile-actions";
+export {
   DistributorProfileInfo,
   type TDistributorProfileInfoProps,
 } from "./components/distributor-profile-info";

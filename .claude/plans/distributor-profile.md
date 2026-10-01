@@ -37,8 +37,8 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 - [x] 15. [atomic-component]    organism  ReviewShopDialog        (new, feature review) — M4: StarRatingInput + Textarea, lỗi 409/403
 - [x] 16. [atomic-component]    organism  EditProfileDialog       (new, feature user) — M6: form + 2 FileInputField, upload rồi PATCH
 - [x] 17. [atomic-component]    organism  DistributorProfileInfo  (new, feature distributor) — title + slot actions + InfoTable (Email / Phone, Giấy phép, Địa chỉ, Lĩnh vực, Giới thiệu); loading/error
-- [ ] 18. [atomic-component]    organism  DistributorProfileActions (new, feature distributor) — owner: Edit → EditProfileDialog; FARMER: Chat → ChatModal, Đánh giá → ReviewShopDialog
-- [ ] 19. [atomic-component]    template  ProfileLayout           (new, shared) — header + vùng thông tin + slot tabs (để trống, làm sau)
+- [x] 18. [atomic-component]    organism  DistributorProfileActions (new, feature distributor) — owner: Edit → EditProfileDialog; FARMER: Chat → ChatModal, Đánh giá → ReviewShopDialog
+- [x] 19. [atomic-component]    template  ProfileLayout           (new, shared) — header + vùng thông tin + slot tabs (để trống, làm sau)
 - [ ] 20. [page]                page /profile/[id] — hasSession branching, prefetch, notFound, generateMetadata, loading/error/not-found
 - [ ] 21. [arch-review]
 
