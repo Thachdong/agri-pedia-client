@@ -31,7 +31,7 @@ export type TDistributorCardProps = Omit<React.ComponentProps<typeof Link>, "hre
 
 /** Card distributor (ui-ux.md §6 (7)) — click mở /profile/<userId>. */
 export function DistributorCard({ distributor, provinceName, selected = false, className, ...props }: TDistributorCardProps) {
-  const { userId, username, bussinessType, address, distanceMeters } = distributor;
+  const { userId, username, avatar, bussinessType, address, distanceMeters } = distributor;
 
   return (
     <Link
@@ -40,8 +40,7 @@ export function DistributorCard({ distributor, provinceName, selected = false, c
       className={cn(cardVariants({ selected }), className)}
       {...props}
     >
-      {/* `avatar` của API là media id, chưa có endpoint đổi sang URL → hiện chữ cái đầu. */}
-      <Avatar name={username} size="lg" />
+      <Avatar src={avatar} name={username} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate font-medium">{username}</span>
         {bussinessType && (

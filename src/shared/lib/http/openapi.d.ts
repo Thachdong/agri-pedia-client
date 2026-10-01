@@ -51,7 +51,7 @@ export interface paths {
         put?: never;
         /**
          * Log in with identifier and password
-         * @description Responds 200 with an access token (JWT), a refresh token and the user profile. Unknown identifier, login type mismatch and wrong password all return USER_INVALID_CREDENTIALS. USER_NOT_ACTIVE (distributor not activated yet) is returned only after the password matched.
+         * @description Responds 200 with an access token (JWT), a refresh token and the user profile (same shape as GET /users/me: `email` / `phone` login identifier, `bussinessLicense` signed URL). Unknown identifier, login type mismatch and wrong password all return USER_INVALID_CREDENTIALS. USER_NOT_ACTIVE (distributor not activated yet) is returned only after the password matched.
          */
         post: operations["AuthController_login"];
         delete?: never;
@@ -149,7 +149,7 @@ export interface paths {
         };
         /**
          * Get the profile of the caller
-         * @description Profile as returned by POST /auth/login (user), including the primary address (null if none). Works for any user with a valid access token, whatever its status.
+         * @description Profile as returned by POST /auth/login (user), including the primary address (null if none). `email` / `phone`: the login identifier (the other one is null). `bussinessLicense`: signed read URL of the business license (expires; null if none). Works for any user with a valid access token, whatever its status.
          */
         get: operations["UserController_getMe"];
         put?: never;
@@ -164,6 +164,70 @@ export interface paths {
         patch: operations["UserController_updateMe"];
         trace?: never;
     };
+    "/users/me/addresses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the addresses of the caller
+         * @description Every address of the caller, primary first. Works for any user with a valid access token, whatever its status.
+         */
+        get: operations["UserController_getMyAddresses"];
+        put?: never;
+        /**
+         * Add an address for the caller
+         * @description Responds 201 with the new address id. `province` = a province `codename` from GET /provinces; `ward` = a ward `codename` of that province from GET /provinces/{provinceCode}/wards. `isPrimary` (default false): true makes it the primary address and the current primary becomes a normal one.
+         */
+        post: operations["UserController_createMyAddress"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/me/addresses/{addressId}/primary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Set one of the caller's addresses as primary
+         * @description The current primary becomes a normal address. Already primary: 200, nothing changes. An address of another user answers 404 like an unknown one.
+         */
+        patch: operations["UserController_setMyPrimaryAddress"];
+        trace?: never;
+    };
+    "/users/me/addresses/{addressId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete one of the caller's addresses
+         * @description Hard delete. The primary address cannot be deleted: set another address as primary first (PATCH /users/me/addresses/{addressId}/primary), so a user always keeps one. An address of another user answers 404 like an unknown one.
+         */
+        delete: operations["UserController_deleteMyAddress"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/distributors/nearby": {
         parameters: {
             query?: never;
@@ -176,6 +240,26 @@ export interface paths {
          * @description No login needed; the access token is optional (an invalid one → 401). Location, first match wins: `lat` + `long` (GPS or a point picked on the map); `provinceCode` [+ `wardCode`] (codenames from GET /provinces and GET /provinces/{provinceCode}/wards); none: the caller's primary address (guest, or no address: every distributor by username). A point and an area cannot be combined. Stages run in order and the first one with any distributor is paginated — point: `radius` (within DISTRIBUTOR_SEARCH_RADIUS_KM, default 30 km) → `nationwide_by_distance`, nearest first; area: `province` (the given ward first, then by username) → `nationwide`, by username. `scope` names the stage, `source` where the location came from. `distanceMeters` is set for the distance scopes only. Only ACTIVE distributors are listed, at their primary address. No match at all: 200 with empty `items`.
          */
         get: operations["DistributorController_findNearby"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/distributors/{distributorId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the public profile of a distributor (public)
+         * @description No login needed. Returns the distributor with its primary address (null if none); the full address list is GET /users/me/addresses (owner only). `email` / `phone`: the login identifier (the other one is null). `bussinessLicense`: signed read URL of the business license (expires; null if none). `avatar` is a media id. Unknown id, not a DISTRIBUTOR, or not ACTIVE → 404 USER_DISTRIBUTOR_NOT_FOUND.
+         */
+        get: operations["DistributorController_getProfile"];
         put?: never;
         post?: never;
         delete?: never;
@@ -218,6 +302,26 @@ export interface paths {
         get: operations["LocationController_listWards"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/media/presign-url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Get signed URLs to upload 1..10 files to TMP storage
+         * @description Send 1..10 `files`; returns one `items` entry per file, in the same order. Allowed extensions: IMAGE jpg/jpeg/png/webp, VIDEO mp4/mov, FILE pdf (case-insensitive, leading dot ignored). All-or-nothing: if any file has an extension not allowed for its type, responds 400 `MEDIA_INVALID_EXTENSION` with `details.files: [{ index, type, extension, allowed }]` listing every invalid file, and no URL is issued. Upload each file with `PUT <presignUrl>` sending exactly its `headers` (Content-Type and `x-goog-content-length-range`); the storage rejects a different Content-Type, a file over 10 MB, or an expired URL. Keep each `key` to confirm the upload later.
+         */
+        post: operations["MediaController_presignUrl"];
         delete?: never;
         options?: never;
         head?: never;
@@ -304,26 +408,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/media/presign-url": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Get signed URLs to upload 1..10 files to TMP storage
-         * @description Send 1..10 `files`; returns one `items` entry per file, in the same order. Allowed extensions: IMAGE jpg/jpeg/png/webp, VIDEO mp4/mov, FILE pdf (case-insensitive, leading dot ignored). All-or-nothing: if any file has an extension not allowed for its type, responds 400 `MEDIA_INVALID_EXTENSION` with `details.files: [{ index, type, extension, allowed }]` listing every invalid file, and no URL is issued. Upload each file with `PUT <presignUrl>` sending exactly its `headers` (Content-Type and `x-goog-content-length-range`); the storage rejects a different Content-Type, a file over 10 MB, or an expired URL. Keep each `key` to confirm the upload later.
-         */
-        post: operations["MediaController_presignUrl"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/products": {
         parameters: {
             query?: never;
@@ -355,7 +439,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Get a product detail (public)
+         * @description No login needed. Returns the product in any status (ACTIVE / INACTIVE / OUT_OF_STOCK) with its seller `distributorId` and every media (IMAGE / VIDEO / FILE) ordered by `sortOrder`. Each `url` is a signed URL (expires after the configured TTL, default 1h). A deleted product → 404. Rating: `GET /reviews/summary`.
+         */
+        get: operations["ProductController_getDetail"];
         put?: never;
         post?: never;
         /**
@@ -407,6 +495,46 @@ export interface paths {
          * @description Caller must be a FARMER whose account is ACTIVE, otherwise 403 `REVIEW_REVIEWER_NOT_ALLOWED`. `targetType` USER: `targetId` is a distributor user id; it must be an ACTIVE DISTRIBUTOR. `targetType` PRODUCT: `targetId` is a product id; the product must be ACTIVE (deleted → 404, INACTIVE / OUT_OF_STOCK → 422). A farmer reviews each target once (second time → 409). `star` integer 1..5; `content` 1..1000 characters after trimming. On success the distributor (the shop itself, or the seller of the product) gets a REVIEW notification with `referenceId` = `reviewId`.
          */
         post: operations["ReviewController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the rating of a product or a distributor (public)
+         * @description No login needed. `targetType=PRODUCT`: reviews of that product. `targetType=USER`: reviews of the distributor itself only (not of its products; the whole shop summary is in `GET /reviews`). `avgRating` has 1 decimal and is 0 when there is no review. A target without reviews, or that does not exist, returns all zero.
+         */
+        get: operations["ReviewController_summary"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/reviews/products/{productId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List reviews of a product (public)
+         * @description No login needed. Reviews of one product (any status; a deleted or unknown product → 404), newest first. Filter with `star`. `limit` 1..50, default 20. To get the next page pass the returned `nextCursor` as `cursor` with the same `star`; `nextCursor` is null on the last page. `user.avatar` is a signed URL (expires after the configured TTL, default 1h), or null. Rating of the product: `GET /reviews/summary`.
+         */
+        get: operations["ReviewController_listByProduct"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -522,7 +650,7 @@ export interface paths {
         };
         /**
          * List the messages of a chat room
-         * @description Caller must be a member of the room. Newest message first (`createdAt` desc); `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` to get older messages (null on the last page). Read-only: does not mark messages read (socket `chat.room.enter` does). New messages arrive live through socket `chat.message.received`.
+         * @description Caller must be a member of the room. Newest message first (`createdAt` desc); `limit` 1..50, default 20; pass the returned `nextCursor` as `cursor` to get older messages (null on the last page). Each message carries its sender's `senderUsername` (null when the user no longer exists) and `senderAvatar` (signed read URL that expires; null when none). Read-only: does not mark messages read (socket `chat.room.enter` does). New messages arrive live through socket `chat.message.received` (same sender fields).
          */
         get: operations["ChatController_listMessages"];
         put?: never;
@@ -597,6 +725,8 @@ export interface components {
             id: string;
             /** @enum {string} */
             loginType: "EMAIL" | "PHONE";
+            email: string | null;
+            phone: string | null;
             username: string;
             /** @enum {string} */
             role: "FARMER" | "DISTRIBUTOR";
@@ -633,6 +763,29 @@ export interface components {
         IssueRealtimeTicketResponse: {
             ticket: string;
             expiresIn: number;
+        };
+        MyAddressResponse: {
+            id: string;
+            province: string;
+            ward: string;
+            houseNumber: string;
+            lat: number;
+            long: number;
+            isPrimary: boolean;
+        };
+        ListMyAddressesResponse: {
+            addresses: components["schemas"]["MyAddressResponse"][];
+        };
+        CreateAddressDto: {
+            province: string;
+            ward: string;
+            houseNumber: string;
+            lat: number;
+            long: number;
+            isPrimary?: boolean;
+        };
+        CreateAddressResponse: {
+            addressId: string;
         };
         AvatarFileDto: {
             /** @enum {string} */
@@ -690,6 +843,20 @@ export interface components {
             items: components["schemas"]["NearbyDistributorResponse"][];
             total: number;
         };
+        DistributorProfileResponse: {
+            id: string;
+            email: string | null;
+            phone: string | null;
+            username: string;
+            avatar: string | null;
+            bio: string | null;
+            /** @enum {string|null} */
+            bussinessType: "AGRICULTURAL_CHEMICAL_SUPPLIES" | "SEEDS_SEEDLINGS" | "AQUACULTURE_SEEDLINGS" | null;
+            bussinessLicense: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            address: components["schemas"]["UserAddressResponse"] | null;
+        };
         LocationItemResponse: {
             codename: string;
             name: string;
@@ -699,6 +866,23 @@ export interface components {
         };
         ListWardsResponse: {
             wards: components["schemas"]["LocationItemResponse"][];
+        };
+        PresignFileDto: {
+            filename: string;
+            extension: string;
+            /** @enum {string} */
+            type: "IMAGE" | "VIDEO" | "FILE";
+        };
+        GetPresignUrlDto: {
+            files: components["schemas"]["PresignFileDto"][];
+        };
+        PresignedMediaResponse: {
+            presignUrl: string;
+            key: string;
+            headers: Record<string, never>;
+        };
+        GetPresignUrlResponse: {
+            items: components["schemas"]["PresignedMediaResponse"][];
         };
         ActivateAccountDto: {
             identifier: string;
@@ -719,23 +903,6 @@ export interface components {
             code: string;
             newPassword: string;
         };
-        PresignFileDto: {
-            filename: string;
-            extension: string;
-            /** @enum {string} */
-            type: "IMAGE" | "VIDEO" | "FILE";
-        };
-        GetPresignUrlDto: {
-            files: components["schemas"]["PresignFileDto"][];
-        };
-        PresignedMediaResponse: {
-            presignUrl: string;
-            key: string;
-            headers: Record<string, never>;
-        };
-        GetPresignUrlResponse: {
-            items: components["schemas"]["PresignedMediaResponse"][];
-        };
         DistributorProductResponse: {
             id: string;
             name: string;
@@ -750,6 +917,25 @@ export interface components {
         ListDistributorProductsResponse: {
             products: components["schemas"]["DistributorProductResponse"][];
             nextCursor: string | null;
+        };
+        ProductMediaResponse: {
+            id: string;
+            type: Record<string, never>;
+            url: string;
+        };
+        GetProductDetailResponse: {
+            id: string;
+            name: string;
+            description: string;
+            price: number;
+            quantity: number;
+            /** @enum {string} */
+            unit: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton";
+            categoryId: string;
+            /** @enum {string} */
+            status: "ACTIVE" | "INACTIVE" | "OUT_OF_STOCK";
+            distributorId: string;
+            media: components["schemas"]["ProductMediaResponse"][];
         };
         ProductMediaDto: {
             key: string;
@@ -826,6 +1012,27 @@ export interface components {
             reviews: components["schemas"]["DistributorReviewResponse"][];
             nextCursor: string | null;
         };
+        GetReviewSummaryResponse: {
+            avgRating: number;
+            reviewCount: number;
+            oneStarCount: number;
+            twoStarCount: number;
+            threeStarCount: number;
+            fourStarCount: number;
+            fiveStarCount: number;
+        };
+        ProductReviewResponse: {
+            id: string;
+            star: number;
+            content: string;
+            /** Format: date-time */
+            createdAt: string;
+            user: components["schemas"]["ReviewerResponse"];
+        };
+        ListProductReviewsResponse: {
+            reviews: components["schemas"]["ProductReviewResponse"][];
+            nextCursor: string | null;
+        };
         CreateReviewDto: {
             /** @enum {string} */
             targetType: "PRODUCT" | "USER";
@@ -878,6 +1085,8 @@ export interface components {
         RoomMessageResponse: {
             id: string;
             senderId: string;
+            senderUsername: string | null;
+            senderAvatar: string | null;
             message: string;
             /** Format: date-time */
             createdAt: string;
@@ -1264,6 +1473,194 @@ export interface operations {
             };
         };
     };
+    UserController_getMyAddresses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListMyAddressesResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_createMyAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAddressDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateAddressResponse"];
+                };
+            };
+            /** @description Request validation failed, or: USER_INVALID_COORDINATES, USER_LOCATION_INVALID */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_setMyPrimaryAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    UserController_deleteMyAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                addressId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description USER_ADDRESS_PRIMARY_NOT_DELETABLE */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
     DistributorController_findNearby: {
         parameters: {
             query?: {
@@ -1299,6 +1696,45 @@ export interface operations {
             };
             /** @description AUTH_INVALID_ACCESS_TOKEN */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DistributorController_getProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                distributorId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DistributorProfileResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description USER_DISTRIBUTOR_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1357,6 +1793,47 @@ export interface operations {
             };
             /** @description LOCATION_PROVINCE_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    MediaController_presignUrl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GetPresignUrlDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPresignUrlResponse"];
+                };
+            };
+            /** @description Request validation failed, or: MEDIA_INVALID_EXTENSION */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1576,47 +2053,6 @@ export interface operations {
             };
         };
     };
-    MediaController_presignUrl: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["GetPresignUrlDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetPresignUrlResponse"];
-                };
-            };
-            /** @description Request validation failed, or: MEDIA_INVALID_EXTENSION */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
-                };
-            };
-            /** @description AUTH_INVALID_ACCESS_TOKEN */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainErrorResponse"];
-                };
-            };
-        };
-    };
     ProductController_listByDistributor: {
         parameters: {
             query: {
@@ -1707,6 +2143,45 @@ export interface operations {
                 };
             };
             /** @description PRODUCT_CATEGORY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ProductController_getDetail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                productId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetProductDetailResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description PRODUCT_NOT_FOUND */
             404: {
                 headers: {
                     [name: string]: unknown;
@@ -1961,6 +2436,80 @@ export interface operations {
             };
             /** @description REVIEW_INVALID_TARGET */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ReviewController_summary: {
+        parameters: {
+            query: {
+                targetType: "PRODUCT" | "USER";
+                targetId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetReviewSummaryResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+        };
+    };
+    ReviewController_listByProduct: {
+        parameters: {
+            query?: {
+                star?: number;
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                productId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListProductReviewsResponse"];
+                };
+            };
+            /** @description Request validation failed, or: REVIEW_INVALID_CURSOR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description REVIEW_TARGET_NOT_FOUND */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -27,3 +27,12 @@ export const USER_LABELS = {
   geolocation: "Bạn ở đây",
   profile: "Địa chỉ của bạn",
 } as const;
+
+/** Nhãn các hàng bảng thông tin distributor (ui-ux.md §7). */
+export const PROFILE_INFO_LABELS = {
+  contact: "Email / Phone",
+  license: "Giấy phép kinh doanh",
+  address: "Địa chỉ",
+  businessType: "Lĩnh vực kinh doanh",
+  bio: "Giới thiệu",
+} as const;

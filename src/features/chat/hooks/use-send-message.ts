@@ -20,7 +20,14 @@ export const useSendMessage = (senderId: string) => {
     invalidates: () => [queryKeys.chat.rooms()],
     onSuccess: (ack, input, _onMutateResult, { client }) => {
       client.setQueryData<TChatMessagesCache>(queryKeys.chat.messages(ack.roomId), (cache) =>
-        prependMessage(cache, { id: ack.messageId, senderId, message: input.message.trim(), createdAt: ack.createdAt }),
+        prependMessage(cache, {
+          id: ack.messageId,
+          senderId,
+          senderUsername: null,
+          senderAvatar: null,
+          message: input.message.trim(),
+          createdAt: ack.createdAt,
+        }),
       );
     },
   });

@@ -1,4 +1,4 @@
-// Public API của feature `distributor` (danh sách + map distributor ở trang "/").
+// Public API của feature `distributor` (danh sách + map ở trang "/", profile public ở /profile/<id>).
 export {
   DistributorExplorerList,
   DistributorExplorerMap,
@@ -6,9 +6,23 @@ export {
   type TDistributorExplorerProviderProps,
   type TExplorerOrigin,
 } from "./components/distributor-explorer";
-export { nearbyDistributorsQuery } from "./hooks/distributor.queries";
+export {
+  DistributorProfileActions,
+  type TDistributorProfileActionsProps,
+} from "./components/distributor-profile-actions";
+export {
+  DistributorProfileTabs,
+  type TDistributorProfileTabsProps,
+} from "./components/distributor-profile-tabs";
+export {
+  DistributorProfileInfo,
+  type TDistributorProfileInfoProps,
+} from "./components/distributor-profile-info";
+export { distributorProfileQuery, nearbyDistributorsQuery } from "./hooks/distributor.queries";
+export { useDistributorProfile } from "./hooks/use-distributor-profile";
 export { useNearbyDistributors } from "./hooks/use-nearby-distributors";
 export type {
+  TDistributorProfile,
   TNearbyDistributor,
   TNearbyDistributorsParams,
   TNearbyDistributorsView,

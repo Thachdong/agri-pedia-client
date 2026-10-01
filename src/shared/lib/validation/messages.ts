@@ -19,5 +19,7 @@ export const messages: LanguageMessages = {
   "array.min": "Chọn tối thiểu {#limit} mục",
   "array.max": "Chọn tối đa {#limit} mục",
   "date.base": "Ngày không hợp lệ",
+  "file.base": "File không hợp lệ",
+  "file.uploading": "File đang tải lên, vui lòng đợi",
   "object.unknown": "Trường không được phép",
 };

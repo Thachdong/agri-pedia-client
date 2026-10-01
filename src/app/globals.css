@@ -46,6 +46,8 @@
   --color-highlight-foreground: var(--highlight-foreground);
   --color-highlight-subtle: var(--highlight-subtle);
   --color-border-subtle: var(--border-subtle);
+  --color-rating: var(--rating);
+  --color-rating-muted: var(--rating-muted);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -66,6 +68,8 @@
   --palette-btn-main: #1e4d3b;
   --palette-border-subtle: #e1eadf;
   --palette-bg-highlight-subtle: #fff4f0;
+  --palette-rating-star: #b7791f;
+  --palette-rating-star-empty: #a9b8af;
 
   /* ------------------------------------------------------------------ */
   /* 2) SEMANTIC TOKENS — map palette ở trên vào các biến có ý nghĩa,    */
@@ -90,6 +94,9 @@
   --highlight: var(--palette-text-highlight);
   --highlight-foreground: #ffffff;
   --highlight-subtle: var(--palette-bg-highlight-subtle);
+  /* Sao đánh giá: rating = sao đã chọn/đạt, rating-muted = sao trống (đồ hoạ, không phải chữ) */
+  --rating: var(--palette-rating-star);
+  --rating-muted: var(--palette-rating-star-empty);
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--palette-border-subtle);
   --border-subtle: var(--palette-border-subtle);
@@ -134,6 +141,8 @@
   --highlight: #e08a68;
   --highlight-foreground: #14201a;
   --highlight-subtle: #3a2620;
+  --rating: #f2b84b;
+  --rating-muted: #4a5c53;
   --destructive: oklch(0.704 0.191 22.216);
   --border: #2e3b35;
   --border-subtle: #2e3b35;

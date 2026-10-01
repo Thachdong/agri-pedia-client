@@ -21,5 +21,5 @@ export const GUEST_ONLY_PATHS: readonly string[] = [
   ROUTES.auth.changePassword,
 ];
 
-/** Chưa đăng nhập mà vào các trang này (và trang con) → về LOGIN_PATH. Wireframe hiện chưa có trang private. */
-export const PROTECTED_PATHS: readonly string[] = [];
+/** Chưa đăng nhập mà vào các trang này (và trang con) → về LOGIN_PATH (kèm `next` để quay lại). */
+export const PROTECTED_PATHS: readonly string[] = [ROUTES.myProfile];
