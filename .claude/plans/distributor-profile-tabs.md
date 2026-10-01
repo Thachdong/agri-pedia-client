@@ -37,7 +37,7 @@ Decisions:
 - [x] 12. [shared-unit]         hook useInfiniteSentinel (shared) — ref sentinel + IntersectionObserver → fetchNextPage
 - [x] 13. [shared-unit]         util formatPrice (shared, VND) + PRODUCT_UNIT_LABELS / PRODUCT_STATUS_LABELS (feature product constants)
 - [x] 14. [atomic-component]    atom      StarRating             (new, shared) — hiển thị sao readonly (giá trị lẻ), aria-label
-- [ ] 15. [atomic-component]    molecule  ConfirmDialog          (new, shared) — tiêu đề, mô tả, nút xác nhận destructive + loading
+- [x] 15. [atomic-component]    molecule  ConfirmDialog          (new, shared) — tiêu đề, mô tả, nút xác nhận destructive + loading
 - [ ] 16. [atomic-component]    molecule  MultiImageInput        (new, shared) — ảnh hiện có (xoá được) + chọn thêm ảnh mới, preview lưới, giới hạn số lượng
 - [ ] 17. [atomic-component]    molecule  MediaGallery           (new, shared) — ảnh lớn + thumbnails, video / file fallback
 - [ ] 18. [atomic-component]    molecule  ProductCard            (new, feature product) — thumbnail, name, price / unit, quantity; clickable
