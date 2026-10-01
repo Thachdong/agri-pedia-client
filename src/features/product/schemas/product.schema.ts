@@ -9,7 +9,7 @@ import {
   PRODUCT_STATUSES,
   PRODUCT_UNITS,
 } from "../constants/product.constants";
-import type { TCreateProductFormValues, TUpdateProductFormValues } from "../types/product.types";
+import type { TProductFormValues } from "../types/product.types";
 
 const PRICE_REQUIRED = "Vui lòng nhập giá";
 const QUANTITY_REQUIRED = "Vui lòng nhập số lượng";
@@ -56,9 +56,11 @@ const baseFields = {
     .messages({ "any.only": "Vui lòng chọn đơn vị", "string.empty": "Vui lòng chọn đơn vị" }),
 };
 
-/** M8 — tạo product: 1..10 ảnh. */
-export const createProductSchema = schema<TCreateProductFormValues>({
+/** M8 — tạo product: 1..10 ảnh; status (server tự đặt ACTIVE) / removeMediaIds bị bỏ. */
+export const createProductSchema = schema<TProductFormValues>({
   ...baseFields,
+  status: v.any().strip(),
+  removeMediaIds: v.any().strip(),
   images: v
     .array()
     .items(productImage())
@@ -69,7 +71,7 @@ export const createProductSchema = schema<TCreateProductFormValues>({
 });
 
 /** M9 — sửa product (mirror UpdateProductDto + action 14): thêm 0..10 ảnh, xoá 0..10 ảnh cũ mỗi lần lưu. */
-export const updateProductSchema = schema<TUpdateProductFormValues>({
+export const updateProductSchema = schema<TProductFormValues>({
   ...baseFields,
   status: v
     .string()

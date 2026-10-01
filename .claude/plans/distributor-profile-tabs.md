@@ -47,7 +47,7 @@ Decisions:
 - [x] 21a. [atomic-component]  molecule  ReviewList             (new, feature review) — list ReviewItem + skeleton / lỗi / rỗng / sentinel / lỗi trang kế (dùng chung 22, 23)
 - [x] 22. [atomic-component]    organism  ProductReviewsPanel    (new, feature review) — summary PRODUCT + list review product (infinite), highlight của farmer, chưa có → ReviewForm
 - [x] 23. [atomic-component]    organism  ShopReviewsPanel       (new, feature review) — RatingSummary shop + list review shop & product (infinite), highlight của farmer
-- [ ] 24. [atomic-component]    organism  ProductFormDialog      (new, feature product) — M8 / M9: form + MultiImageInput + Select category / unit / status, upload → POST / PATCH
+- [x] 24. [atomic-component]    organism  ProductFormDialog      (new, feature product) — M8 / M9: form + MultiImageInput + Select category / unit / status, upload → POST / PATCH
 - [ ] 25. [atomic-component]    organism  ProductDetailDialog    (new, feature product) — M3: useProductDetail + MediaGallery + thông tin + slot reviews + slot actions; loading / 404
 - [ ] 26. [atomic-component]    organism  DistributorProductsTab (new, feature distributor) — grid infinite ProductCard, owner "Thêm sản phẩm"; mở ProductDetailDialog (+ ProductReviewsPanel, owner Sửa / Xoá)
 - [ ] 27. [atomic-component]    organism  DistributorProfileTabs (new, feature distributor) — Tabs Sản phẩm | Đánh giá (default Sản phẩm) → DistributorProductsTab | ShopReviewsPanel

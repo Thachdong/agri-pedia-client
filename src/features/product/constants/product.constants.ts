@@ -35,3 +35,23 @@ export const PRODUCT_PRICE_MAX = 999_999_999_999.99;
 export const PRODUCT_QUANTITY_MAX = 2_147_483_647;
 /** Số media mỗi lần gửi: create 1..10, update addMedia / removeMediaIds 0..10. */
 export const PRODUCT_MEDIA_MAX = 10;
+
+/** Mã lỗi domain của POST / PATCH / DELETE /products mà UI xử lý riêng. */
+export const PRODUCT_ERROR_CODE = {
+  SELLER_NOT_ALLOWED: "PRODUCT_SELLER_NOT_ALLOWED",
+  NOT_OWNER: "PRODUCT_NOT_OWNER",
+  NOT_FOUND: "PRODUCT_NOT_FOUND",
+  CATEGORY_NOT_FOUND: "PRODUCT_CATEGORY_NOT_FOUND",
+  INVALID_PRICE: "PRODUCT_INVALID_PRICE",
+  INVALID_QUANTITY: "PRODUCT_INVALID_QUANTITY",
+} as const;
+
+/** Message tiếng Việt thay cho message tiếng Anh của server. */
+export const PRODUCT_ERROR_MESSAGES: Record<string, string> = {
+  [PRODUCT_ERROR_CODE.SELLER_NOT_ALLOWED]: "Chỉ tài khoản nhà phân phối đã kích hoạt mới được quản lý sản phẩm.",
+  [PRODUCT_ERROR_CODE.NOT_OWNER]: "Bạn không phải chủ của sản phẩm này.",
+  [PRODUCT_ERROR_CODE.NOT_FOUND]: "Sản phẩm không còn tồn tại.",
+  [PRODUCT_ERROR_CODE.CATEGORY_NOT_FOUND]: "Danh mục không còn tồn tại, vui lòng chọn lại.",
+  [PRODUCT_ERROR_CODE.INVALID_PRICE]: "Giá không hợp lệ.",
+  [PRODUCT_ERROR_CODE.INVALID_QUANTITY]: "Số lượng không hợp lệ.",
+};

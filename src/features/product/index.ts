@@ -1,5 +1,6 @@
 // Public API của feature `product` (sản phẩm của distributor: list, chi tiết, tạo / sửa / xoá).
 export { ProductCard, type TProductCardProps } from "./components/product-card";
+export { ProductFormDialog, type TProductFormDialogProps } from "./components/product-form-dialog";
 export { categoriesQuery, distributorProductsQuery, productDetailQuery } from "./hooks/product.queries";
 export { useCategories } from "./hooks/use-categories";
 export { useCreateProduct } from "./hooks/use-create-product";

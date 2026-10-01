@@ -23,19 +23,19 @@ export type TUpdateProductInput = TApiSchema<"UpdateProductDto">;
 export type TCategory = TApiSchema<"CategoryResponse">;
 export type TCategoriesResponse = TApiSchema<"ListCategoriesResponse">;
 
-/** Giá trị form tạo product (M8). `price` / `quantity` null = chưa nhập; `unit` "" = chưa chọn; `images` chưa upload. */
-export type TCreateProductFormValues = {
+/**
+ * Giá trị form tạo (M8) / sửa (M9) product — 1 shape cho cả 2 để dùng chung field.
+ * `price` / `quantity` null = chưa nhập; `unit` "" = chưa chọn; `images` là ảnh mới (chưa upload).
+ * `status` / `removeMediaIds` chỉ dùng khi sửa (schema tạo bỏ qua).
+ */
+export type TProductFormValues = {
   name: string;
   description: string;
   price: number | null;
   quantity: number | null;
   categoryId: string;
   unit: TProductUnit | "";
-  images: File[];
-};
-
-/** Giá trị form sửa product (M9) — thêm status + id media cũ cần xoá; `images` là ảnh mới thêm. */
-export type TUpdateProductFormValues = TCreateProductFormValues & {
   status: TProductStatus;
+  images: File[];
   removeMediaIds: string[];
 };
