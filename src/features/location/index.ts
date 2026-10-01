@@ -1,5 +1,6 @@
 // Public API của feature `location`.
 export { AddressFields, type TAddressFieldsProps } from "./components/address-fields";
+export { AddressList, type TAddressListItem, type TAddressListProps } from "./components/address-list";
 export { provincesQuery, wardsQuery } from "./hooks/location.queries";
 export { type TAddressCodes, useAddressLabel } from "./hooks/use-address-label";
 export { useProvinces } from "./hooks/use-provinces";
