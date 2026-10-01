@@ -65,7 +65,6 @@ export function ProductReviewsPanel({ productId, currentUserId, canReview = fals
           reviews={others}
           currentUserId={currentUserId}
           isPending={reviews.isPending}
-          isError={reviews.isError}
           hasNextPage={reviews.hasNextPage}
           isFetchingNextPage={reviews.isFetchingNextPage}
           isFetchNextPageError={reviews.isFetchNextPageError}

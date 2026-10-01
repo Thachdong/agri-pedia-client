@@ -16,7 +16,6 @@ export type TReviewListProps = {
   /** Người đang xem — review của họ được highlight. */
   currentUserId?: string;
   isPending: boolean;
-  isError: boolean;
   hasNextPage: boolean;
   isFetchingNextPage: boolean;
   isFetchNextPageError: boolean;
@@ -36,7 +35,6 @@ export function ReviewList({
   reviews,
   currentUserId,
   isPending,
-  isError,
   hasNextPage,
   isFetchingNextPage,
   isFetchNextPageError,
@@ -71,7 +69,8 @@ export function ReviewList({
     );
   }
 
-  if (isError || !reviews) {
+  // Không dùng isError: lỗi trang kế cũng bật isError → list đã có vẫn phải hiện (kèm nút tải thêm).
+  if (!reviews) {
     return (
       <div className={cn("flex flex-col items-center gap-2 py-6 text-center text-sm", className)} role="alert">
         <p className="text-muted-foreground">Không tải được đánh giá.</p>

@@ -11,6 +11,10 @@ export {
   type TDistributorProfileActionsProps,
 } from "./components/distributor-profile-actions";
 export {
+  DistributorProductsTab,
+  type TDistributorProductsTabProps,
+} from "./components/distributor-products-tab";
+export {
   DistributorProfileInfo,
   type TDistributorProfileInfoProps,
 } from "./components/distributor-profile-info";

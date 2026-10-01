@@ -32,7 +32,6 @@ export function ShopReviewsPanel({ distributorId, currentUserId, className }: TS
         reviews={query.data?.reviews}
         currentUserId={currentUserId}
         isPending={query.isPending}
-        isError={query.isError}
         hasNextPage={query.hasNextPage}
         isFetchingNextPage={query.isFetchingNextPage}
         isFetchNextPageError={query.isFetchNextPageError}
