@@ -34,7 +34,7 @@ Decisions:
 - [x] 9. [feature-api]          GET /reviews/products/:id → TProductReview, productReviewsQuery (infinite), useProductReviews; keys reviews.product(productId)
 - [x] 10. [feature-api]         GET /reviews/summary → TReviewSummaryResponse (select → TReviewSummary chung shape với GET /reviews), reviewSummaryQuery, useReviewSummary; keys reviews.summary(targetType, targetId)
 - [x] 11. [validation-schema]   productSchema create / update (feature product) — mirror CreateProductDto / UpdateProductDto, media 1..10 (create)
-- [ ] 12. [shared-unit]         hook useInfiniteSentinel (shared) — ref sentinel + IntersectionObserver → fetchNextPage
+- [x] 12. [shared-unit]         hook useInfiniteSentinel (shared) — ref sentinel + IntersectionObserver → fetchNextPage
 - [ ] 13. [shared-unit]         util formatPrice (shared, VND) + PRODUCT_UNIT_LABELS / PRODUCT_STATUS_LABELS (feature product constants)
 - [ ] 14. [atomic-component]    atom      StarRating             (new, shared) — hiển thị sao readonly (giá trị lẻ), aria-label
 - [ ] 15. [atomic-component]    molecule  ConfirmDialog          (new, shared) — tiêu đề, mô tả, nút xác nhận destructive + loading
