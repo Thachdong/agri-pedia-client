@@ -2,7 +2,7 @@
 
 import { ExternalLinkIcon } from "lucide-react";
 import { AddressList, type TAddressListItem } from "@/features/location";
-import { useMyAddresses } from "@/features/user";
+import { PrimaryAddressPicker } from "@/features/user";
 import { Avatar, Button } from "@/shared/components/atoms";
 import { InfoTable, type TInfoTableItem } from "@/shared/components/molecules";
 import { BUSINESS_TYPE_LABELS } from "@/shared/constants";
@@ -12,7 +12,7 @@ import { useDistributorProfile } from "../hooks/use-distributor-profile";
 
 export type TDistributorProfileInfoProps = {
   distributorId: string;
-  /** Người xem là chủ profile → địa chỉ lấy đủ danh sách (/users/me/addresses). */
+  /** Người xem là chủ profile → địa chỉ là đủ danh sách (/users/me/addresses) dạng radio, đổi mặc định ngay. */
   isOwner?: boolean;
   /** Nút cạnh tiêu đề (Chat / Đánh giá / Chỉnh sửa) — do trang quyết định theo người xem. */
   actions?: React.ReactNode;
@@ -25,7 +25,6 @@ export type TDistributorProfileInfoProps = {
  */
 export function DistributorProfileInfo({ distributorId, isOwner = false, actions, className }: TDistributorProfileInfoProps) {
   const profile = useDistributorProfile(distributorId);
-  const myAddresses = useMyAddresses({ enabled: isOwner });
 
   if (profile.isPending) return <ProfileInfoSkeleton className={className} />;
   if (profile.isError) {
@@ -42,9 +41,8 @@ export function DistributorProfileInfo({ distributorId, isOwner = false, actions
   }
 
   const { username, avatar, email, phone, bussinessLicense, bussinessType, bio, address } = profile.data;
-  // Owner: danh sách đầy đủ; đang tải / lỗi → tạm dùng primary address của profile.
-  const addresses: TAddressListItem[] =
-    isOwner && myAddresses.data ? myAddresses.data : address ? [{ ...address, isPrimary: true }] : [];
+  // Viewer khác chỉ thấy primary address của profile.
+  const addresses: TAddressListItem[] = address ? [{ ...address, isPrimary: true }] : [];
 
   const items: TInfoTableItem[] = [
     { label: PROFILE_INFO_LABELS.contact, value: email ?? phone },
@@ -62,7 +60,10 @@ export function DistributorProfileInfo({ distributorId, isOwner = false, actions
         </a>
       ),
     },
-    { label: PROFILE_INFO_LABELS.address, value: <AddressList addresses={addresses} /> },
+    {
+      label: PROFILE_INFO_LABELS.address,
+      value: isOwner ? <PrimaryAddressPicker userId={distributorId} /> : <AddressList addresses={addresses} />,
+    },
     { label: PROFILE_INFO_LABELS.businessType, value: bussinessType && BUSINESS_TYPE_LABELS[bussinessType] },
     { label: PROFILE_INFO_LABELS.bio, value: bio },
   ];

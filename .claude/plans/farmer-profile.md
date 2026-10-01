@@ -31,7 +31,7 @@ Decisions:
 - [x] 10. [atomic-component]    organism  ManageAddressesSection  (new, feature user) — AddressRadioList (set primary) + xoá (ConfirmDialog) + AddAddressForm; loading/error/empty
 - [x] 11. [atomic-component]    organism  EditProfileDialog       (update, feature user) — theo role (FARMER bỏ bussinessType/giấy phép), email/phone read-only, gắn ManageAddressesSection
 - [x] 12. [atomic-component]    organism  FarmerProfileInfo       (new, feature user) — title + nút Chỉnh sửa + InfoTable (Email / Phone, Giới thiệu, Địa chỉ = PrimaryAddressPicker); loading/error
-- [ ] 13. [atomic-component]    organism  DistributorProfileInfo  (update, feature distributor) — owner: Địa chỉ = PrimaryAddressPicker thay AddressList
+- [x] 13. [atomic-component]    organism  DistributorProfileInfo  (update, feature distributor) — owner: Địa chỉ = PrimaryAddressPicker thay AddressList
 - [ ] 14. [atomic-component]    organism  UserMenu                (update, feature user) — "Trang cá nhân" theo role
 - [ ] 15. [page]                page /profile/me — prefetch me + addresses, DISTRIBUTOR → redirect /profile/<id>, ProfileLayout không tabs, metadata, loading/error
 - [ ] 16. [arch-review]
