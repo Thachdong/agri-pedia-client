@@ -48,6 +48,7 @@ export const queryKeys = {
     /** Product ACTIVE của 1 distributor (infinite, cursor). */
     list: (distributorId: string) => [...queryKeys.products.lists(), distributorId] as const,
     detail: (productId: string) => [...queryKeys.products.all, "detail", productId] as const,
+    categories: () => [...queryKeys.products.all, "categories"] as const,
   },
   reviews: {
     all: ["reviews"] as const,

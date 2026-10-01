@@ -1,5 +1,5 @@
 import { http, type IHttpClient } from "@/shared/lib/http";
-import type { TDistributorProductsPage, TProductDetail } from "../types/product.types";
+import type { TCategoriesResponse, TDistributorProductsPage, TProductDetail } from "../types/product.types";
 
 /** Public — `distributorId` không phải DISTRIBUTOR → 404 PRODUCT_DISTRIBUTOR_NOT_FOUND. */
 export const getDistributorProducts = (
@@ -11,3 +11,6 @@ export const getDistributorProducts = (
 /** Public — product ở mọi status; đã xoá → 404 PRODUCT_NOT_FOUND. */
 export const getProductDetail = (productId: string, client: IHttpClient = http) =>
   client.get<TProductDetail>(`/products/${encodeURIComponent(productId)}`);
+
+/** Danh mục product, sắp theo tên (public). */
+export const getCategories = (client: IHttpClient = http) => client.get<TCategoriesResponse>("/categories");

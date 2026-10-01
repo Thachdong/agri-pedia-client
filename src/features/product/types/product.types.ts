@@ -12,3 +12,6 @@ export type TProductMedia = Omit<TApiSchema<"ProductMediaResponse">, "type"> & {
 export type TProductDetail = Omit<TApiSchema<"GetProductDetailResponse">, "media"> & { media: TProductMedia[] };
 export type TProductStatus = TProductDetail["status"];
 export type TProductUnit = TProductDetail["unit"];
+
+export type TCategory = TApiSchema<"CategoryResponse">;
+export type TCategoriesResponse = TApiSchema<"ListCategoriesResponse">;

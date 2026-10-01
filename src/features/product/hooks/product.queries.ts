@@ -1,6 +1,6 @@
 import type { IHttpClient } from "@/shared/lib/http";
 import { appInfiniteQueryOptions, appQueryOptions, queryKeys } from "@/shared/lib/query";
-import { getDistributorProducts, getProductDetail } from "../services/product.service";
+import { getCategories, getDistributorProducts, getProductDetail } from "../services/product.service";
 
 export const DISTRIBUTOR_PRODUCTS_PAGE_SIZE = 20;
 
@@ -19,4 +19,12 @@ export const productDetailQuery = (productId: string, client?: IHttpClient) =>
   appQueryOptions({
     queryKey: queryKeys.products.detail(productId),
     queryFn: () => getProductDetail(productId, client),
+  });
+
+/** Master data, không đổi trong phiên → không refetch. */
+export const categoriesQuery = (client?: IHttpClient) =>
+  appQueryOptions({
+    queryKey: queryKeys.products.categories(),
+    queryFn: () => getCategories(client),
+    staleTime: Infinity,
   });

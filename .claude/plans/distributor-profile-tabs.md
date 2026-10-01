@@ -26,7 +26,7 @@ Decisions:
 - [x] 1. [feature-scaffold]     feature `product` — layers: components, hooks, services, schemas, types, constants
 - [x] 2. [feature-api]          `npm run gen:api` + GET /products → TDistributorProduct, distributorProductsQuery (infinite), useDistributorProducts; keys products.list(distributorId)
 - [x] 3. [feature-api]          GET /products/:id → TProductDetail, productDetailQuery, useProductDetail; keys products.detail(id)
-- [ ] 4. [feature-api]          GET /categories → TCategory, categoriesQuery, useCategories; keys products.categories (staleTime dài)
+- [x] 4. [feature-api]          GET /categories → TCategory, categoriesQuery, useCategories; keys products.categories (staleTime dài)
 - [ ] 5. [feature-api]          POST /products → TCreateProductInput, useCreateProduct; invalidates products.list(distributorId)
 - [ ] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
 - [ ] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list + reviews.distributor
