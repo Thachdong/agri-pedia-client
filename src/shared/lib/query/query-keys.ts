@@ -1,3 +1,5 @@
+import type { TNearbyDistributorsParams } from "@/features/distributor";
+
 /**
  * Registry TẬP TRUNG của query keys — nơi duy nhất được viết key.
  * Mỗi feature một namespace, factory pattern, `as const`:
@@ -18,5 +20,23 @@ export const queryKeys = {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
     wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
+  },
+  users: {
+    all: ["users"] as const,
+    me: () => [...queryKeys.users.all, "me"] as const,
+  },
+  notifications: {
+    all: ["notifications"] as const,
+    list: () => [...queryKeys.notifications.all, "list"] as const,
+  },
+  chat: {
+    all: ["chat"] as const,
+    rooms: () => [...queryKeys.chat.all, "rooms"] as const,
+    messages: (roomId: string) => [...queryKeys.chat.all, "messages", roomId] as const,
+  },
+  distributors: {
+    all: ["distributors"] as const,
+    nearbyLists: () => [...queryKeys.distributors.all, "nearby"] as const,
+    nearby: (params: TNearbyDistributorsParams) => [...queryKeys.distributors.nearbyLists(), params] as const,
   },
 } as const;

@@ -14,7 +14,7 @@ import { useAuthHandoff } from "../hooks/use-auth-handoff";
 import { useLogin } from "../hooks/use-login";
 import { loginSchema } from "../schemas/login.schema";
 import type { TLoginInput, TLoginType } from "../types/auth.types";
-import { getSafeNextPath } from "../utils/login.util";
+import { getPostLoginPath } from "../utils/login.util";
 import { LoginTypeTabs } from "./login-type-tabs";
 
 const DEFAULT_VALUES: TLoginInput = { loginType: "EMAIL", identifier: "", password: "" };
@@ -24,7 +24,7 @@ type TLoginErrorCode = keyof typeof LOGIN_ERROR_MESSAGES;
 const isKnownLoginError = (code: string): code is TLoginErrorCode => code in LOGIN_ERROR_MESSAGES;
 
 export type TLoginFormProps = {
-  /** Giá trị thô của `?next=` — form tự lọc qua getSafeNextPath, không hợp lệ → trang chủ. */
+  /** Giá trị thô của `?next=` — form tự lọc qua getPostLoginPath, không có / không hợp lệ → điều hướng theo role. */
   next?: string;
   className?: string;
 };
@@ -67,9 +67,9 @@ export function LoginForm({ next, className }: TLoginFormProps) {
 
   const onSubmit = form.handleSubmit((input) => {
     loginMutation.mutate(input, {
-      onSuccess: () => {
+      onSuccess: ({ user }) => {
         loginHandoff.clear();
-        router.replace(getSafeNextPath(next));
+        router.replace(getPostLoginPath(user, next));
         // Server Components đọc lại cookie phiên mới.
         router.refresh();
       },

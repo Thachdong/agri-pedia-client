@@ -9,8 +9,8 @@ import nextTs from "eslint-config-next/typescript";
 // Order matters: later objects win for the same rule.
 // ---------------------------------------------------------------------------
 
-/** Map packages — only the MapPicker organism may import them. */
-const MAP_MESSAGE = "Use MapPicker from @/shared/components/organisms/map-picker.";
+/** Map packages — only the map organisms (MapPicker, MarkerMap) may import them. */
+const MAP_MESSAGE = "Use MapPicker / MarkerMap from @/shared/components/organisms.";
 const MAP_PACKAGES = [
   { name: "leaflet", message: MAP_MESSAGE },
   { name: "react-leaflet", message: MAP_MESSAGE },
@@ -24,6 +24,7 @@ const WRAPPED = [
   { name: "joi", message: "Use @/shared/lib/validation." },
   { name: "react-hook-form", message: "Use @/shared/lib/form." },
   { name: "@hookform/resolvers", message: "Use @/shared/lib/form." },
+  { name: "socket.io-client", message: "Use @/shared/lib/realtime." },
   ...MAP_PACKAGES,
 ];
 const WRAPPED_PATTERNS = [{ group: ["@hookform/resolvers/*"], message: "Use @/shared/lib/form." }, ...MAP_PATTERNS];
@@ -113,9 +114,12 @@ const architectureRules = [
       ]),
     },
   },
-  // 5. MapPicker is the map wrapper: leaflet / react-leaflet allowed, other wrapped packages still banned.
+  // 5. MapPicker / MarkerMap are the map wrappers: leaflet / react-leaflet allowed, other wrapped packages still banned.
   {
-    files: ["src/shared/components/organisms/map-picker/**/*.{ts,tsx}"],
+    files: [
+      "src/shared/components/organisms/map-picker/**/*.{ts,tsx}",
+      "src/shared/components/organisms/marker-map/**/*.{ts,tsx}",
+    ],
     rules: {
       "@typescript-eslint/no-restricted-imports": restrictImports(
         [SHARED_TO_FEATURE],

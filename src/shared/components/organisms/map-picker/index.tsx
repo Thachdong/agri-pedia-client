@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { cn } from "@/shared/lib/utils";
 
 /** Leaflet cần `window` → chỉ render phía client. */
-export const MapPicker = dynamic(() => import("./map-picker-view"), {
+export const MapPicker = dynamic(() => import("./map-picker-view").then((module) => module.MapPickerView), {
   ssr: false,
   loading: () => <MapPickerSkeleton />,
 });

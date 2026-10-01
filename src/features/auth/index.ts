@@ -9,6 +9,7 @@ export { ResetPasswordForm } from "./components/reset-password-form";
 export { useActivate } from "./hooks/use-activate";
 export { useConfirmPasswordReset } from "./hooks/use-confirm-password-reset";
 export { useLogin } from "./hooks/use-login";
+export { useLogout } from "./hooks/use-logout";
 export { useRegister } from "./hooks/use-register";
 export { useRequestPasswordReset } from "./hooks/use-request-password-reset";
 export { useResendCode } from "./hooks/use-resend-code";

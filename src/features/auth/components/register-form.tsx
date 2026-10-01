@@ -17,16 +17,11 @@ import {
   Textarea,
 } from "@/shared/components/atoms";
 import { FormField, PasswordInput } from "@/shared/components/molecules";
-import { ROUTES } from "@/shared/constants";
+import { BUSINESS_TYPE_OPTIONS, ROUTES } from "@/shared/constants";
 import { applyServerErrors, useAppForm } from "@/shared/lib/form";
 import { isAppError } from "@/shared/lib/http";
 import { cn } from "@/shared/lib/utils";
-import {
-  BUSINESS_TYPE_OPTIONS,
-  IDENTIFIER_LABELS,
-  REGISTER_ERROR_FIELDS,
-  ROLE_OPTIONS,
-} from "../constants/auth.constants";
+import { IDENTIFIER_LABELS, REGISTER_ERROR_FIELDS, ROLE_OPTIONS } from "../constants/auth.constants";
 import { useAuthHandoff } from "../hooks/use-auth-handoff";
 import { useRegister } from "../hooks/use-register";
 import { registerSchema } from "../schemas/register.schema";
