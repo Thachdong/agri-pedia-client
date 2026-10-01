@@ -27,9 +27,9 @@ Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, re
 - [x] 5. [feature-api]          PATCH /users/me → TUpdateProfileInput, useUpdateMe; invalidates users.me + distributors.detail(me.id)
 - [x] 6. [feature-api]          POST /reviews → TCreateReviewInput, useCreateReview; keys reviews.all (namespace mới); invalidates reviews.all
 - [x] 7. [validation-schema]    updateProfileSchema (feature user) — username 1..100, bio ≤1000, bussinessType, file avatar/license (đuôi cho phép)
-- [ ] 8. [validation-schema]    createReviewSchema (feature review) — star 1..5, content 1..1000 sau trim
-- [ ] 9. [design-token]         màu sao rating (`rating` / `rating-muted`) light + dark
-- [ ] 10. [shared-unit]         hook useAddressLabel (feature location) — codename → "số nhà, xã, tỉnh"
+- [x] 8. [validation-schema]    reviewSchema (feature review) — star 1..5, content 1..1000 sau trim
+- [x] 9. [design-token]         màu sao rating (`rating` / `rating-muted`) light + dark
+- [x] 10. [shared-unit]         hook useAddressLabel (feature location) — codename → "số nhà, xã, tỉnh"
 - [ ] 11. [atomic-component]    atom      StarRatingInput         (new, shared) — radio 1..5 sao, keyboard, aria
 - [ ] 12. [atomic-component]    molecule  FileInputField          (new, shared) — chọn file (accept), hiện tên/ảnh xem trước, xoá chọn
 - [ ] 13. [atomic-component]    molecule  InfoTable               (new, shared) — các hàng label / value (bảng thông tin wireframe), responsive
