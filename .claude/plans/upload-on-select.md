@@ -9,7 +9,7 @@ chặn submit khi còn file đang tải; bỏ file hoặc đóng dialog → abor
 
 - [x] 1. [data-wrapper]        toast: cài sonner (shadcn `sonner` atom Toaster) + wrapper `toast` trong shared/lib/toast + gắn Toaster vào AppProviders
 - [x] 2. [data-wrapper]        http: putToSignedUrl chuyển sang XHR, thêm `onProgress(percent)`, giữ signal + mapping AppError
-- [ ] 3. [shared-unit]         type TFileUpload<TMedia> + TFileUploadStatus (uploading | done) + progress — shared/types, cho molecule hiển thị
+- [x] 3. [shared-unit]         type TFileUpload<TMedia> + TFileUploadStatus (uploading | done) + progress — shared/types, cho molecule hiển thị
 - [ ] 4. [feature-api]         media: uploadMedia nhận signal + onProgress; hook useMediaUploads (per-file state, pre-check đuôi/size, 1 presign/lô chọn, abort khi remove/unmount, lỗi → bỏ item + toast) thay useUploadMedia
 - [ ] 5. [validation-schema]   rules.uploadedFile (item phải done; uploading → "Đang tải file…") thay rules.file; cập nhật updateProfileSchema, create/updateProductSchema + form value types
 - [ ] 6. [atomic-component]    molecule FileInputField (update) — value TFileUpload | null; % / progress bar khi uploading
