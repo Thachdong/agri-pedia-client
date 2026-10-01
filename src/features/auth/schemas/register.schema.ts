@@ -36,13 +36,5 @@ export const registerSchema = schema<TRegisterFormValues>({
     otherwise: v.any().empty(v.any()).default(null),
   }),
   bio: v.string().trim().max(1000).empty("").optional(),
-  address: v
-    .object({
-      province: v.string().max(255).required().messages(selectRequired("Vui lòng chọn tỉnh/thành phố")),
-      ward: v.string().max(255).required().messages(selectRequired("Vui lòng chọn phường/xã")),
-      houseNumber: v.string().trim().max(255).required(),
-      lat: v.number().min(-90).max(90).required().messages({ "any.required": "Vui lòng chọn vị trí trên bản đồ" }),
-      long: v.number().min(-180).max(180).required().messages({ "any.required": "Vui lòng chọn vị trí trên bản đồ" }),
-    })
-    .required(),
+  address: v.object(rules.addressFields()).required(),
 });
