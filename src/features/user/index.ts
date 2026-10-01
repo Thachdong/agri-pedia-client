@@ -4,6 +4,7 @@ export { EditProfileDialog, type TEditProfileDialogProps } from "./components/ed
 export { UserMenu } from "./components/user-menu";
 export { meQuery, myAddressesQuery } from "./hooks/user.queries";
 export { useCreateMyAddress } from "./hooks/use-create-my-address";
+export { useDeleteMyAddress } from "./hooks/use-delete-my-address";
 export { useSetMyPrimaryAddress } from "./hooks/use-set-my-primary-address";
 export { useMe } from "./hooks/use-me";
 export { useMyAddresses } from "./hooks/use-my-addresses";

@@ -21,6 +21,10 @@ export const createMyAddress = (input: TCreateAddressInput, client: IHttpClient 
 export const setMyPrimaryAddress = (addressId: string, client: IHttpClient = http) =>
   client.patch<void>(`/users/me/addresses/${encodeURIComponent(addressId)}/primary`);
 
+/** Xoá hẳn. Primary không xoá được → 409 USER_ADDRESS_PRIMARY_NOT_DELETABLE (đặt primary khác trước). */
+export const deleteMyAddress = (addressId: string, client: IHttpClient = http) =>
+  client.delete<void>(`/users/me/addresses/${encodeURIComponent(addressId)}`);
+
 /** bussinessType chỉ DISTRIBUTOR (USER_BUSINESS_TYPE_NOT_ALLOWED), không set null được (USER_BUSINESS_TYPE_REQUIRED). */
 export const updateMe = (input: TUpdateProfileInput, client: IHttpClient = http) =>
   client.patch<TUpdateProfileResponse>("/users/me", input);
