@@ -1,7 +1,7 @@
 import type { IHttpClient } from "@/shared/lib/http";
-import { appInfiniteQueryOptions, queryKeys } from "@/shared/lib/query";
-import { getDistributorReviews, getProductReviews } from "../services/review.service";
-import type { TDistributorReviewsParams } from "../types/review.types";
+import { appInfiniteQueryOptions, appQueryOptions, queryKeys } from "@/shared/lib/query";
+import { getDistributorReviews, getProductReviews, getReviewSummary } from "../services/review.service";
+import type { TDistributorReviewsParams, TReviewSummaryParams } from "../types/review.types";
 
 export const REVIEWS_PAGE_SIZE = 20;
 
@@ -21,4 +21,10 @@ export const productReviewsQuery = (productId: string, client?: IHttpClient) =>
     queryFn: ({ pageParam }) => getProductReviews(productId, { cursor: pageParam, limit: REVIEWS_PAGE_SIZE }, client),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+  });
+
+export const reviewSummaryQuery = (params: TReviewSummaryParams, client?: IHttpClient) =>
+  appQueryOptions({
+    queryKey: queryKeys.reviews.summary(params),
+    queryFn: () => getReviewSummary(params, client),
   });

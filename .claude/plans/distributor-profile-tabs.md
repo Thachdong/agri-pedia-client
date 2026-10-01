@@ -30,9 +30,9 @@ Decisions:
 - [x] 5. [feature-api]          POST /products → TCreateProductInput, useCreateProduct; invalidates products.list(distributorId)
 - [x] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
 - [x] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list, removeQueries products.detail(id) (review của product đã xoá vẫn hiện → reviews không stale)
-- [x] 8. [feature-api]          GET /reviews → TDistributorReview, TShopReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
+- [x] 8. [feature-api]          GET /reviews → TDistributorReview, TReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
 - [x] 9. [feature-api]          GET /reviews/products/:id → TProductReview, productReviewsQuery (infinite), useProductReviews; keys reviews.product(productId)
-- [ ] 10. [feature-api]         GET /reviews/summary → TReviewSummary, reviewSummaryQuery, useReviewSummary; keys reviews.summary(targetType, targetId)
+- [x] 10. [feature-api]         GET /reviews/summary → TReviewSummaryResponse (select → TReviewSummary chung shape với GET /reviews), reviewSummaryQuery, useReviewSummary; keys reviews.summary(targetType, targetId)
 - [ ] 11. [validation-schema]   productSchema create / update (feature product) — mirror CreateProductDto / UpdateProductDto, media 1..10 (create)
 - [ ] 12. [shared-unit]         hook useInfiniteSentinel (shared) — ref sentinel + IntersectionObserver → fetchNextPage
 - [ ] 13. [shared-unit]         util formatPrice (shared, VND) + PRODUCT_UNIT_LABELS / PRODUCT_STATUS_LABELS (feature product constants)
@@ -42,7 +42,7 @@ Decisions:
 - [ ] 17. [atomic-component]    molecule  MediaGallery           (new, shared) — ảnh lớn + thumbnails, video / file fallback
 - [ ] 18. [atomic-component]    molecule  ProductCard            (new, feature product) — thumbnail, name, price / unit, quantity; clickable
 - [ ] 19. [atomic-component]    molecule  ReviewItem             (new, feature review) — avatar, username, sao, nội dung, tag product (tuỳ), thời gian tương đối; highlight "Đánh giá của bạn"
-- [ ] 20. [atomic-component]    molecule  RatingSummary          (new, feature review) — điểm TB / tổng, 5 hàng đếm + thanh (nhận cả 2 shape summary)
+- [ ] 20. [atomic-component]    molecule  RatingSummary          (new, feature review) — điểm TB / tổng, 5 hàng đếm + thanh (TReviewSummary — 1 shape)
 - [ ] 21. [atomic-component]    organism  ReviewForm             (new, feature review) — form inline sao + nội dung cho target bất kỳ, xử lý 409 / 403; ReviewShopDialog dùng lại
 - [ ] 22. [atomic-component]    organism  ProductReviewsPanel    (new, feature review) — summary PRODUCT + list review product (infinite), highlight của farmer, chưa có → ReviewForm
 - [ ] 23. [atomic-component]    organism  ShopReviewsPanel       (new, feature review) — RatingSummary shop + list review shop & product (infinite), highlight của farmer

@@ -9,8 +9,8 @@ export type TReviewFormValues = Pick<TCreateReviewInput, "star" | "content">;
 
 /** Item GET /reviews — `productName` null với review shop (USER); `user.avatar` signed URL hoặc null. */
 export type TDistributorReview = TApiSchema<"DistributorReviewResponse">;
-/** Summary cả shop (shop + product), không phụ thuộc filter / cursor. */
-export type TShopReviewSummary = TApiSchema<"ReviewSummaryResponse">;
+/** Summary rating (shape chung) — trong GET /reviews: cả shop (shop + product), không phụ thuộc filter / cursor. */
+export type TReviewSummary = TApiSchema<"ReviewSummaryResponse">;
 export type TDistributorReviewsPage = TApiSchema<"ListDistributorReviewsResponse">;
 
 type TDistributorReviewsQuery = TApiPaths["/reviews"]["get"]["parameters"]["query"];
@@ -19,8 +19,12 @@ type TDistributorReviewsQuery = TApiPaths["/reviews"]["get"]["parameters"]["quer
 export type TDistributorReviewsParams = Omit<TDistributorReviewsQuery, "cursor" | "limit">;
 
 /** Các trang đã gộp. */
-export type TDistributorReviewsView = { summary: TShopReviewSummary; reviews: TDistributorReview[] };
+export type TDistributorReviewsView = { summary: TReviewSummary; reviews: TDistributorReview[] };
 
 /** Item GET /reviews/products/:id — `user.avatar` signed URL hoặc null. */
 export type TProductReview = TApiSchema<"ProductReviewResponse">;
 export type TProductReviewsPage = TApiSchema<"ListProductReviewsResponse">;
+
+/** GET /reviews/summary — USER: chỉ review shop (không gồm product); PRODUCT: review của product. Target lạ → toàn 0. */
+export type TReviewSummaryParams = TApiPaths["/reviews/summary"]["get"]["parameters"]["query"];
+export type TReviewSummaryResponse = TApiSchema<"GetReviewSummaryResponse">;

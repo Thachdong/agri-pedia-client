@@ -5,6 +5,8 @@ import type {
   TDistributorReviewsPage,
   TDistributorReviewsParams,
   TProductReviewsPage,
+  TReviewSummaryParams,
+  TReviewSummaryResponse,
 } from "../types/review.types";
 
 /**
@@ -26,3 +28,7 @@ export const getProductReviews = (
   { cursor, limit }: { cursor?: string; limit?: number } = {},
   client: IHttpClient = http,
 ) => client.get<TProductReviewsPage>(`/reviews/products/${encodeURIComponent(productId)}`, { query: { cursor, limit } });
+
+/** Public — rating của 1 product hoặc của riêng shop (USER, không gồm product; summary cả shop nằm trong GET /reviews). */
+export const getReviewSummary = (params: TReviewSummaryParams, client: IHttpClient = http) =>
+  client.get<TReviewSummaryResponse>("/reviews/summary", { query: params });

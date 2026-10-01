@@ -1,5 +1,5 @@
 import type { TNearbyDistributorsParams } from "@/features/distributor";
-import type { TDistributorReviewsParams } from "@/features/review";
+import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features/review";
 
 /**
  * Registry TẬP TRUNG của query keys — nơi duy nhất được viết key.
@@ -60,5 +60,11 @@ export const queryKeys = {
       [...queryKeys.reviews.distributor(distributorId), "list", filters] as const,
     /** Review của 1 product (infinite, cursor) — dialog chi tiết product. */
     product: (productId: string) => [...queryKeys.reviews.all, "product", productId] as const,
+    /** Rating của 1 target — nằm dưới prefix của target để review mới làm stale cả list lẫn summary. */
+    summary: ({ targetType, targetId }: TReviewSummaryParams) =>
+      [
+        ...(targetType === "USER" ? queryKeys.reviews.distributor(targetId) : queryKeys.reviews.product(targetId)),
+        "summary",
+      ] as const,
   },
 } as const;
