@@ -1,6 +1,6 @@
 import type { IHttpClient } from "@/shared/lib/http";
-import { appInfiniteQueryOptions, queryKeys } from "@/shared/lib/query";
-import { getDistributorProducts } from "../services/product.service";
+import { appInfiniteQueryOptions, appQueryOptions, queryKeys } from "@/shared/lib/query";
+import { getDistributorProducts, getProductDetail } from "../services/product.service";
 
 export const DISTRIBUTOR_PRODUCTS_PAGE_SIZE = 20;
 
@@ -12,4 +12,11 @@ export const distributorProductsQuery = (distributorId: string, client?: IHttpCl
       getDistributorProducts(distributorId, { cursor: pageParam, limit: DISTRIBUTOR_PRODUCTS_PAGE_SIZE }, client),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+  });
+
+/** Chi tiết product (M3) — dialog chi tiết và form sửa (M9) dùng chung. */
+export const productDetailQuery = (productId: string, client?: IHttpClient) =>
+  appQueryOptions({
+    queryKey: queryKeys.products.detail(productId),
+    queryFn: () => getProductDetail(productId, client),
   });
