@@ -21,11 +21,13 @@ import {
 import { FileInputField, FormField } from "@/shared/components/molecules";
 import { BUSINESS_TYPE_OPTIONS } from "@/shared/constants";
 import { applyServerErrors, useAppForm } from "@/shared/lib/form";
+import type { TSchema } from "@/shared/lib/validation";
 import type { TBusinessType } from "@/shared/types";
 import { useMe } from "../hooks/use-me";
 import { useUpdateMe } from "../hooks/use-update-me";
-import { updateProfileSchema } from "../schemas/update-profile.schema";
+import { updateFarmerProfileSchema, updateProfileSchema } from "../schemas/update-profile.schema";
 import type { TUpdateProfileFormValues, TUpdateProfileInput, TUserProfile } from "../types/user.types";
+import { ManageAddressesSection } from "./manage-addresses-section";
 
 export type TEditProfileDialogProps = {
   open: boolean;
@@ -43,15 +45,17 @@ const LICENSE_ACCEPT = getMediaAccept(LICENSE_TYPES);
 type TFileField = "avatar" | "bussinessLicense";
 
 /**
- * M6 — sửa hồ sơ của chính mình (ui-ux.md §7, DISTRIBUTOR): username, avatar, bio, lĩnh vực, giấy phép.
- * File upload lên TMP ngay khi chọn; submit (chờ upload xong) → PATCH /users/me với key đã nhận.
+ * M6 + M7 — sửa hồ sơ của chính mình (ui-ux.md §7):
+ * - Hồ sơ: username, avatar, bio; DISTRIBUTOR thêm lĩnh vực, giấy phép. Email / Phone chỉ xem.
+ *   File upload lên TMP ngay khi chọn; "Lưu" (chờ upload xong) → PATCH /users/me với key đã nhận.
+ * - Địa chỉ (ManageAddressesSection): đặt mặc định / thêm / xoá gọi API ngay, không chờ "Lưu".
  */
 export function EditProfileDialog({ open, onOpenChange }: TEditProfileDialogProps) {
   const { data: me } = useMe();
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-lg">
+      <DialogContent className="flex max-h-[90dvh] flex-col sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Chỉnh sửa hồ sơ</DialogTitle>
           <DialogDescription>Thông tin hiển thị trên trang profile của bạn.</DialogDescription>
@@ -65,19 +69,32 @@ export function EditProfileDialog({ open, onOpenChange }: TEditProfileDialogProp
 
 type TEditProfileFormProps = { me: TUserProfile; onDone: () => void; onCancel: () => void };
 
+/**
+ * FARMER: form chỉ có username / bio / avatar — defaultValues không có key của DISTRIBUTOR (joi chặn key lạ),
+ * schema farmer là tập con nên ép kiểu về schema chung của form.
+ */
+const getFormOptions = (me: TUserProfile) =>
+  me.role === "DISTRIBUTOR"
+    ? {
+        schema: updateProfileSchema,
+        defaultValues: {
+          username: me.username,
+          bio: me.bio ?? "",
+          // Chưa có (dữ liệu cũ) → để trống, schema bắt chọn.
+          bussinessType: me.bussinessType ?? ("" as TBusinessType),
+          avatar: null,
+          bussinessLicense: null,
+        },
+      }
+    : {
+        schema: updateFarmerProfileSchema as unknown as TSchema<TUpdateProfileFormValues>,
+        defaultValues: { username: me.username, bio: me.bio ?? "", avatar: null },
+      };
+
 function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
+  const isDistributor = me.role === "DISTRIBUTOR";
   const updateMe = useUpdateMe(me.id);
-  const form = useAppForm<TUpdateProfileFormValues>({
-    schema: updateProfileSchema,
-    defaultValues: {
-      username: me.username,
-      bio: me.bio ?? "",
-      // Chưa có (dữ liệu cũ) → để trống, schema bắt chọn.
-      bussinessType: me.bussinessType ?? ("" as TBusinessType),
-      avatar: null,
-      bussinessLicense: null,
-    },
-  });
+  const form = useAppForm<TUpdateProfileFormValues>(getFormOptions(me));
   const { errors, isSubmitted, isSubmitting } = form.formState;
   const avatar = form.watch("avatar");
   const license = form.watch("bussinessLicense");
@@ -126,10 +143,11 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
-      const input: TUpdateProfileInput = { username: values.username, bio: values.bio, bussinessType: values.bussinessType };
+      const input: TUpdateProfileInput = { username: values.username, bio: values.bio };
+      if (isDistributor) input.bussinessType = values.bussinessType;
       // Schema đã bắt mọi file phải upload xong.
       if (values.avatar?.status === "done") input.avatar = values.avatar.media;
-      if (values.bussinessLicense?.status === "done") input.bussinessLicense = values.bussinessLicense.media;
+      if (isDistributor && values.bussinessLicense?.status === "done") input.bussinessLicense = values.bussinessLicense.media;
 
       await updateMe.mutateAsync(input);
       onDone();
@@ -139,124 +157,134 @@ function EditProfileForm({ me, onDone, onCancel }: TEditProfileFormProps) {
   });
 
   const rootError = errors.root?.server?.message;
+  const contactLabel = me.loginType === "PHONE" ? "Số điện thoại" : "Email";
+  const contact = (me.loginType === "PHONE" ? me.phone : me.email) ?? me.email ?? me.phone ?? "";
 
   return (
     <>
-      <form
-        id={FORM_ID}
-        onSubmit={onSubmit}
-        noValidate
-        className="scrollbar-thin -mx-1 flex min-h-0 flex-col gap-4 overflow-y-auto px-1"
-      >
-        <FormField id="profile-username" label="Tên hiển thị" required error={errors.username?.message}>
-          {(control) => <Input {...control} {...form.register("username")} autoComplete="nickname" disabled={isSubmitting} />}
-        </FormField>
+      {/* Vùng cuộn chứa 2 form anh em (hồ sơ + thêm address) — không lồng form. */}
+      <div className="scrollbar-thin -mx-1 flex min-h-0 flex-col gap-6 overflow-y-auto px-1 pb-1">
+        <form id={FORM_ID} onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+          <FormField id="profile-username" label="Tên hiển thị" required error={errors.username?.message}>
+            {(control) => <Input {...control} {...form.register("username")} autoComplete="nickname" disabled={isSubmitting} />}
+          </FormField>
 
-        <FormField
-          id="profile-avatar"
-          label="Ảnh đại diện"
-          error={errors.avatar?.message}
-          description="JPG, PNG hoặc WEBP, tối đa 10MB."
-        >
-          {(control) => (
-            <FileInputField
-              {...control}
-              value={avatar}
-              onSelect={selectAvatar}
-              onRemove={() => removeFile("avatar", avatarUploads.cancel)}
-              accept={AVATAR_ACCEPT}
-              disabled={isSubmitting}
-              buttonLabel="Chọn ảnh"
-              placeholder={
-                <span className="flex items-center gap-2">
-                  <Avatar src={me.avatar} name={username || me.username} size="sm" />
-                  {me.avatar ? "Giữ ảnh hiện tại" : "Chưa có ảnh đại diện"}
-                </span>
-              }
-            />
-          )}
-        </FormField>
+          <FormField id="profile-contact" label={contactLabel} description="Dùng để đăng nhập, không thay đổi được.">
+            {(control) => <Input {...control} value={contact} readOnly disabled />}
+          </FormField>
 
-        <FormField id="profile-business-type" label="Lĩnh vực kinh doanh" required error={errors.bussinessType?.message}>
-          {(control) => (
-            <Select
-              value={bussinessType}
-              onValueChange={(next) =>
-                form.setValue("bussinessType", next as TBusinessType, { shouldDirty: true, shouldValidate: isSubmitted })
-              }
-              disabled={isSubmitting}
-            >
-              <SelectTrigger className="w-full" {...control}>
-                <SelectValue placeholder="Chọn lĩnh vực kinh doanh" />
-              </SelectTrigger>
-              <SelectContent position="popper">
-                {BUSINESS_TYPE_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          )}
-        </FormField>
+          <FormField
+            id="profile-avatar"
+            label="Ảnh đại diện"
+            error={errors.avatar?.message}
+            description="JPG, PNG hoặc WEBP, tối đa 10MB."
+          >
+            {(control) => (
+              <FileInputField
+                {...control}
+                value={avatar}
+                onSelect={selectAvatar}
+                onRemove={() => removeFile("avatar", avatarUploads.cancel)}
+                accept={AVATAR_ACCEPT}
+                disabled={isSubmitting}
+                buttonLabel="Chọn ảnh"
+                placeholder={
+                  <span className="flex items-center gap-2">
+                    <Avatar src={me.avatar} name={username || me.username} size="sm" />
+                    {me.avatar ? "Giữ ảnh hiện tại" : "Chưa có ảnh đại diện"}
+                  </span>
+                }
+              />
+            )}
+          </FormField>
 
-        <FormField
-          id="profile-license"
-          label="Giấy phép kinh doanh"
-          error={errors.bussinessLicense?.message}
-          description="Ảnh (JPG, PNG, WEBP) hoặc PDF, tối đa 10MB."
-        >
-          {(control) => (
-            <FileInputField
-              {...control}
-              value={license}
-              onSelect={selectLicense}
-              onRemove={() => removeFile("bussinessLicense", licenseUploads.cancel)}
-              accept={LICENSE_ACCEPT}
-              disabled={isSubmitting}
-              placeholder={
-                me.bussinessLicense ? (
-                  <a
-                    href={me.bussinessLicense}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-highlight underline-offset-4 hover:underline"
+          {isDistributor && (
+            <>
+              <FormField id="profile-business-type" label="Lĩnh vực kinh doanh" required error={errors.bussinessType?.message}>
+                {(control) => (
+                  <Select
+                    value={bussinessType}
+                    onValueChange={(next) =>
+                      form.setValue("bussinessType", next as TBusinessType, { shouldDirty: true, shouldValidate: isSubmitted })
+                    }
+                    disabled={isSubmitting}
                   >
-                    Xem giấy phép hiện tại
-                  </a>
-                ) : (
-                  "Chưa có giấy phép"
-                )
-              }
-            />
-          )}
-        </FormField>
+                    <SelectTrigger className="w-full" {...control}>
+                      <SelectValue placeholder="Chọn lĩnh vực kinh doanh" />
+                    </SelectTrigger>
+                    <SelectContent position="popper">
+                      {BUSINESS_TYPE_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+              </FormField>
 
-        <FormField
-          id="profile-bio"
-          label="Giới thiệu"
-          error={errors.bio?.message}
-          description={`${bioLength}/${BIO_MAX} ký tự`}
-        >
-          {(control) => (
-            <Textarea
-              {...control}
-              {...form.register("bio")}
-              rows={5}
-              maxLength={BIO_MAX}
-              placeholder="Sản phẩm, kinh nghiệm, khu vực phục vụ…"
-              disabled={isSubmitting}
-              className="resize-none"
-            />
+              <FormField
+                id="profile-license"
+                label="Giấy phép kinh doanh"
+                error={errors.bussinessLicense?.message}
+                description="Ảnh (JPG, PNG, WEBP) hoặc PDF, tối đa 10MB."
+              >
+                {(control) => (
+                  <FileInputField
+                    {...control}
+                    value={license}
+                    onSelect={selectLicense}
+                    onRemove={() => removeFile("bussinessLicense", licenseUploads.cancel)}
+                    accept={LICENSE_ACCEPT}
+                    disabled={isSubmitting}
+                    placeholder={
+                      me.bussinessLicense ? (
+                        <a
+                          href={me.bussinessLicense}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-highlight underline-offset-4 hover:underline"
+                        >
+                          Xem giấy phép hiện tại
+                        </a>
+                      ) : (
+                        "Chưa có giấy phép"
+                      )
+                    }
+                  />
+                )}
+              </FormField>
+            </>
           )}
-        </FormField>
 
-        {rootError && (
-          <p role="alert" className="text-sm text-destructive">
-            {rootError}
-          </p>
-        )}
-      </form>
+          <FormField
+            id="profile-bio"
+            label="Giới thiệu"
+            error={errors.bio?.message}
+            description={`${bioLength}/${BIO_MAX} ký tự`}
+          >
+            {(control) => (
+              <Textarea
+                {...control}
+                {...form.register("bio")}
+                rows={5}
+                maxLength={BIO_MAX}
+                placeholder="Sản phẩm, kinh nghiệm, khu vực phục vụ…"
+                disabled={isSubmitting}
+                className="resize-none"
+              />
+            )}
+          </FormField>
+
+          {rootError && (
+            <p role="alert" className="text-sm text-destructive">
+              {rootError}
+            </p>
+          )}
+        </form>
+
+        <ManageAddressesSection userId={me.id} className="border-t border-border-subtle pt-4" />
+      </div>
 
       <DialogFooter>
         <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
