@@ -21,7 +21,7 @@ Decisions:
 
 - [x] 1. [bff-auth]             PROTECTED_PATHS thêm /profile/me; ROUTES.myProfile
 - [x] 2. [feature-api]          POST /users/me/addresses → TCreateAddressInput, createMyAddress, useCreateMyAddress; invalidates như trên
-- [ ] 3. [feature-api]          PATCH /users/me/addresses/:id/primary → setMyPrimaryAddress, useSetMyPrimaryAddress; invalidates như trên
+- [x] 3. [feature-api]          PATCH /users/me/addresses/:id/primary → setMyPrimaryAddress, useSetMyPrimaryAddress; invalidates như trên
 - [ ] 4. [feature-api]          DELETE /users/me/addresses/:id → deleteMyAddress, useDeleteMyAddress; invalidates users.addresses; message 409
 - [ ] 5. [validation-schema]    createAddressSchema (feature user) — province, ward, houseNumber ≤255 (trim), lat/long trong khoảng, bắt chọn vị trí
 - [ ] 6. [validation-schema]    updateFarmerProfileSchema (feature user) — username 1..100, bio ≤1000, avatar uploadedFile
