@@ -7,6 +7,9 @@ export type TUserRole = TUserProfile["role"];
 export type TUserAddress = NonNullable<TUserProfile["address"]>;
 export type TMyAddress = TApiSchema<"MyAddressResponse">;
 export type TMyAddressesResponse = TApiSchema<"ListMyAddressesResponse">;
+/** Body POST /users/me/addresses — province / ward là codename (feature location). */
+export type TCreateAddressInput = TApiSchema<"CreateAddressDto">;
+export type TCreateAddressResponse = TApiSchema<"CreateAddressResponse">;
 
 /** Body PATCH /users/me — mọi field optional, null/thiếu = giữ nguyên; file là key đã upload lên TMP (feature media). */
 export type TUpdateProfileInput = TApiSchema<"UpdateProfileDto">;
