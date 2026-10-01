@@ -30,7 +30,7 @@ Decisions:
 - [x] 5. [feature-api]          POST /products → TCreateProductInput, useCreateProduct; invalidates products.list(distributorId)
 - [x] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
 - [x] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list, removeQueries products.detail(id) (review của product đã xoá vẫn hiện → reviews không stale)
-- [ ] 8. [feature-api]          GET /reviews → TDistributorReview, TShopReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
+- [x] 8. [feature-api]          GET /reviews → TDistributorReview, TShopReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
 - [ ] 9. [feature-api]          GET /reviews/products/:id → TProductReview, productReviewsQuery (infinite), useProductReviews; keys reviews.product(productId)
 - [ ] 10. [feature-api]         GET /reviews/summary → TReviewSummary, reviewSummaryQuery, useReviewSummary; keys reviews.summary(targetType, targetId)
 - [ ] 11. [validation-schema]   productSchema create / update (feature product) — mirror CreateProductDto / UpdateProductDto, media 1..10 (create)

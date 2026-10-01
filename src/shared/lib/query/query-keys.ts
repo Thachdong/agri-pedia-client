@@ -1,4 +1,5 @@
 import type { TNearbyDistributorsParams } from "@/features/distributor";
+import type { TDistributorReviewsParams } from "@/features/review";
 
 /**
  * Registry TẬP TRUNG của query keys — nơi duy nhất được viết key.
@@ -52,7 +53,10 @@ export const queryKeys = {
   },
   reviews: {
     all: ["reviews"] as const,
-    /** Prefix mọi query review của 1 shop (list theo filter thêm sau — tab "Đánh giá"). */
+    /** Prefix mọi query review của 1 shop — review shop mới làm stale cả list lẫn summary trong list. */
     distributor: (distributorId: string) => [...queryKeys.reviews.all, "distributor", distributorId] as const,
+    /** Review shop + product của shop theo filter (infinite, cursor) — tab "Đánh giá". */
+    list: ({ distributorId, ...filters }: TDistributorReviewsParams) =>
+      [...queryKeys.reviews.distributor(distributorId), "list", filters] as const,
   },
 } as const;
