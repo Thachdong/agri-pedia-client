@@ -33,3 +33,4 @@ export { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 export { Textarea } from "../ui/textarea";
+export { Toaster } from "../ui/sonner";

@@ -53,7 +53,7 @@ Decisions:
 - [x] 27. [atomic-component]    organism  DistributorProfileTabs (new, feature distributor) — Tabs Sản phẩm | Đánh giá (default Sản phẩm) → DistributorProductsTab | ShopReviewsPanel
 - [x] 27a. [data-wrapper]      prefetch(): option `infinite: [...]` → prefetchInfiniteQuery (trang đầu, đúng shape { pages, pageParams })
 - [x] 28. [page]                /profile/[id] — gắn tabs vào ProfileLayout, prefetch trang đầu products + reviews shop
-- [ ] 29. [arch-review]
+- [x] 29. [arch-review]
 
 Components (in order):
   [atom]      StarRating              new    shared
