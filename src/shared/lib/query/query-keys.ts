@@ -24,6 +24,8 @@ export const queryKeys = {
   users: {
     all: ["users"] as const,
     me: () => [...queryKeys.users.all, "me"] as const,
+    /** Address của người đang đăng nhập — tách khỏi `me` để invalidate `me` không kéo theo. */
+    addresses: () => [...queryKeys.users.all, "addresses"] as const,
   },
   notifications: {
     all: ["notifications"] as const,

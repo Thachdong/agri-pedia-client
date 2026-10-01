@@ -20,7 +20,7 @@ Decisions:
 Foundation: có đủ (http/query/form/validation, BFF auth + forward, proxy, realtime). Thiếu: openapi.d.ts chưa có schema mới (gen:api), token màu sao rating.
 
 - [x] 1. [feature-api]          `npm run gen:api` + GET /distributors/:id → TDistributorProfile, getDistributorProfile, distributorProfileQuery, useDistributorProfile; keys distributors.detail(id)
-- [ ] 2. [feature-api]          GET /users/me/addresses → TMyAddress, myAddressesQuery, useMyAddresses; keys users.addresses
+- [x] 2. [feature-api]          GET /users/me/addresses → TMyAddress, myAddressesQuery, useMyAddresses; keys users.addresses
 - [ ] 3. [feature-scaffold]     features `media` (services, hooks, types) và `review` (components, hooks, services, schemas, types)
 - [ ] 4. [feature-api]          POST /media/presign-url + PUT signed URL → uploadMedia, useUploadMedia (mutation, không invalidate)
 - [ ] 5. [feature-api]          PATCH /users/me → TUpdateProfileInput, useUpdateMe; invalidates users.me + distributors.detail(me.id)
