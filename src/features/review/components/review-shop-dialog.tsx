@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   Button,
   Dialog,
@@ -9,16 +8,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  StarRatingInput,
-  Textarea,
 } from "@/shared/components/atoms";
-import { FormField } from "@/shared/components/molecules";
-import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
-import { isAppError } from "@/shared/lib/http";
-import { REVIEW_CONTENT_MAX, REVIEW_ERROR_CODE, REVIEW_SHOP_ERROR_MESSAGES } from "../constants/review.constants";
-import { useCreateReview } from "../hooks/use-create-review";
-import { reviewSchema } from "../schemas/review.schema";
-import type { TReviewFormValues } from "../types/review.types";
+import { ReviewForm } from "./review-form";
 
 export type TReviewShopDialogProps = {
   open: boolean;
@@ -29,105 +20,42 @@ export type TReviewShopDialogProps = {
   onReviewed?: () => void;
 };
 
-const DEFAULT_VALUES: TReviewFormValues = { star: 0, content: "" };
+const FORM_ID = "review-shop-form";
 
 /**
- * M4 — đánh giá shop (ui-ux.md §7): chọn sao + nội dung, POST /reviews targetType USER.
- * Không có API kiểm tra "đã review chưa" → dựa vào 409 REVIEW_ALREADY_EXISTS: khoá form + thông báo.
+ * M4 — đánh giá shop (ui-ux.md §7): ReviewForm targetType USER trong dialog.
+ * Form nằm trong DialogContent → đóng dialog là unmount, mở lại có form sạch.
+ * Thành công → đóng dialog; 409 (đã review) → giữ dialog + thông báo, nút "Huỷ" thành "Đóng".
  */
 export function ReviewShopDialog({ open, onOpenChange, distributorId, distributorName, onReviewed }: TReviewShopDialogProps) {
-  const createReview = useCreateReview();
-  const form = useAppForm<TReviewFormValues>({ schema: reviewSchema, defaultValues: DEFAULT_VALUES });
-  const [alreadyReviewed, setAlreadyReviewed] = useState(false);
-  const { errors, isSubmitted, isSubmitting } = form.formState;
-
-  const star = form.watch("star");
-  const contentLength = form.watch("content").length;
-  const locked = alreadyReviewed || isSubmitting;
-
-  const handleOpenChange = (next: boolean) => {
-    if (!next) {
-      form.reset(DEFAULT_VALUES);
-      createReview.reset();
-    }
-    onOpenChange(next);
-  };
-
-  const onSubmit = form.handleSubmit(async (values) => {
-    try {
-      await createReview.mutateAsync({ targetType: "USER", targetId: distributorId, ...values });
-      onReviewed?.();
-      handleOpenChange(false);
-    } catch (error) {
-      const message = isAppError(error) ? REVIEW_SHOP_ERROR_MESSAGES[error.code] : undefined;
-      if (isAppError(error) && error.code === REVIEW_ERROR_CODE.ALREADY_EXISTS) {
-        setAlreadyReviewed(true);
-        onReviewed?.();
-      }
-      if (message) form.setError(FORM_ROOT_ERROR, { type: "server", message });
-      else applyServerErrors(form, error);
-    }
-  });
-
-  const rootError = errors.root?.server?.message;
-
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Đánh giá shop</DialogTitle>
           <DialogDescription>Chia sẻ trải nghiệm của bạn với {distributorName}.</DialogDescription>
         </DialogHeader>
 
-        <form id="review-shop-form" onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
-          <FormField id="review-star" label="Số sao" required error={errors.star?.message}>
-            {(control) => (
-              <StarRatingInput
-                name="review-star"
-                value={star}
-                onChange={(next) => form.setValue("star", next, { shouldDirty: true, shouldValidate: isSubmitted })}
-                disabled={locked}
-                aria-describedby={control["aria-describedby"]}
-                aria-invalid={control["aria-invalid"]}
-              />
-            )}
-          </FormField>
-
-          <FormField
-            id="review-content"
-            label="Nội dung"
-            required
-            error={errors.content?.message}
-            description={`${contentLength}/${REVIEW_CONTENT_MAX} ký tự`}
-          >
-            {(control) => (
-              <Textarea
-                {...control}
-                {...form.register("content")}
-                rows={5}
-                maxLength={REVIEW_CONTENT_MAX}
-                placeholder="Chất lượng sản phẩm, tư vấn, giao hàng…"
-                disabled={locked}
-                className="resize-none"
-              />
-            )}
-          </FormField>
-
-          {rootError && (
-            <p role="alert" className="text-sm text-destructive">
-              {rootError}
-            </p>
+        <ReviewForm
+          id={FORM_ID}
+          targetType="USER"
+          targetId={distributorId}
+          onSuccess={() => {
+            onReviewed?.();
+            onOpenChange(false);
+          }}
+          onAlreadyReviewed={onReviewed}
+          renderActions={({ submitting, alreadyReviewed }) => (
+            <DialogFooter>
+              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+                {alreadyReviewed ? "Đóng" : "Huỷ"}
+              </Button>
+              <Button type="submit" form={FORM_ID} variant="highlight" loading={submitting} disabled={alreadyReviewed}>
+                Gửi đánh giá
+              </Button>
+            </DialogFooter>
           )}
-        </form>
-
-        <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
-            {alreadyReviewed ? "Đóng" : "Huỷ"}
-          </Button>
-          <Button type="submit" form="review-shop-form" variant="highlight" loading={isSubmitting} disabled={alreadyReviewed}>
-            Gửi đánh giá
-          </Button>
-        </DialogFooter>
+        />
       </DialogContent>
     </Dialog>
   );
