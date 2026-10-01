@@ -20,3 +20,7 @@ export type TDistributorReviewsParams = Omit<TDistributorReviewsQuery, "cursor" 
 
 /** Các trang đã gộp. */
 export type TDistributorReviewsView = { summary: TShopReviewSummary; reviews: TDistributorReview[] };
+
+/** Item GET /reviews/products/:id — `user.avatar` signed URL hoặc null. */
+export type TProductReview = TApiSchema<"ProductReviewResponse">;
+export type TProductReviewsPage = TApiSchema<"ListProductReviewsResponse">;

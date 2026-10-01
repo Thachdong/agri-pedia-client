@@ -4,6 +4,7 @@ import type {
   TCreateReviewResponse,
   TDistributorReviewsPage,
   TDistributorReviewsParams,
+  TProductReviewsPage,
 } from "../types/review.types";
 
 /**
@@ -18,3 +19,10 @@ export const getDistributorReviews = (
   params: TDistributorReviewsParams & { cursor?: string; limit?: number },
   client: IHttpClient = http,
 ) => client.get<TDistributorReviewsPage>("/reviews", { query: params });
+
+/** Public — review của 1 product (mọi status), mới nhất trước; product đã xoá / lạ → 404 REVIEW_TARGET_NOT_FOUND. */
+export const getProductReviews = (
+  productId: string,
+  { cursor, limit }: { cursor?: string; limit?: number } = {},
+  client: IHttpClient = http,
+) => client.get<TProductReviewsPage>(`/reviews/products/${encodeURIComponent(productId)}`, { query: { cursor, limit } });

@@ -58,5 +58,7 @@ export const queryKeys = {
     /** Review shop + product của shop theo filter (infinite, cursor) — tab "Đánh giá". */
     list: ({ distributorId, ...filters }: TDistributorReviewsParams) =>
       [...queryKeys.reviews.distributor(distributorId), "list", filters] as const,
+    /** Review của 1 product (infinite, cursor) — dialog chi tiết product. */
+    product: (productId: string) => [...queryKeys.reviews.all, "product", productId] as const,
   },
 } as const;
