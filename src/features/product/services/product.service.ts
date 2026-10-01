@@ -32,3 +32,7 @@ export const createProduct = (input: TCreateProductInput, client: IHttpClient = 
 /** Chỉ seller của product (403 PRODUCT_SELLER_NOT_ALLOWED / PRODUCT_NOT_OWNER); đã xoá → 404 PRODUCT_NOT_FOUND. Body rỗng. */
 export const updateProduct = (productId: string, input: TUpdateProductInput, client: IHttpClient = http) =>
   client.patch<void>(`/products/${encodeURIComponent(productId)}`, input);
+
+/** Soft delete — chỉ seller (403 PRODUCT_SELLER_NOT_ALLOWED / PRODUCT_NOT_OWNER); đã xoá → 404 PRODUCT_NOT_FOUND. Body rỗng. */
+export const deleteProduct = (productId: string, client: IHttpClient = http) =>
+  client.delete<void>(`/products/${encodeURIComponent(productId)}`);

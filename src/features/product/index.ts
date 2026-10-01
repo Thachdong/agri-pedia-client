@@ -2,6 +2,7 @@
 export { categoriesQuery, distributorProductsQuery, productDetailQuery } from "./hooks/product.queries";
 export { useCategories } from "./hooks/use-categories";
 export { useCreateProduct } from "./hooks/use-create-product";
+export { useDeleteProduct } from "./hooks/use-delete-product";
 export { useDistributorProducts } from "./hooks/use-distributor-products";
 export { useProductDetail } from "./hooks/use-product-detail";
 export { useUpdateProduct } from "./hooks/use-update-product";

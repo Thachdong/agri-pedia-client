@@ -20,7 +20,7 @@ Decisions:
     + "Xoá" (confirm). List chỉ trả ACTIVE → product đổi sang INACTIVE / OUT_OF_STOCK biến khỏi tab (kể cả owner).
   - ProductDetailDialog (feature product) nhận slot `reviews` + `actions` → product không phụ thuộc review; ghép ở feature distributor.
   - Invalidate: create → products.list(distributorId); update → products.list + products.detail(id);
-    delete → products.list + reviews.distributor(distributorId); create review → reviews.all (đã có, phủ cả product reviews + summary).
+    delete → products.list + bỏ cache products.detail(id); create review → reviews.all (đã có, phủ cả product reviews + summary).
   - Page prefetch trang đầu products + reviews shop (public) cho mọi viewer.
 
 - [x] 1. [feature-scaffold]     feature `product` — layers: components, hooks, services, schemas, types, constants
@@ -29,7 +29,7 @@ Decisions:
 - [x] 4. [feature-api]          GET /categories → TCategory, categoriesQuery, useCategories; keys products.categories (staleTime dài)
 - [x] 5. [feature-api]          POST /products → TCreateProductInput, useCreateProduct; invalidates products.list(distributorId)
 - [x] 6. [feature-api]          PATCH /products/:id → TUpdateProductInput, useUpdateProduct; invalidates products.list + products.detail(id)
-- [ ] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list + reviews.distributor
+- [x] 7. [feature-api]          DELETE /products/:id → useDeleteProduct; invalidates products.list, removeQueries products.detail(id) (review của product đã xoá vẫn hiện → reviews không stale)
 - [ ] 8. [feature-api]          GET /reviews → TDistributorReview, TShopReviewSummary, distributorReviewsQuery (infinite), useDistributorReviews; keys reviews.list(params)
 - [ ] 9. [feature-api]          GET /reviews/products/:id → TProductReview, productReviewsQuery (infinite), useProductReviews; keys reviews.product(productId)
 - [ ] 10. [feature-api]         GET /reviews/summary → TReviewSummary, reviewSummaryQuery, useReviewSummary; keys reviews.summary(targetType, targetId)
