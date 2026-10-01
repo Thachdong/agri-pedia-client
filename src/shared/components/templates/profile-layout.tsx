@@ -4,7 +4,7 @@ export type TProfileLayoutProps = {
   header: React.ReactNode;
   /** Phần thông tin (tiêu đề + nút + bảng thông tin). */
   info: React.ReactNode;
-  /** Tabs nội dung bên dưới (Sản phẩm | Đánh giá) — chưa có thì bỏ trống. */
+  /** Tabs nội dung bên dưới (Sản phẩm | Đánh giá). */
   tabs?: React.ReactNode;
   className?: string;
 };

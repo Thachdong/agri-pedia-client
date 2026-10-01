@@ -52,7 +52,7 @@ Decisions:
 - [x] 26. [atomic-component]    organism  DistributorProductsTab (new, feature distributor) — grid infinite ProductCard, owner "Thêm sản phẩm"; mở ProductDetailDialog (+ ProductReviewsPanel, owner Sửa / Xoá)
 - [x] 27. [atomic-component]    organism  DistributorProfileTabs (new, feature distributor) — Tabs Sản phẩm | Đánh giá (default Sản phẩm) → DistributorProductsTab | ShopReviewsPanel
 - [x] 27a. [data-wrapper]      prefetch(): option `infinite: [...]` → prefetchInfiniteQuery (trang đầu, đúng shape { pages, pageParams })
-- [ ] 28. [page]                /profile/[id] — gắn tabs vào ProfileLayout, prefetch trang đầu products + reviews shop
+- [x] 28. [page]                /profile/[id] — gắn tabs vào ProfileLayout, prefetch trang đầu products + reviews shop
 - [ ] 29. [arch-review]
 
 Components (in order):

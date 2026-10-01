@@ -3,6 +3,7 @@ import { ProfileLayout } from "@/shared/components/templates";
 
 const BLOCK = "animate-pulse rounded-lg bg-muted";
 const ROW_COUNT = 5;
+const CARD_COUNT = 3;
 
 export default function ProfileLoading() {
   return (
@@ -21,6 +22,16 @@ export default function ProfileLoading() {
                 <div className={`${BLOCK} h-4 w-28`} />
                 <div className={`${BLOCK} h-4 w-3/4`} />
               </div>
+            ))}
+          </div>
+        </div>
+      }
+      tabs={
+        <div className="flex flex-col gap-6" aria-hidden>
+          <div className={`${BLOCK} h-11 w-full`} />
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: CARD_COUNT }, (_, index) => (
+              <div key={index} className={`${BLOCK} aspect-4/3 w-full`} />
             ))}
           </div>
         </div>
