@@ -22,4 +22,4 @@ export const GUEST_ONLY_PATHS: readonly string[] = [
 ];
 
 /** Chưa đăng nhập mà vào các trang này (và trang con) → về LOGIN_PATH (kèm `next` để quay lại). */
-export const PROTECTED_PATHS: readonly string[] = [ROUTES.myProfile];
+export const PROTECTED_PATHS: readonly string[] = [ROUTES.myProfile, ROUTES.diagnosis.list];
