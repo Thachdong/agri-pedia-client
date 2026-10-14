@@ -42,7 +42,7 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 38. [atomic-component]  organism  DiagnosisResult       (new, feature) ← useDiagnosisLive
 - [x] 39. [atomic-component]  organism  DiagnosisHistoryList  (new, feature) ← useDiagnosisHistory
 - [x] 40. [atomic-component]  organism  DiseaseDetail         (new, feature)
-- [ ] 41. [atomic-component]  template  ContentLayout         (new, shared) — header sticky + main max-w + footer sticky tuỳ chọn
+- [x] 41. [atomic-component]  template  ContentLayout         (new, shared) — header sticky + main max-w + footer sticky tuỳ chọn
 - [ ] 42. [page]              /diagnosis/new ← DiagnosisForm (kiểm tra `crop` qua knowledge.crops)
 - [ ] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
 - [ ] 44. [page]              /diagnosis ← DiagnosisHistoryList
