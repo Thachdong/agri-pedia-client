@@ -32,7 +32,7 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 28. [atomic-component]  organism  CropPickerDialog      (new, feature)
 - [x] 29. [atomic-component]  organism  DiagnosisHeaderButton (new, feature) ← useCrops
 - [x] 30. [atomic-component]  organism  CameraCaptureDialog   (new, feature)
-- [ ] 31. [atomic-component]  organism  DiagnosisForm         (new, feature) ← useCreateDiagnosis
+- [x] 31. [atomic-component]  organism  DiagnosisForm         (new, feature) ← useCreateDiagnosis
 - [ ] 32. [atomic-component]  organism  DiagnosisStatusPanel  (new, feature) — PROCESSING / quá 5 phút / FAILED
 - [ ] 33. [atomic-component]  organism  DiagnosisSummary      (new, feature)
 - [ ] 34. [atomic-component]  organism  ImageLightbox         (new, feature)

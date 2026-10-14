@@ -107,3 +107,13 @@ export const POLL_TIMEOUT_MS = 5 * 60_000;
 export const DIAGNOSIS_EVENTS = {
   completed: "diagnosis.completed",
 } as const;
+
+/** Mã lỗi domain của POST /diagnoses và feedback (api.md action 36, 39). */
+export const DIAGNOSIS_ERROR_CODE = {
+  invalidImage: "DIAGNOSIS_INVALID_IMAGE",
+  cropNotSupported: "DIAGNOSIS_CROP_NOT_SUPPORTED",
+  userNotAllowed: "DIAGNOSIS_USER_NOT_ALLOWED",
+  dailyLimitExceeded: "DIAGNOSIS_DAILY_LIMIT_EXCEEDED",
+  notFound: "DIAGNOSIS_NOT_FOUND",
+  notCompleted: "DIAGNOSIS_NOT_COMPLETED",
+} as const;

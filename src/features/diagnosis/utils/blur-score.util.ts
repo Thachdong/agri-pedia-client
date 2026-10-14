@@ -26,20 +26,20 @@ export function laplacianVariance({ data, width, height }: ImageData): number {
 }
 
 /**
- * Ảnh có thể bị mờ? (chỉ chạy ở browser) — đo trên bản thu nhỏ cạnh dài 512px để nhanh và ổn định giữa các cỡ ảnh.
- * Decode lỗi → `false` (lỗi định dạng do bước nén báo).
+ * Kiểm tra nhanh 1 ảnh vừa chọn (chỉ chạy ở browser): decode được không, có thể bị mờ không.
+ * Đo mờ trên bản thu nhỏ cạnh dài 512px để nhanh và ổn định giữa các cỡ ảnh.
  */
-export async function isLikelyBlurry(file: Blob): Promise<boolean> {
+export async function analyzeImage(file: Blob): Promise<{ decodable: boolean; blurry: boolean }> {
   let bitmap: ImageBitmap;
   try {
     bitmap = await decodeImage(file);
   } catch {
-    return false;
+    return { decodable: false, blurry: false };
   }
   try {
     const { width, height } = fitWithin(bitmap.width, bitmap.height, BLUR_SAMPLE_EDGE);
     const { context } = drawToCanvas(bitmap, width, height);
-    return laplacianVariance(context.getImageData(0, 0, width, height)) < BLUR_THRESHOLD;
+    return { decodable: true, blurry: laplacianVariance(context.getImageData(0, 0, width, height)) < BLUR_THRESHOLD };
   } finally {
     bitmap.close();
   }
