@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ChatRoomsMenu } from "@/features/chat";
+import { StartDiagnosisButton } from "@/features/diagnosis";
 import { DistributorExplorerList, DistributorExplorerMap, DistributorExplorerProvider } from "@/features/distributor";
 import { NotificationMenu } from "@/features/notification";
 import { DistributorHomeRedirect, meQuery, type TUserProfile, UserMenu } from "@/features/user";
@@ -47,6 +48,7 @@ export default async function HomePage() {
               <SiteHeader
                 actions={
                   <>
+                    <StartDiagnosisButton compact />
                     <NotificationMenu />
                     <ChatRoomsMenu />
                     <UserMenu />

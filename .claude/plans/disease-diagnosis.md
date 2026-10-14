@@ -47,7 +47,7 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
 - [x] 44. [page]              /diagnosis ← DiagnosisHistoryList
 - [x] 45. [page]              /diseases/[code] (public) ← prefetch diseaseQuery, DiseaseDetail (+ not-found)
-- [ ] 46. [page]              gắn StartDiagnosisButton (compact) vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
+- [x] 46. [page]              gắn StartDiagnosisButton (compact) vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
 - [ ] 47. [arch-review]
 
 Components (in order):
