@@ -52,3 +52,24 @@ export type TDiagnosisListItem = TApiSchema<"DiagnosisListItemResponse">;
 export type TDiagnosisListPage = TApiSchema<"ListMyDiagnosesResponse">;
 
 export type TDiagnosisFeedbackInput = TApiSchema<"SubmitDiagnosisFeedbackDto">;
+
+/** Payload realtime `diagnosis.completed`. */
+export type TDiagnosisCompletedEvent = { id: string; status: Exclude<TDiagnosisStatus, "PROCESSING"> };
+
+/** 1 ô ảnh của form — `file` ảnh gốc người dùng chọn; nén lúc gửi. */
+export type TDiagnosisFormImage = {
+  id: string;
+  file: File;
+  /** "" = chưa chọn. */
+  plantPart: TPlantPart | "";
+};
+
+export type TDiagnosisFormValues = {
+  images: TDiagnosisFormImage[];
+  note: string;
+};
+
+export type TDiagnosisFeedbackFormValues = {
+  feedback: TDiagnosisFeedbackValue | "";
+  comment: string;
+};

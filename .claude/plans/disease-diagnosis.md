@@ -11,9 +11,9 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 7. [feature-api]        GET /diagnoses/:id → TDiagnosis (override category enum), diagnosisQuery, useDiagnosis; keys diagnoses.detail(id)
 - [x] 8. [feature-api]        GET /diagnoses (infinite, cursor) → TDiagnosisListItem, useDiagnosisHistory; keys diagnoses.lists
 - [x] 9. [feature-api]        POST /diagnoses/:id/feedback → useDiagnosisFeedback; invalidates diagnoses.detail(id), diagnoses.lists
-- [ ] 10. [validation-schema] diagnosisFormSchema (1..5 ảnh, plantPart bắt buộc, note ≤ 1000)
-- [ ] 11. [validation-schema] diagnosisFeedbackSchema (feedback bắt buộc, comment ≤ 1000)
-- [ ] 12. [shared-unit]       feature constants: PLANT_PART / CONFIDENCE / CATEGORY / STATUS labels + tone, MAX_IMAGES, MAX_EDGE, POLL_*, BLUR_THRESHOLD, DIAGNOSIS_EVENTS
+- [x] 10. [validation-schema] diagnosisFormSchema (1..5 ảnh, plantPart bắt buộc, note ≤ 1000)
+- [x] 11. [validation-schema] diagnosisFeedbackSchema (feedback bắt buộc, comment ≤ 1000)
+- [x] 12. [shared-unit]       feature constants: PLANT_PART / CONFIDENCE / CATEGORY / STATUS labels + tone, MAX_IMAGES, MAX_EDGE, POLL_*, BLUR_THRESHOLD, DIAGNOSIS_EVENTS
 - [ ] 13. [shared-unit]       util compressImage (EXIF, ≤2048px, JPEG 0.85 → 0.7)
 - [ ] 14. [shared-unit]       util blurScore (phương sai Laplacian ~512px)
 - [ ] 15. [shared-unit]       hook useCameraStream (getUserMedia environment, cleanup, phát hiện không hỗ trợ / bị từ chối / không HTTPS)
