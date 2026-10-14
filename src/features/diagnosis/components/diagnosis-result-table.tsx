@@ -4,26 +4,36 @@ import { Badge } from "@/shared/components/atoms";
 import { cn } from "@/shared/lib/utils";
 import { CATEGORY_LABELS } from "../constants/diagnosis.constants";
 import type { TDiagnosisImage } from "../types/diagnosis.types";
+import { formatLocation, regionsOfDisease, uniqueSymptoms } from "../utils/diagnosis-view.util";
 import { ConfidenceBadge } from "./confidence-badge";
+import { DiseaseNameButton } from "./disease-name-button";
 
 export type TDiagnosisResultTableProps = {
-  image: Pick<TDiagnosisImage, "diseases" | "regions">;
+  image: Pick<TDiagnosisImage, "diseases" | "regions" | "plantPart" | "detectedPart">;
   /** diseaseCode đang làm nổi trên ảnh. */
   highlightedCode?: string | null;
   onHighlightCode?: (code: string | null | undefined) => void;
+  /** Bấm tên bệnh → mở báo cáo bệnh. */
+  onOpenDisease: (code: string) => void;
   className?: string;
 };
 
 /**
- * Kết quả từng bệnh của 1 ảnh: bệnh (+ biến thể), nhóm, triệu chứng (từ các vùng của bệnh đó), độ tin cậy, số vùng.
- * Mỗi bệnh là 1 hàng thẻ (đọc được cả ở mobile / cột hẹp). Hover / chạm hàng → làm nổi khung tương ứng trên ảnh.
+ * Kết quả từng bệnh của 1 ảnh: tên bệnh (link báo cáo) + độ tin cậy + nhóm, vị trí (bộ phận · số vùng),
+ * triệu chứng (gạch đầu dòng). Hover / focus hàng → làm nổi khung tương ứng trên ảnh.
  */
-export function DiagnosisResultTable({ image, highlightedCode, onHighlightCode, className }: TDiagnosisResultTableProps) {
+export function DiagnosisResultTable({
+  image,
+  highlightedCode,
+  onHighlightCode,
+  onOpenDisease,
+  className,
+}: TDiagnosisResultTableProps) {
   return (
     <ul className={cn("divide-y divide-border-subtle overflow-hidden rounded-lg border border-border-subtle", className)}>
       {image.diseases.map((disease) => {
-        const regions = image.regions.filter((region) => region.diagnosis?.diseaseCode === disease.diseaseCode);
-        const symptoms = [...new Set(regions.map((region) => region.symptom))];
+        const regions = regionsOfDisease(image, disease.diseaseCode);
+        const symptoms = uniqueSymptoms(regions);
         const active = highlightedCode === disease.diseaseCode;
 
         return (
@@ -31,32 +41,35 @@ export function DiagnosisResultTable({ image, highlightedCode, onHighlightCode, 
             key={`${disease.diseaseCode}-${disease.variantCode ?? ""}`}
             onMouseEnter={() => onHighlightCode?.(disease.diseaseCode)}
             onMouseLeave={() => onHighlightCode?.(undefined)}
-            className={cn("transition-colors", active && "bg-highlight-subtle")}
+            className={cn("flex flex-col gap-2 px-4 py-3 transition-colors", active && "bg-highlight-subtle")}
           >
-            <button
-              type="button"
-              onClick={() => onHighlightCode?.(active ? undefined : disease.diseaseCode)}
-              aria-pressed={active}
-              className="flex w-full flex-col gap-2 px-4 py-3 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-            >
-              <span className="flex flex-wrap items-center gap-2">
-                <span className="font-medium">
-                  {disease.diseaseName}
-                  {disease.variantName && <span className="font-normal text-muted-foreground"> — {disease.variantName}</span>}
-                </span>
-                <ConfidenceBadge level={disease.confidence.level} />
-              </span>
-              <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                <Badge>{CATEGORY_LABELS[disease.category]}</Badge>
-                <span>{regions.length > 0 ? `${regions.length} vùng trên ảnh` : "Không khoanh vùng"}</span>
-              </span>
-              {symptoms.length > 0 && (
-                <span className="text-sm">
-                  <span className="text-muted-foreground">Triệu chứng: </span>
-                  {symptoms.join("; ")}
-                </span>
-              )}
-            </button>
+            <div className="flex flex-wrap items-center gap-2">
+              <DiseaseNameButton
+                name={disease.diseaseName}
+                variantName={disease.variantName}
+                onClick={() => onOpenDisease(disease.diseaseCode)}
+                onFocus={() => onHighlightCode?.(disease.diseaseCode)}
+                onBlur={() => onHighlightCode?.(undefined)}
+              />
+              <ConfidenceBadge level={disease.confidence.level} />
+              <Badge>{CATEGORY_LABELS[disease.category]}</Badge>
+            </div>
+            <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+              <dt className="text-muted-foreground">Vị trí</dt>
+              <dd>{formatLocation(image, regions.length)}</dd>
+              <dt className="text-muted-foreground">Triệu chứng</dt>
+              <dd>
+                {symptoms.length > 0 ? (
+                  <ul className="list-disc space-y-0.5 pl-4">
+                    {symptoms.map((symptom) => (
+                      <li key={symptom}>{symptom}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span className="text-muted-foreground">Không có mô tả</span>
+                )}
+              </dd>
+            </dl>
           </li>
         );
       })}

@@ -11,7 +11,6 @@ export type TPlantPart = TApiDiagnosisImage["plantPart"];
 export type TDiagnosisImageStatus = NonNullable<TApiDiagnosisImage["status"]>;
 export type TConfidence = TApiSchema<"DiagnosisConfidenceResponse">;
 export type TConfidenceLevel = TConfidence["level"];
-export type TDiagnosisFeedbackValue = TApiSchema<"SubmitDiagnosisFeedbackDto">["feedback"];
 
 /** Swagger sinh `category` thành `{}` → override bằng enum của knowledge. */
 type TWithCategory<T> = Omit<T, "category"> & { category: TDiseaseCategory };
@@ -51,8 +50,6 @@ export type TCreateDiagnosisResponse = TApiSchema<"CreateDiagnosisResponse">;
 export type TDiagnosisListItem = TApiSchema<"DiagnosisListItemResponse">;
 export type TDiagnosisListPage = TApiSchema<"ListMyDiagnosesResponse">;
 
-export type TDiagnosisFeedbackInput = TApiSchema<"SubmitDiagnosisFeedbackDto">;
-
 /** Payload realtime `diagnosis.completed`. */
 export type TDiagnosisCompletedEvent = { id: string; status: Exclude<TDiagnosisStatus, "PROCESSING"> };
 
@@ -67,9 +64,4 @@ export type TDiagnosisFormImage = {
 export type TDiagnosisFormValues = {
   images: TDiagnosisFormImage[];
   note: string;
-};
-
-export type TDiagnosisFeedbackFormValues = {
-  feedback: TDiagnosisFeedbackValue | "";
-  comment: string;
 };

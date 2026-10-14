@@ -2,6 +2,7 @@
 
 import { RefreshCwIcon } from "lucide-react";
 import { notFound } from "next/navigation";
+import { useState } from "react";
 import { Button } from "@/shared/components/atoms";
 import { Callout } from "@/shared/components/molecules";
 import { cn } from "@/shared/lib/utils";
@@ -9,20 +10,19 @@ import { DIAGNOSIS_ERROR_CODE } from "../constants/diagnosis.constants";
 import { useCrops } from "../hooks/use-crops";
 import { useDiagnosisLive } from "../hooks/use-diagnosis-live";
 import type { TDiagnosis } from "../types/diagnosis.types";
-import { DiagnosisFeedback } from "./diagnosis-feedback";
 import { DiagnosisResultImage } from "./diagnosis-result-image";
 import { DiagnosisStatusBadge } from "./diagnosis-status-badge";
 import { DiagnosisStatusPanel } from "./diagnosis-status-panel";
 import { DiagnosisSummary } from "./diagnosis-summary";
-import { collectDiseaseCodes, RelatedDiseases } from "./related-diseases";
+import { DiseaseReportDialog } from "./disease-report-dialog";
 
 const DATE_FORMAT = new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium", timeStyle: "short" });
 
 export type TDiagnosisResultProps = { id: string; className?: string };
 
 /**
- * Trang kết quả chẩn đoán (cần RealtimeProvider): chờ kết quả (realtime + poll) → tóm tắt → từng ảnh
- * → bài viết liên quan → phản hồi → disclaimer.
+ * Trang kết quả chẩn đoán (cần RealtimeProvider): chờ kết quả (realtime + poll) → bảng tổng hợp → từng ảnh
+ * → disclaimer. Tên bệnh ở 2 mục đầu mở dialog báo cáo bệnh.
  */
 export function DiagnosisResult({ id, className }: TDiagnosisResultProps) {
   const query = useDiagnosisLive(id);
@@ -75,21 +75,21 @@ export function DiagnosisResult({ id, className }: TDiagnosisResultProps) {
 }
 
 function CompletedResult({ diagnosis }: { diagnosis: TDiagnosis }) {
+  const [diseaseCode, setDiseaseCode] = useState<string | null>(null);
   const images = [...diagnosis.images].sort((a, b) => a.index - b.index);
   return (
     <>
-      <DiagnosisSummary diagnosis={diagnosis} />
+      <DiagnosisSummary diagnosis={diagnosis} onOpenDisease={setDiseaseCode} />
       <section aria-labelledby="diagnosis-images-title" className="flex flex-col gap-3">
         <h2 id="diagnosis-images-title" className="text-lg font-semibold">
           Kết quả từng ảnh
         </h2>
         {images.map((image) => (
-          <DiagnosisResultImage key={image.index} image={image} />
+          <DiagnosisResultImage key={image.index} image={image} onOpenDisease={setDiseaseCode} />
         ))}
       </section>
-      <RelatedDiseases codes={collectDiseaseCodes(images)} />
-      <DiagnosisFeedback diagnosis={diagnosis} />
       <p className="text-xs text-muted-foreground">{diagnosis.disclaimer}</p>
+      <DiseaseReportDialog code={diseaseCode} onClose={() => setDiseaseCode(null)} />
     </>
   );
 }

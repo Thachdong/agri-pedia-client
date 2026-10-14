@@ -4,7 +4,6 @@ import type {
   TCreateDiagnosisMeta,
   TCreateDiagnosisResponse,
   TDiagnosis,
-  TDiagnosisFeedbackInput,
   TDiagnosisListPage,
 } from "../types/diagnosis.types";
 
@@ -30,6 +29,3 @@ export const getMyDiagnoses = (
   client: IHttpClient = http,
 ) => client.get<TDiagnosisListPage>("/diagnoses", { query: { cursor, limit } });
 
-/** Ghi đè phản hồi trước đó; chỉ khi COMPLETED (409 DIAGNOSIS_NOT_COMPLETED). Body trả về rỗng. */
-export const submitDiagnosisFeedback = (id: string, input: TDiagnosisFeedbackInput, client: IHttpClient = http) =>
-  client.post<null>(`/diagnoses/${encodeURIComponent(id)}/feedback`, input);

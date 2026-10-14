@@ -52,7 +52,15 @@ export function DiseaseDetail({ code, className }: TDiseaseDetailProps) {
   return <DiseaseArticle disease={query.data} className={className} />;
 }
 
-function DiseaseArticle({ disease, className }: { disease: TDisease; className?: string }) {
+export type TDiseaseArticleProps = {
+  disease: TDisease;
+  /** Phần tử tiêu đề — trang: h1; dialog: DialogTitle. */
+  titleAs?: React.ElementType;
+  className?: string;
+};
+
+/** Nội dung đầy đủ của 1 bệnh — dùng ở trang /diseases/[code] và dialog báo cáo bệnh. */
+export function DiseaseArticle({ disease, titleAs: Title = "h1", className }: TDiseaseArticleProps) {
   const subtitle = [disease.nameEn, disease.scientificName].filter(Boolean);
   const { cultural, biological, nutrition } = disease.treatments;
   const hasTreatments = cultural.length + biological.length + nutrition.length > 0;
@@ -65,7 +73,7 @@ function DiseaseArticle({ disease, className }: { disease: TDisease; className?:
         )}
         <div className="flex flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-2xl font-bold">{disease.nameVi}</h1>
+            <Title className="text-2xl font-bold">{disease.nameVi}</Title>
             <Badge>{CATEGORY_LABELS[disease.category]}</Badge>
           </div>
           {subtitle.length > 0 && (

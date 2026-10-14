@@ -1,15 +1,8 @@
 import { schema, v } from "@/shared/lib/validation";
-import {
-  DIAGNOSIS_MAX_IMAGES,
-  DIAGNOSIS_NOTE_MAX,
-  FEEDBACK_COMMENT_MAX,
-  FEEDBACK_VALUES,
-  PLANT_PARTS,
-} from "../constants/diagnosis.constants";
-import type { TDiagnosisFeedbackFormValues, TDiagnosisFormValues } from "../types/diagnosis.types";
+import { DIAGNOSIS_MAX_IMAGES, DIAGNOSIS_NOTE_MAX, PLANT_PARTS } from "../constants/diagnosis.constants";
+import type { TDiagnosisFormValues } from "../types/diagnosis.types";
 
 const PLANT_PART_REQUIRED = "Chọn bộ phận";
-const FEEDBACK_REQUIRED = "Vui lòng chọn đánh giá kết quả";
 
 const diagnosisImage = schema<TDiagnosisFormValues["images"][number]>({
   id: v.string().required(),
@@ -36,12 +29,3 @@ export const diagnosisFormSchema = schema<TDiagnosisFormValues>({
   note: v.string().trim().allow("").max(DIAGNOSIS_NOTE_MAX),
 });
 
-/** Mirror SubmitDiagnosisFeedbackDto: feedback bắt buộc, comment ≤ 1000 (tuỳ chọn). */
-export const diagnosisFeedbackSchema = schema<TDiagnosisFeedbackFormValues>({
-  feedback: v
-    .string()
-    .valid(...FEEDBACK_VALUES)
-    .required()
-    .messages({ "any.only": FEEDBACK_REQUIRED, "string.empty": FEEDBACK_REQUIRED, "any.required": FEEDBACK_REQUIRED }),
-  comment: v.string().trim().allow("").max(FEEDBACK_COMMENT_MAX),
-});

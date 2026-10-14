@@ -1,6 +1,5 @@
 import type {
   TConfidenceLevel,
-  TDiagnosisFeedbackValue,
   TDiagnosisImageStatus,
   TDiagnosisStatus,
   TPlantPart,
@@ -49,14 +48,6 @@ export const IMAGE_STATUS_LABELS: Record<TDiagnosisImageStatus, string> = {
   LOW_QUALITY: "Ảnh chưa đủ rõ",
 };
 
-export const FEEDBACK_OPTIONS = [
-  { value: "CORRECT", label: "Kết quả đúng" },
-  { value: "WRONG", label: "Sai" },
-  { value: "UNSURE", label: "Không chắc" },
-] as const satisfies readonly { value: TDiagnosisFeedbackValue; label: string }[];
-
-export const FEEDBACK_VALUES = FEEDBACK_OPTIONS.map((option) => option.value);
-
 export const AGENT_TYPE_LABELS: Record<TDiseaseAgentType, string> = {
   FUNGUS: "Nấm",
   BACTERIA: "Vi khuẩn",
@@ -84,7 +75,6 @@ export const CROP_STAGE_LABELS: Record<TCropStage, string> = {
 /** POST /diagnoses: 1..5 ảnh, note ≤ 1000 (api.md action 36). */
 export const DIAGNOSIS_MAX_IMAGES = 5;
 export const DIAGNOSIS_NOTE_MAX = 1000;
-export const FEEDBACK_COMMENT_MAX = 1000;
 
 /** Định dạng nhận ở input file — HEIC/HEIF được nén sang JPEG ở client nếu trình duyệt decode được. */
 export const DIAGNOSIS_IMAGE_ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";
@@ -108,12 +98,11 @@ export const DIAGNOSIS_EVENTS = {
   completed: "diagnosis.completed",
 } as const;
 
-/** Mã lỗi domain của POST /diagnoses và feedback (api.md action 36, 39). */
+/** Mã lỗi domain của POST /diagnoses và GET /diagnoses/:id (api.md action 36, 37). */
 export const DIAGNOSIS_ERROR_CODE = {
   invalidImage: "DIAGNOSIS_INVALID_IMAGE",
   cropNotSupported: "DIAGNOSIS_CROP_NOT_SUPPORTED",
   userNotAllowed: "DIAGNOSIS_USER_NOT_ALLOWED",
   dailyLimitExceeded: "DIAGNOSIS_DAILY_LIMIT_EXCEEDED",
   notFound: "DIAGNOSIS_NOT_FOUND",
-  notCompleted: "DIAGNOSIS_NOT_COMPLETED",
 } as const;

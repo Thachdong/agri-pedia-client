@@ -8,6 +8,7 @@ import { Callout } from "@/shared/components/molecules";
 import { cn } from "@/shared/lib/utils";
 import { IMAGE_STATUS_LABELS, PLANT_PART_LABELS } from "../constants/diagnosis.constants";
 import type { TDiagnosisImage, TDiagnosisImageStatus } from "../types/diagnosis.types";
+import { resultImageAnchorId } from "../utils/diagnosis-view.util";
 import { DiagnosisResultTable } from "./diagnosis-result-table";
 import { ImageLightbox } from "./image-lightbox";
 import { RegionOverlay } from "./region-overlay";
@@ -20,13 +21,18 @@ const IMAGE_STATUS_TONES: Record<TDiagnosisImageStatus, TBadgeTone> = {
   LOW_QUALITY: "warning",
 };
 
-export type TDiagnosisResultImageProps = { image: TDiagnosisImage; className?: string };
+export type TDiagnosisResultImageProps = {
+  image: TDiagnosisImage;
+  /** Bấm tên bệnh → mở báo cáo bệnh. */
+  onOpenDisease: (code: string) => void;
+  className?: string;
+};
 
 /**
  * Kết quả 1 ảnh: ảnh + khung vùng bệnh (bấm → lightbox) và bảng bệnh; ảnh không có bệnh → `message` của server.
  * lg: 2 cột [ảnh | bảng]; mobile: xếp dọc. Hover / chạm hàng bảng ↔ làm nổi khung tương ứng.
  */
-export function DiagnosisResultImage({ image, className }: TDiagnosisResultImageProps) {
+export function DiagnosisResultImage({ image, onOpenDisease, className }: TDiagnosisResultImageProps) {
   // undefined = không làm nổi; null = vùng chưa xác định.
   const [highlightedCode, setHighlightedCode] = useState<string | null | undefined>(undefined);
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -34,7 +40,13 @@ export function DiagnosisResultImage({ image, className }: TDiagnosisResultImage
   const showTable = image.status === "DISEASED" && image.diseases.length > 0;
 
   return (
-    <article className={cn("card-normal flex flex-col gap-4 rounded-xl p-4 sm:p-5", className)} aria-label={title}>
+    <article
+      // Đích cuộn từ bảng tổng hợp — scroll-mt chừa chỗ cho header dính.
+      id={resultImageAnchorId(image.index)}
+      tabIndex={-1}
+      className={cn("card-normal flex scroll-mt-20 flex-col gap-4 rounded-xl p-4 outline-none focus-visible:ring-2 focus-visible:ring-ring sm:p-5", className)}
+      aria-label={title}
+    >
       <header className="flex flex-wrap items-center gap-2">
         <h3 className="font-semibold">{title}</h3>
         {image.status && <Badge tone={IMAGE_STATUS_TONES[image.status]}>{IMAGE_STATUS_LABELS[image.status]}</Badge>}
@@ -81,7 +93,12 @@ export function DiagnosisResultImage({ image, className }: TDiagnosisResultImage
         )}
 
         {showTable ? (
-          <DiagnosisResultTable image={image} highlightedCode={highlightedCode} onHighlightCode={setHighlightedCode} />
+          <DiagnosisResultTable
+            image={image}
+            highlightedCode={highlightedCode}
+            onHighlightCode={setHighlightedCode}
+            onOpenDisease={onOpenDisease}
+          />
         ) : (
           image.message && <Callout tone={image.status === "HEALTHY" ? "success" : "neutral"}>{image.message}</Callout>
         )}

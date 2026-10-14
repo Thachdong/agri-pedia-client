@@ -50,6 +50,12 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 46. [page]              gắn StartDiagnosisButton (compact) vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
 - [x] 47. [arch-review]
 
+UI revision 1 (2026-10-14):
+- [x] 48. [atomic-component]  organism  DiseaseReportDialog (new, feature) ← useDisease; molecule DiseaseNameButton; DiseaseArticle tách ra dùng chung với /diseases/[code]
+- [x] 49. [atomic-component]  organism  DiagnosisSummary → bảng mỗi ảnh 1 hàng: ảnh (cuộn tới ảnh), bệnh (link dialog), độ tin cậy, vị trí (bộ phận · số vùng), triệu chứng
+- [x] 50. [atomic-component]  molecule  DiagnosisResultTable → thêm Vị trí trước Triệu chứng, triệu chứng gạch đầu dòng, tên bệnh mở dialog
+- [x] 51. [atomic-component]  bỏ RelatedDiseases, DiseaseCard, DiagnosisFeedback (+ hook / service / schema feedback)
+
 Components (in order):
   [atom]      Badge                  new    shared
   [atom]      Button                 reuse  shared
