@@ -1,5 +1,6 @@
 // Atom có tuỳ biến riêng của project.
 export { Avatar, type TAvatarProps } from "./avatar";
+export { Badge, type TBadgeProps, type TBadgeTone } from "./badge";
 export { Button, type TButtonProps } from "./button";
 export { CountBadge, formatCount, type TCountBadgeProps } from "./count-badge";
 export { StarRating, type TStarRatingProps } from "./star-rating";
