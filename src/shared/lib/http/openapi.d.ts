@@ -661,6 +661,127 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/knowledge/crops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List crops supported by diagnosis (public) */
+        get: operations["KnowledgeController_crops"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/diseases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List diseases of a crop, by Vietnamese name (public)
+         * @description Filter by category; `q` matches Vietnamese/English names and aliases, ignoring case and diacritics. No pagination (~50 per crop).
+         */
+        get: operations["KnowledgeController_diseases"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/diseases/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the Vietnamese detail of a disease (public)
+         * @description No chemical recommendations. When `verification` is not SOURCED, show that experts have not confirmed the content yet.
+         */
+        get: operations["KnowledgeController_disease"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/diagnoses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List my diagnoses, newest first
+         * @description Cursor pagination. `thumbnail` = signed URL of the first stored image; `diseases` empty while PROCESSING or when FAILED.
+         */
+        get: operations["DiagnosisController_listMine"];
+        put?: never;
+        /**
+         * Send plant photos for disease diagnosis (processed in background)
+         * @description multipart/form-data: `images` = 1..5 files (jpg/png/webp, <= DIAGNOSIS_MAX_IMAGE_BYTES each; format checked by content), `meta` = JSON string `{ cropType, images: [{ plantPart }], note? }` with one entry per file in the same order. Answers 202 with status PROCESSING; the result comes via realtime `diagnosis.completed` { id, status } or by polling GET /diagnoses/{diagnosisId}. Daily limit per user: DIAGNOSIS_DAILY_LIMIT (Vietnam day).
+         */
+        post: operations["DiagnosisController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/diagnoses/{diagnosisId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get one of my diagnoses with per-image results
+         * @description While PROCESSING: `summary` null, image `status` null, `regions` empty. Region `box` is 0..1 on the stored (EXIF-rotated) image at `url`; `diagnosis` null = uncertain region. Use `diseaseCode` with GET /knowledge/diseases/{code}. Another user's diagnosis answers 404.
+         */
+        get: operations["DiagnosisController_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/diagnoses/{diagnosisId}/feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Give feedback on a completed diagnosis (overwrites)
+         * @description Empty body (null) on success.
+         */
+        post: operations["DiagnosisController_feedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1094,6 +1215,178 @@ export interface components {
         ListRoomMessagesResponse: {
             messages: components["schemas"]["RoomMessageResponse"][];
             nextCursor: string | null;
+        };
+        CropItemResponse: {
+            code: string;
+            nameVi: string;
+        };
+        ListCropsResponse: {
+            crops: components["schemas"]["CropItemResponse"][];
+        };
+        DiseaseItemResponse: {
+            code: string;
+            nameVi: string;
+            nameEn: string;
+            scientificName: string | null;
+            aliases: string[];
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+            /** @enum {string} */
+            agentType: "FUNGUS" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
+            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT")[];
+            /** @enum {string} */
+            verification: "SOURCED" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+        };
+        ListDiseasesResponse: {
+            diseases: components["schemas"]["DiseaseItemResponse"][];
+        };
+        DiseaseVariantResponse: {
+            code: string;
+            name: string;
+            affectedParts: string;
+            symptoms: string[];
+        };
+        DiseaseTreatmentsResponse: {
+            cultural: string[];
+            biological: string[];
+            nutrition: string[];
+        };
+        SimilarDiseaseResponse: {
+            code: string;
+            name: string;
+            distinguishingFeature: string | null;
+        };
+        DiseaseReferenceResponse: {
+            title: string;
+            url: string;
+        };
+        DiseaseDetailResponse: {
+            code: string;
+            nameVi: string;
+            nameEn: string;
+            scientificName: string | null;
+            aliases: string[];
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+            /** @enum {string} */
+            agentType: "FUNGUS" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
+            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT")[];
+            pathogens: string[];
+            symptoms: string[];
+            variants: components["schemas"]["DiseaseVariantResponse"][];
+            transmissionMode: string | null;
+            cropStages: ("SEEDLING" | "TILLERING" | "BOOTING" | "HEADING" | "MILK" | "MATURITY")[];
+            favorableConditions: string[];
+            treatments: components["schemas"]["DiseaseTreatmentsResponse"];
+            similarDiseases: components["schemas"]["SimilarDiseaseResponse"][];
+            references: components["schemas"]["DiseaseReferenceResponse"][];
+            /** @enum {string} */
+            verification: "SOURCED" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+            kbVersion: string;
+        };
+        CreateDiagnosisResponse: {
+            id: string;
+            /** @enum {string} */
+            status: "PROCESSING" | "COMPLETED" | "FAILED";
+        };
+        DiagnosisListDiseaseResponse: {
+            diseaseCode: string;
+            diseaseName: string;
+            /** @enum {string} */
+            confidenceLevel: "HIGH" | "MEDIUM" | "LOW";
+        };
+        DiagnosisListItemResponse: {
+            id: string;
+            /** @enum {string} */
+            status: "PROCESSING" | "COMPLETED" | "FAILED";
+            cropType: string;
+            thumbnail: string | null;
+            diseases: components["schemas"]["DiagnosisListDiseaseResponse"][];
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ListMyDiagnosesResponse: {
+            diagnoses: components["schemas"]["DiagnosisListItemResponse"][];
+            nextCursor: string | null;
+        };
+        DiagnosisConfidenceResponse: {
+            /** @enum {string} */
+            level: "HIGH" | "MEDIUM" | "LOW";
+            score: number;
+        };
+        DiagnosisSummaryDiseaseResponse: {
+            diseaseCode: string;
+            diseaseName: string;
+            category: Record<string, never>;
+            confidence: components["schemas"]["DiagnosisConfidenceResponse"];
+            imageCount: number;
+        };
+        DiagnosisSummaryResponse: {
+            hasDisease: boolean;
+            conflict: boolean;
+            diseases: components["schemas"]["DiagnosisSummaryDiseaseResponse"][];
+        };
+        DiagnosisImageDiseaseResponse: {
+            category: Record<string, never>;
+            diseaseCode: string;
+            variantCode: string | null;
+            diseaseName: string;
+            variantName: string | null;
+            confidence: components["schemas"]["DiagnosisConfidenceResponse"];
+        };
+        DiagnosisBoxResponse: {
+            x: number;
+            y: number;
+            w: number;
+            h: number;
+        };
+        DiagnosedDiseaseResponse: {
+            diseaseCode: string;
+            variantCode: string | null;
+            diseaseName: string;
+            variantName: string | null;
+            confidence: components["schemas"]["DiagnosisConfidenceResponse"];
+        };
+        DiagnosisRegionResponse: {
+            box: components["schemas"]["DiagnosisBoxResponse"];
+            symptom: string;
+            features: string[];
+            diagnosis: components["schemas"]["DiagnosedDiseaseResponse"] | null;
+        };
+        DiagnosisImageResponse: {
+            index: number;
+            mediaId: string | null;
+            url: string | null;
+            /** @enum {string} */
+            plantPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT";
+            /** @enum {string|null} */
+            detectedPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | null;
+            /** @enum {string|null} */
+            status: "DISEASED" | "HEALTHY" | "UNCERTAIN" | "NOT_TARGET_CROP" | "LOW_QUALITY" | null;
+            message: string | null;
+            diseases: components["schemas"]["DiagnosisImageDiseaseResponse"][];
+            regions: components["schemas"]["DiagnosisRegionResponse"][];
+        };
+        GetDiagnosisResponse: {
+            id: string;
+            /** @enum {string} */
+            status: "PROCESSING" | "COMPLETED" | "FAILED";
+            cropType: string;
+            note: string | null;
+            summary: components["schemas"]["DiagnosisSummaryResponse"] | null;
+            images: components["schemas"]["DiagnosisImageResponse"][];
+            /** @enum {string|null} */
+            userFeedback: "CORRECT" | "WRONG" | "UNSURE" | null;
+            disclaimer: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            completedAt: string | null;
+        };
+        SubmitDiagnosisFeedbackDto: {
+            /** @enum {string} */
+            feedback: "CORRECT" | "WRONG" | "UNSURE";
+            comment?: string;
         };
     };
     responses: never;
@@ -2781,6 +3074,316 @@ export interface operations {
             };
             /** @description CHAT_ROOM_NOT_FOUND */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    KnowledgeController_crops: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListCropsResponse"];
+                };
+            };
+        };
+    };
+    KnowledgeController_diseases: {
+        parameters: {
+            query: {
+                crop: string;
+                category?: "DISEASE" | "PEST" | "DISORDER";
+                q?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListDiseasesResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    KnowledgeController_disease: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiseaseDetailResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_DISEASE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DiagnosisController_listMine: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListMyDiagnosesResponse"];
+                };
+            };
+            /** @description Request validation failed, or: DIAGNOSIS_INVALID_CURSOR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DiagnosisController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /** @description 1..5 photos */
+                    images: string[];
+                    /** @description JSON: { "cropType": "RICE", "images": [{ "plantPart": "LEAF" }], "note": "..." }; plantPart: LEAF | SHEATH | STEM | PANICLE | ROOT | WHOLE_PLANT */
+                    meta: string;
+                };
+            };
+        };
+        responses: {
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateDiagnosisResponse"];
+                };
+            };
+            /** @description Request validation failed, or: DIAGNOSIS_CROP_NOT_SUPPORTED, DIAGNOSIS_INVALID_IMAGE */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_USER_NOT_ALLOWED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_DAILY_LIMIT_EXCEEDED */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DiagnosisController_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                diagnosisId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetDiagnosisResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    DiagnosisController_feedback: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                diagnosisId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitDiagnosisFeedbackDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_NOT_COMPLETED */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -4,8 +4,8 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 
 - [x] 1. [design-token]       tokens trạng thái: success / warning / info (+ foreground, subtle) cho badge tin cậy, cảnh báo mờ, banner chưa xác nhận
 - [x] 2. [shared-unit]        ROUTES.diagnosis {list, new(crop), detail(id)}, ROUTES.disease(code); PROTECTED_PATHS += /diagnosis
-- [ ] 3. [feature-scaffold]   feature `diagnosis` — layers: components, hooks, services, schemas, types, utils, constants
-- [ ] 4. [feature-api]        `npm run gen:api` + GET /knowledge/crops → TCrop, getCrops, useCrops; keys knowledge.crops
+- [x] 3. [feature-scaffold]   feature `diagnosis` — layers: components, hooks, services, schemas, types, utils, constants
+- [x] 4. [feature-api]        `npm run gen:api` + GET /knowledge/crops → TCrop, getCrops, useCrops; keys knowledge.crops
 - [ ] 5. [feature-api]        GET /knowledge/diseases/:code → TDisease, diseaseQuery (prefetch được), useDisease; keys knowledge.disease(code)
 - [ ] 6. [feature-api]        POST /diagnoses (FormData) → createDiagnosis, useCreateDiagnosis; invalidates diagnoses.lists
 - [ ] 7. [feature-api]        GET /diagnoses/:id → TDiagnosis (override category enum), diagnosisQuery, useDiagnosis; keys diagnoses.detail(id)
