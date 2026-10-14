@@ -16,8 +16,8 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 12. [shared-unit]       feature constants: PLANT_PART / CONFIDENCE / CATEGORY / STATUS labels + tone, MAX_IMAGES, MAX_EDGE, POLL_*, BLUR_THRESHOLD, DIAGNOSIS_EVENTS
 - [x] 13. [shared-unit]       util compressImage (EXIF, ≤2048px, JPEG 0.85 → 0.7)
 - [x] 14. [shared-unit]       util blurScore (phương sai Laplacian ~512px)
-- [ ] 15. [shared-unit]       hook useCameraStream (getUserMedia environment, cleanup, phát hiện không hỗ trợ / bị từ chối / không HTTPS)
-- [ ] 16. [shared-unit]       hook useDiagnosisLive (useDiagnosis + realtime `diagnosis.completed` + poll 3s khi PROCESSING, dừng sau 5 phút, refetch khi reconnect)
+- [x] 15. [shared-unit]       hook useCameraStream (getUserMedia environment, cleanup, phát hiện không hỗ trợ / bị từ chối / không HTTPS)
+- [x] 16. [shared-unit]       hook useDiagnosisLive (useDiagnosis + realtime `diagnosis.completed` + poll 3s khi PROCESSING, dừng sau 5 phút, refetch khi reconnect)
 - [ ] 17. [atomic-component]  atom      Badge                 (new, shared)
 - [ ] 18. [atomic-component]  molecule  Callout               (new, shared)
 - [ ] 19. [atomic-component]  atom      ConfidenceBadge       (new, feature)
