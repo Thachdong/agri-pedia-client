@@ -15,13 +15,14 @@ Next.js here is 16.x — read `node_modules/next/dist/docs/01-app/` for any file
 - Data: prefetch on the server with the feature's query options, wrap children in hydration so client hooks start with data:
 ```tsx
 // src/app/(main)/crops/[id]/page.tsx
+import { serverHttp } from '@/shared/lib/http/server';
 import { HydrateQueries, prefetch } from '@/shared/lib/query/server';
 import { DetailLayout } from '@/shared/components/templates';
 import { CropInfoCard, cropDetailQuery } from '@/features/crop-detail';
 
 export default async function CropDetailPage({ params }: PageProps<'/crops/[id]'>) {
   const { id } = await params;
-  const state = await prefetch([cropDetailQuery(id)]);
+  const state = await prefetch([cropDetailQuery(id, serverHttp)]); // server client: same key, NestJS direct
   return (
     <HydrateQueries state={state}>
       <DetailLayout main={<CropInfoCard id={id} />} />

@@ -14,7 +14,7 @@ If `.claude/plans/<feature-slug>.md` exists and has unchecked steps, show its st
 1. Understand the feature.
    - Wireframe: `specs/ui-ux/ui-ux.md` + the relevant `specs/ui-ux/image*.png` (read the images).
    - Existing code: `graphify query "<question>"` first, then targeted reads. Find reusable components, hooks, services, query keys.
-   - API: the NestJS contract in `../server/src/modules/<module>/infrastructure/http/` (controller, `dto/`, `responses/`). Never guess endpoints or payloads.
+   - API: `python3 .claude/scripts/openapi.py list [filter]` to find endpoints, `... op METHOD /path` for one contract (see "API contract source" in `fe-feature-api`). Business rules / pagination / realtime / not-implemented list: grep the action in `specs/api.md` (never read whole `specs/openapi.json` or `specs/api.md`). Never guess endpoints or payloads.
    - Ask only questions whose answer changes the plan.
 2. Check foundation. Missing → plan it first:
    - `src/shared/lib/{http,query,validation,form}` + `src/shared/providers/app-providers.tsx` + `components.json` → `[data-wrapper]`

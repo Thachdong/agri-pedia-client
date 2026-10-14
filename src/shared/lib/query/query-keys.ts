@@ -1,0 +1,70 @@
+import type { TNearbyDistributorsParams } from "@/features/distributor";
+import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features/review";
+
+/**
+ * Registry TẬP TRUNG của query keys — nơi duy nhất được viết key.
+ * Mỗi feature một namespace, factory pattern, `as const`:
+ *
+ *   crops: {
+ *     all: ['crops'] as const,
+ *     lists: () => [...queryKeys.crops.all, 'list'] as const,
+ *     list: (filters: TCropFilters) => [...queryKeys.crops.lists(), filters] as const,
+ *     detail: (id: string) => [...queryKeys.crops.all, 'detail', id] as const,
+ *   },
+ *
+ * Type filter lấy từ feature bằng `import type` qua index của feature.
+ */
+export const queryKeys = {
+  /** Prefix của MỌI query — chỉ dùng khi đổi phiên (login/logout) làm cả cache stale. */
+  all: [] as const,
+  location: {
+    all: ["location"] as const,
+    provinces: () => [...queryKeys.location.all, "provinces"] as const,
+    wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
+  },
+  users: {
+    all: ["users"] as const,
+    me: () => [...queryKeys.users.all, "me"] as const,
+    /** Address của người đang đăng nhập — tách khỏi `me` để invalidate `me` không kéo theo. */
+    addresses: () => [...queryKeys.users.all, "addresses"] as const,
+  },
+  notifications: {
+    all: ["notifications"] as const,
+    list: () => [...queryKeys.notifications.all, "list"] as const,
+  },
+  chat: {
+    all: ["chat"] as const,
+    rooms: () => [...queryKeys.chat.all, "rooms"] as const,
+    messages: (roomId: string) => [...queryKeys.chat.all, "messages", roomId] as const,
+  },
+  distributors: {
+    all: ["distributors"] as const,
+    nearbyLists: () => [...queryKeys.distributors.all, "nearby"] as const,
+    nearby: (params: TNearbyDistributorsParams) => [...queryKeys.distributors.nearbyLists(), params] as const,
+    detail: (distributorId: string) => [...queryKeys.distributors.all, "detail", distributorId] as const,
+  },
+  products: {
+    all: ["products"] as const,
+    lists: () => [...queryKeys.products.all, "list"] as const,
+    /** Product ACTIVE của 1 distributor (infinite, cursor). */
+    list: (distributorId: string) => [...queryKeys.products.lists(), distributorId] as const,
+    detail: (productId: string) => [...queryKeys.products.all, "detail", productId] as const,
+    categories: () => [...queryKeys.products.all, "categories"] as const,
+  },
+  reviews: {
+    all: ["reviews"] as const,
+    /** Prefix mọi query review của 1 shop — review shop mới làm stale cả list lẫn summary trong list. */
+    distributor: (distributorId: string) => [...queryKeys.reviews.all, "distributor", distributorId] as const,
+    /** Review shop + product của shop theo filter (infinite, cursor) — tab "Đánh giá". */
+    list: ({ distributorId, ...filters }: TDistributorReviewsParams) =>
+      [...queryKeys.reviews.distributor(distributorId), "list", filters] as const,
+    /** Review của 1 product (infinite, cursor) — dialog chi tiết product. */
+    product: (productId: string) => [...queryKeys.reviews.all, "product", productId] as const,
+    /** Rating của 1 target — nằm dưới prefix của target để review mới làm stale cả list lẫn summary. */
+    summary: ({ targetType, targetId }: TReviewSummaryParams) =>
+      [
+        ...(targetType === "USER" ? queryKeys.reviews.distributor(targetId) : queryKeys.reviews.product(targetId)),
+        "summary",
+      ] as const,
+  },
+} as const;

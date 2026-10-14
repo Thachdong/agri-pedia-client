@@ -10,7 +10,7 @@ description: Create a joi schema for a form/input in src/features/<slug>/schemas
 ## Rules
 - Import from `@/shared/lib/validation` only (`v`, `schema`, `rules`). Never `import Joi from 'joi'`.
 - Type-link the schema to the feature input type: `schema<TCreateReviewInput>({...})`. Input types live in `types/` (created by `fe-feature-api`).
-- Mirror the server DTO (`../server/src/modules/<module>/infrastructure/http/dto/*.dto.ts`, class-validator): same required fields, lengths, enums, formats. Client may be stricter only for UX (trim), never looser.
+- Mirror the server DTO: `python3 .claude/scripts/openapi.py op METHOD /path` (or `schema <XxxDto>`) shows required fields, `minLength/maxLength/minimum/maximum/pattern`, enums. Rules the spec can't express (phone format, cross-field like "bussinessType required for DISTRIBUTOR") → grep the action in `specs/api.md`. Client may be stricter only for UX (trim), never looser.
 - Messages: Vietnamese via the wrapper's message map. Field-specific message only when the generic one is unclear (`.messages({ 'string.pattern.base': '...' })`).
 - A rule used by 2+ schemas (phone, password, username) → `rules.ts` in shared, not copied.
 - Cross-field rules (confirm password) with `v.ref`.
@@ -30,7 +30,7 @@ export const createReviewSchema = schema<TCreateReviewInput>({
 Used as `useAppForm({ schema: createReviewSchema, defaultValues })`.
 
 ## Steps
-1. Read the matching DTO on the server.
+1. Read the DTO constraints via `openapi.py` + business rules via `api.md` grep.
 2. Write the schema (+ shared rule if reusable).
 3. `npx tsc --noEmit && npm run lint`.
 

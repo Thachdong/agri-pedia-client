@@ -9,15 +9,27 @@ description: Connect ONE NestJS endpoint to a feature — types from the server 
 
 Requires `src/shared/lib/{http,query}`. Missing → stop, suggest `fe-data-wrapper`.
 
-## Contract first
-Read the endpoint in `../server/src/modules/<module>/infrastructure/http/`: `<x>.controller.ts` (method, path, guards), `dto/` (request), `responses/` (response), `<x>.api-docs.ts` (status codes). Never guess field names — the server spelling wins (e.g. `bussinessType`). Dates arrive as ISO strings.
+## API contract source (cheapest first — never read whole spec files)
+1. `specs/openapi.json` via the lookup script (~300 tokens per endpoint):
+   - `python3 .claude/scripts/openapi.py list [filter]` — find the endpoint
+   - `python3 .claude/scripts/openapi.py op POST /reviews` — params, body, 2xx response ($refs resolved, constraints), error codes per status
+   - `python3 .claude/scripts/openapi.py schema <Name>` — one component schema
+2. `specs/api.md` — business rules, who may call, pagination style, realtime, "CHƯA IMPLEMENT" list. Grep the action: `grep -n -A30 "— POST /reviews" specs/api.md`.
+3. `../server/src/modules/<module>/infrastructure/http/` — ONLY when the endpoint is missing from the spec (spec stale). Tell the developer to re-export `openapi.json` + `npm run gen:api`.
+Never guess field names — the spec spelling wins (e.g. `bussinessType`). Dates arrive as ISO strings. Endpoint marked "CHƯA IMPLEMENT" in api.md → stop, report.
+
+## Types
+Generated from the spec: `src/shared/lib/http/openapi.d.ts` (`npm run gen:api`, never hand-edit). Feature types are aliases, not hand-written copies:
+```ts
+// types/review.types.ts
+import type { TApiSchema } from '@/shared/lib/http';
+export type TReview = TApiSchema<'ReviewResponse'>;
+export type TCreateReviewInput = TApiSchema<'CreateReviewDto'>;
+```
+Hand-write a type only for client-only shapes (view models, filters) — derive from generated ones (`Pick`, `Omit`) when possible.
 
 ## Files
 ```ts
-// types/crop.types.ts
-export type TCrop = { id: string; name: string; createdAt: string };
-export type TCreateReviewInput = { rating: number; content: string };
-
 // src/shared/lib/query/query-keys.ts   (add the namespace; never write keys elsewhere)
 crops: {
   all: ['crops'] as const,
@@ -56,8 +68,8 @@ export const useCreateReview = (id: string) =>
 - Export from feature `index.ts`: hooks, query options (for page prefetch), public types.
 
 ## Steps
-1. Read the server contract.
-2. Types → keys → service → queries → hook → `index.ts`.
+1. Contract via `openapi.py op` (+ `api.md` grep for rules/pagination).
+2. Type aliases → keys → service → queries → hook → `index.ts`. Missing schema in `openapi.d.ts` → `npm run gen:api` first.
 3. `npx tsc --noEmit && npm run lint`.
 
 ## Report
