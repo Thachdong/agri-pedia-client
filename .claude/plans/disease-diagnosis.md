@@ -43,10 +43,10 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 39. [atomic-component]  organism  DiagnosisHistoryList  (new, feature) ← useDiagnosisHistory
 - [x] 40. [atomic-component]  organism  DiseaseDetail         (new, feature)
 - [x] 41. [atomic-component]  template  ContentLayout         (new, shared) — header sticky + main max-w + footer sticky tuỳ chọn
-- [ ] 42. [page]              /diagnosis/new ← DiagnosisForm (kiểm tra `crop` qua knowledge.crops)
-- [ ] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
-- [ ] 44. [page]              /diagnosis ← DiagnosisHistoryList
-- [ ] 45. [page]              /diseases/[code] (public) ← prefetch diseaseQuery, DiseaseDetail (+ not-found)
+- [x] 42. [page]              /diagnosis/new ← DiagnosisForm (kiểm tra `crop` qua knowledge.crops)
+- [x] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
+- [x] 44. [page]              /diagnosis ← DiagnosisHistoryList
+- [x] 45. [page]              /diseases/[code] (public) ← prefetch diseaseQuery, DiseaseDetail (+ not-found)
 - [ ] 46. [page]              gắn StartDiagnosisButton (compact) vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
 - [ ] 47. [arch-review]
 
