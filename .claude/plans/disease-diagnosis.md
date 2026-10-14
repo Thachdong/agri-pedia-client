@@ -37,11 +37,11 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 33. [atomic-component]  organism  DiagnosisSummary      (new, feature)
 - [x] 34. [atomic-component]  organism  ImageLightbox         (new, feature)
 - [x] 35. [atomic-component]  organism  DiagnosisResultImage  (new, feature)
-- [ ] 36. [atomic-component]  organism  RelatedDiseases       (new, feature) ← useDisease × N
-- [ ] 37. [atomic-component]  organism  DiagnosisFeedback     (new, feature) ← useDiagnosisFeedback
-- [ ] 38. [atomic-component]  organism  DiagnosisResult       (new, feature) ← useDiagnosisLive
-- [ ] 39. [atomic-component]  organism  DiagnosisHistoryList  (new, feature) ← useDiagnosisHistory
-- [ ] 40. [atomic-component]  organism  DiseaseDetail         (new, feature)
+- [x] 36. [atomic-component]  organism  RelatedDiseases       (new, feature) ← useDisease × N
+- [x] 37. [atomic-component]  organism  DiagnosisFeedback     (new, feature) ← useDiagnosisFeedback
+- [x] 38. [atomic-component]  organism  DiagnosisResult       (new, feature) ← useDiagnosisLive
+- [x] 39. [atomic-component]  organism  DiagnosisHistoryList  (new, feature) ← useDiagnosisHistory
+- [x] 40. [atomic-component]  organism  DiseaseDetail         (new, feature)
 - [ ] 41. [atomic-component]  template  ContentLayout         (new, shared) — header sticky + main max-w + footer sticky tuỳ chọn
 - [ ] 42. [page]              /diagnosis/new ← DiagnosisForm (kiểm tra `crop` qua knowledge.crops)
 - [ ] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
