@@ -29,9 +29,9 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 25. [atomic-component]  molecule  DiagnosisResultTable  (new, feature)
 - [x] 26. [atomic-component]  molecule  DiseaseCard           (new, feature)
 - [x] 27. [atomic-component]  molecule  DiagnosisHistoryItem  (new, feature)
-- [ ] 28. [atomic-component]  organism  CropPickerDialog      (new, feature)
-- [ ] 29. [atomic-component]  organism  DiagnosisHeaderButton (new, feature) ← useCrops
-- [ ] 30. [atomic-component]  organism  CameraCaptureDialog   (new, feature)
+- [x] 28. [atomic-component]  organism  CropPickerDialog      (new, feature)
+- [x] 29. [atomic-component]  organism  DiagnosisHeaderButton (new, feature) ← useCrops
+- [x] 30. [atomic-component]  organism  CameraCaptureDialog   (new, feature)
 - [ ] 31. [atomic-component]  organism  DiagnosisForm         (new, feature) ← useCreateDiagnosis
 - [ ] 32. [atomic-component]  organism  DiagnosisStatusPanel  (new, feature) — PROCESSING / quá 5 phút / FAILED
 - [ ] 33. [atomic-component]  organism  DiagnosisSummary      (new, feature)
