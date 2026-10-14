@@ -71,5 +71,7 @@ export const queryKeys = {
     all: ["knowledge"] as const,
     /** Cây trồng được hỗ trợ chẩn đoán (public). */
     crops: () => [...queryKeys.knowledge.all, "crops"] as const,
+    /** Bài viết 1 bệnh theo diseaseCode (public). */
+    disease: (code: string) => [...queryKeys.knowledge.all, "disease", code] as const,
   },
 } as const;
