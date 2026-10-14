@@ -3,18 +3,31 @@
 import { ScanSearchIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "@/shared/components/atoms";
+import { Button, type TButtonProps } from "@/shared/components/atoms";
 import { ROUTES } from "@/shared/constants";
 import { toast } from "@/shared/lib/toast";
+import { cn } from "@/shared/lib/utils";
 import { useCrops } from "../hooks/use-crops";
 import type { TCrop } from "../types/knowledge.types";
 import { CropPickerDialog } from "./crop-picker-dialog";
 
+export type TStartDiagnosisButtonProps = Omit<TButtonProps, "onClick" | "loading" | "children" | "asChild"> & {
+  /** Mặc định "Chẩn đoán bệnh". */
+  label?: string;
+  /** Mobile chỉ hiện icon (header). */
+  compact?: boolean;
+};
+
 /**
- * Nút "Chẩn đoán bệnh" trên header (đã đăng nhập): 1 cây được hỗ trợ → vào thẳng form; nhiều cây → dialog chọn cây.
- * Mobile chỉ hiện icon.
+ * Bắt đầu chẩn đoán (header, lịch sử...): 1 cây được hỗ trợ → vào thẳng form; nhiều cây → dialog chọn cây.
  */
-export function DiagnosisHeaderButton() {
+export function StartDiagnosisButton({
+  label = "Chẩn đoán bệnh",
+  compact = false,
+  size = "sm",
+  className,
+  ...props
+}: TStartDiagnosisButtonProps) {
   const router = useRouter();
   const crops = useCrops();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -38,14 +51,15 @@ export function DiagnosisHeaderButton() {
   return (
     <>
       <Button
-        size="sm"
+        size={size}
         onClick={handleClick}
         loading={loading}
-        aria-label="Chẩn đoán bệnh"
-        className="px-2 sm:px-3"
+        aria-label={compact ? label : undefined}
+        className={cn(compact && "px-2 sm:px-3", className)}
+        {...props}
       >
         {!loading && <ScanSearchIcon aria-hidden />}
-        <span className="hidden sm:inline">Chẩn đoán bệnh</span>
+        <span className={cn(compact && "hidden sm:inline")}>{label}</span>
       </Button>
       {crops.data && <CropPickerDialog open={pickerOpen} onOpenChange={setPickerOpen} crops={crops.data} />}
     </>

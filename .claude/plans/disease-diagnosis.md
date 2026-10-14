@@ -30,13 +30,13 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 26. [atomic-component]  molecule  DiseaseCard           (new, feature)
 - [x] 27. [atomic-component]  molecule  DiagnosisHistoryItem  (new, feature)
 - [x] 28. [atomic-component]  organism  CropPickerDialog      (new, feature)
-- [x] 29. [atomic-component]  organism  DiagnosisHeaderButton (new, feature) ← useCrops
+- [x] 29. [atomic-component]  organism  StartDiagnosisButton  (new, feature) ← useCrops — dùng ở header (compact) + lịch sử
 - [x] 30. [atomic-component]  organism  CameraCaptureDialog   (new, feature)
 - [x] 31. [atomic-component]  organism  DiagnosisForm         (new, feature) ← useCreateDiagnosis
-- [ ] 32. [atomic-component]  organism  DiagnosisStatusPanel  (new, feature) — PROCESSING / quá 5 phút / FAILED
-- [ ] 33. [atomic-component]  organism  DiagnosisSummary      (new, feature)
-- [ ] 34. [atomic-component]  organism  ImageLightbox         (new, feature)
-- [ ] 35. [atomic-component]  organism  DiagnosisResultImage  (new, feature)
+- [x] 32. [atomic-component]  organism  DiagnosisStatusPanel  (new, feature) — PROCESSING / quá 5 phút / FAILED
+- [x] 33. [atomic-component]  organism  DiagnosisSummary      (new, feature)
+- [x] 34. [atomic-component]  organism  ImageLightbox         (new, feature)
+- [x] 35. [atomic-component]  organism  DiagnosisResultImage  (new, feature)
 - [ ] 36. [atomic-component]  organism  RelatedDiseases       (new, feature) ← useDisease × N
 - [ ] 37. [atomic-component]  organism  DiagnosisFeedback     (new, feature) ← useDiagnosisFeedback
 - [ ] 38. [atomic-component]  organism  DiagnosisResult       (new, feature) ← useDiagnosisLive
@@ -47,7 +47,7 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [ ] 43. [page]              /diagnosis/[id] ← prefetch diagnosisQuery, DiagnosisResult (+ loading / error / not-found)
 - [ ] 44. [page]              /diagnosis ← DiagnosisHistoryList
 - [ ] 45. [page]              /diseases/[code] (public) ← prefetch diseaseQuery, DiseaseDetail (+ not-found)
-- [ ] 46. [page]              gắn DiagnosisHeaderButton vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
+- [ ] 46. [page]              gắn StartDiagnosisButton (compact) vào actions header (app/page.tsx, profile/*, diagnosis/*) + link "Lịch sử chẩn đoán" trong UserMenu
 - [ ] 47. [arch-review]
 
 Components (in order):
@@ -69,7 +69,7 @@ Components (in order):
   [organism]  SiteHeader             reuse  shared
   [organism]  UserMenu / NotificationMenu / ChatRoomsMenu  reuse  feature (user/notification/chat)
   [organism]  CropPickerDialog       new    feature
-  [organism]  DiagnosisHeaderButton  new    feature
+  [organism]  StartDiagnosisButton   new    feature
   [organism]  CameraCaptureDialog    new    feature
   [organism]  DiagnosisForm          new    feature
   [organism]  DiagnosisStatusPanel   new    feature
