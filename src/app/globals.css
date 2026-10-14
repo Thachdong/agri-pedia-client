@@ -48,6 +48,15 @@
   --color-border-subtle: var(--border-subtle);
   --color-rating: var(--rating);
   --color-rating-muted: var(--rating-muted);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-subtle: var(--success-subtle);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-info-subtle: var(--info-subtle);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -70,6 +79,12 @@
   --palette-bg-highlight-subtle: #fff4f0;
   --palette-rating-star: #b7791f;
   --palette-rating-star-empty: #a9b8af;
+  --palette-status-success: #2f7a4f;
+  --palette-status-success-subtle: #edf7f0;
+  --palette-status-warning: #8a5a00;
+  --palette-status-warning-subtle: #fff7e0;
+  --palette-status-info: #2b5f8a;
+  --palette-status-info-subtle: #edf4fa;
 
   /* ------------------------------------------------------------------ */
   /* 2) SEMANTIC TOKENS — map palette ở trên vào các biến có ý nghĩa,    */
@@ -97,6 +112,17 @@
   /* Sao đánh giá: rating = sao đã chọn/đạt, rating-muted = sao trống (đồ hoạ, không phải chữ) */
   --rating: var(--palette-rating-star);
   --rating-muted: var(--palette-rating-star-empty);
+  /* Trạng thái (badge, callout): <status> = chữ/viền/nền đặc, -foreground = chữ trên nền đặc,
+     -subtle = nền nhạt (chữ <status> trên nền này đạt ≥ 4.5:1) */
+  --success: var(--palette-status-success);
+  --success-foreground: #ffffff;
+  --success-subtle: var(--palette-status-success-subtle);
+  --warning: var(--palette-status-warning);
+  --warning-foreground: #ffffff;
+  --warning-subtle: var(--palette-status-warning-subtle);
+  --info: var(--palette-status-info);
+  --info-foreground: #ffffff;
+  --info-subtle: var(--palette-status-info-subtle);
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--palette-border-subtle);
   --border-subtle: var(--palette-border-subtle);
@@ -143,6 +169,15 @@
   --highlight-subtle: #3a2620;
   --rating: #f2b84b;
   --rating-muted: #4a5c53;
+  --success: #6cc58f;
+  --success-foreground: #14201a;
+  --success-subtle: #1d3a2a;
+  --warning: #f2b84b;
+  --warning-foreground: #14201a;
+  --warning-subtle: #3a2f14;
+  --info: #7fb3e0;
+  --info-foreground: #14201a;
+  --info-subtle: #1a2c3d;
   --destructive: oklch(0.704 0.191 22.216);
   --border: #2e3b35;
   --border-subtle: #2e3b35;
