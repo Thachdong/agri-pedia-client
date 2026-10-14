@@ -7,10 +7,10 @@ API: GET /knowledge/crops, GET /knowledge/diseases/:code, POST /diagnoses (multi
 - [x] 3. [feature-scaffold]   feature `diagnosis` — layers: components, hooks, services, schemas, types, utils, constants
 - [x] 4. [feature-api]        `npm run gen:api` + GET /knowledge/crops → TCrop, getCrops, useCrops; keys knowledge.crops
 - [x] 5. [feature-api]        GET /knowledge/diseases/:code → TDisease, diseaseQuery (prefetch được), useDisease; keys knowledge.disease(code)
-- [ ] 6. [feature-api]        POST /diagnoses (FormData) → createDiagnosis, useCreateDiagnosis; invalidates diagnoses.lists
-- [ ] 7. [feature-api]        GET /diagnoses/:id → TDiagnosis (override category enum), diagnosisQuery, useDiagnosis; keys diagnoses.detail(id)
-- [ ] 8. [feature-api]        GET /diagnoses (infinite, cursor) → TDiagnosisListItem, useDiagnosisHistory; keys diagnoses.lists
-- [ ] 9. [feature-api]        POST /diagnoses/:id/feedback → useDiagnosisFeedback; invalidates diagnoses.detail(id), diagnoses.lists
+- [x] 6. [feature-api]        POST /diagnoses (FormData) → createDiagnosis, useCreateDiagnosis; invalidates diagnoses.lists
+- [x] 7. [feature-api]        GET /diagnoses/:id → TDiagnosis (override category enum), diagnosisQuery, useDiagnosis; keys diagnoses.detail(id)
+- [x] 8. [feature-api]        GET /diagnoses (infinite, cursor) → TDiagnosisListItem, useDiagnosisHistory; keys diagnoses.lists
+- [x] 9. [feature-api]        POST /diagnoses/:id/feedback → useDiagnosisFeedback; invalidates diagnoses.detail(id), diagnoses.lists
 - [ ] 10. [validation-schema] diagnosisFormSchema (1..5 ảnh, plantPart bắt buộc, note ≤ 1000)
 - [ ] 11. [validation-schema] diagnosisFeedbackSchema (feedback bắt buộc, comment ≤ 1000)
 - [ ] 12. [shared-unit]       feature constants: PLANT_PART / CONFIDENCE / CATEGORY / STATUS labels + tone, MAX_IMAGES, MAX_EDGE, POLL_*, BLUR_THRESHOLD, DIAGNOSIS_EVENTS
