@@ -2,19 +2,18 @@ import { schema, v } from "@/shared/lib/validation";
 import { DIAGNOSIS_MAX_IMAGES, DIAGNOSIS_NOTE_MAX, PLANT_PARTS } from "../constants/diagnosis.constants";
 import type { TDiagnosisFormValues } from "../types/diagnosis.types";
 
-const PLANT_PART_REQUIRED = "Chọn bộ phận";
 
 const diagnosisImage = schema<TDiagnosisFormValues["images"][number]>({
   id: v.string().required(),
   file: v.any().required(),
+  // Tuỳ chọn — để trống thì gửi DEFAULT_PLANT_PART.
   plantPart: v
     .string()
-    .valid(...PLANT_PARTS)
-    .required()
-    .messages({ "any.only": PLANT_PART_REQUIRED, "string.empty": PLANT_PART_REQUIRED, "any.required": PLANT_PART_REQUIRED }),
+    .valid(...PLANT_PARTS, "")
+    .required(),
 });
 
-/** Mirror POST /diagnoses meta (action 36): 1..5 ảnh, mỗi ảnh 1 plantPart, note ≤ 1000 (tuỳ chọn). Định dạng / dung lượng ảnh do bước nén xử lý. */
+/** Mirror POST /diagnoses meta (action 36): 1..5 ảnh, plantPart tuỳ chọn ở form (server bắt buộc → gửi mặc định), note ≤ 1000. Định dạng / dung lượng ảnh do bước nén xử lý. */
 export const diagnosisFormSchema = schema<TDiagnosisFormValues>({
   images: v
     .array()

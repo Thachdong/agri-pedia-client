@@ -18,6 +18,9 @@ export const PLANT_PART_OPTIONS = [
 
 export const PLANT_PARTS = PLANT_PART_OPTIONS.map((option) => option.value);
 
+/** Server bắt buộc plantPart cho mỗi ảnh — người dùng không chọn thì gửi "Cả cây" (AI tự nhận diện bộ phận). */
+export const DEFAULT_PLANT_PART = "WHOLE_PLANT" satisfies TPlantPart;
+
 export const PLANT_PART_LABELS = Object.fromEntries(
   PLANT_PART_OPTIONS.map(({ value, label }) => [value, label]),
 ) as Record<TPlantPart, string>;

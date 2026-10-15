@@ -10,7 +10,12 @@ import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/for
 import { APP_ERROR_CODE, isAppError, type AppError } from "@/shared/lib/http";
 import { toast } from "@/shared/lib/toast";
 import { cn } from "@/shared/lib/utils";
-import { DIAGNOSIS_ERROR_CODE, DIAGNOSIS_MAX_IMAGES, DIAGNOSIS_NOTE_MAX } from "../constants/diagnosis.constants";
+import {
+  DEFAULT_PLANT_PART,
+  DIAGNOSIS_ERROR_CODE,
+  DIAGNOSIS_MAX_IMAGES,
+  DIAGNOSIS_NOTE_MAX,
+} from "../constants/diagnosis.constants";
 import { useCreateDiagnosis } from "../hooks/use-create-diagnosis";
 import { diagnosisFormSchema } from "../schemas/diagnosis.schema";
 import type { TDiagnosisFormImage, TDiagnosisFormValues, TPlantPart } from "../types/diagnosis.types";
@@ -54,7 +59,7 @@ export type TDiagnosisFormProps = {
 };
 
 /**
- * Form chẩn đoán (mobile trước): mẹo chụp → lưới ô ảnh (chụp / chọn 1–5 ảnh, mỗi ảnh chọn bộ phận) → ghi chú
+ * Form chẩn đoán (mobile trước): mẹo chụp → lưới ô ảnh (chụp / chọn 1–5 ảnh, mỗi ảnh có thể chọn bộ phận) → ghi chú
  * → thanh "Gửi" dính cuối màn hình. Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi.
  * Thành công → thay trang bằng trang kết quả (back không quay lại form).
  */
@@ -72,9 +77,8 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
   const noteLength = form.watch("note").length;
   const busy = isSubmitting || compressing;
   const remaining = Math.max(DIAGNOSIS_MAX_IMAGES - images.length, 0);
-  const missingPart = images.filter((image) => !image.plantPart).length;
   const brokenCount = images.filter((image) => checks[image.id]?.error).length;
-  const canSubmit = images.length > 0 && missingPart === 0 && brokenCount === 0 && !busy && !limitReached;
+  const canSubmit = images.length > 0 && brokenCount === 0 && !busy && !limitReached;
 
   const setCheck = (id: string, check: TImageCheck) =>
     setChecks((current) => ({ ...current, [id]: { ...current[id], ...check } }));
@@ -149,7 +153,7 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
         cropType,
         images: values.images.map(({ plantPart }, index) => ({
           blob: (results[index] as PromiseFulfilledResult<Blob>).value,
-          plantPart: plantPart as TPlantPart,
+          plantPart: plantPart || DEFAULT_PLANT_PART,
         })),
         note: values.note.trim() || undefined,
       });
@@ -169,9 +173,7 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
       ? "Chưa có ảnh"
       : brokenCount > 0
         ? `${brokenCount} ảnh lỗi — hãy xoá hoặc thay`
-        : missingPart > 0
-          ? `${missingPart} ảnh chưa chọn bộ phận`
-          : `${images.length}/${DIAGNOSIS_MAX_IMAGES} ảnh — sẵn sàng`;
+        : `${images.length}/${DIAGNOSIS_MAX_IMAGES} ảnh — sẵn sàng`;
 
   return (
     <form id={FORM_ID} onSubmit={onSubmit} noValidate className={cn("flex flex-col gap-6", className)} aria-busy={busy}>

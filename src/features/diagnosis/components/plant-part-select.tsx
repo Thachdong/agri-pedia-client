@@ -15,12 +15,12 @@ export type TPlantPartSelectProps = {
   "aria-describedby"?: string;
 };
 
-/** Chọn bộ phận cây của 1 ảnh (Lá, Bẹ lá, Thân, Bông, Rễ, Cả cây). */
+/** Chọn bộ phận cây của 1 ảnh (tuỳ chọn — gợi ý cho AI). */
 export function PlantPartSelect({ value, onValueChange, disabled, className, ...control }: TPlantPartSelectProps) {
   return (
     <Select value={value} onValueChange={(next) => onValueChange(next as TPlantPart)} disabled={disabled}>
       <SelectTrigger className={cn("w-full", className)} {...control}>
-        <SelectValue placeholder="Chọn bộ phận" />
+        <SelectValue placeholder="Bộ phận (tuỳ chọn)" />
       </SelectTrigger>
       <SelectContent position="popper">
         {PLANT_PART_OPTIONS.map((option) => (

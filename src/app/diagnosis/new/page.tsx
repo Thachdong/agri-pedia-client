@@ -45,7 +45,7 @@ export default async function NewDiagnosisPage({ searchParams }: PageProps<"/dia
             />
           }
           title={cropName ? `Chẩn đoán bệnh — ${cropName}` : "Chẩn đoán bệnh"}
-          description="Chụp hoặc chọn 1–5 ảnh, mỗi ảnh chọn bộ phận cây."
+          description="Chụp hoặc chọn 1–5 ảnh; có thể chọn bộ phận cây cho từng ảnh."
         >
           {cropName ? <DiagnosisForm cropType={crop as string} /> : <CropNotSupportedRedirect />}
         </ContentLayout>
