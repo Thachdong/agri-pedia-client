@@ -6,6 +6,7 @@ import { Button } from "@/shared/components/atoms";
 import { useImagePreview } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import type { TPlantPart } from "../types/diagnosis.types";
+import type { TCropPlantPart } from "../types/knowledge.types";
 import { PlantPartSelect } from "./plant-part-select";
 
 export type TDiagnosisImageSlotProps = {
@@ -13,6 +14,8 @@ export type TDiagnosisImageSlotProps = {
   index: number;
   file: File;
   plantPart: TPlantPart | "";
+  /** Bộ phận chọn được của cây. */
+  plantPartOptions: TCropPlantPart[];
   onPlantPartChange: (value: TPlantPart) => void;
   onRemove: () => void;
   /** Ảnh có thể bị mờ — chỉ cảnh báo, không chặn gửi. */
@@ -30,6 +33,7 @@ export function DiagnosisImageSlot({
   index,
   file,
   plantPart,
+  plantPartOptions,
   onPlantPartChange,
   onRemove,
   blurry = false,
@@ -84,6 +88,7 @@ export function DiagnosisImageSlot({
       <PlantPartSelect
         id={selectId}
         value={plantPart}
+        options={plantPartOptions}
         onValueChange={onPlantPartChange}
         disabled={disabled}
         aria-label={`Bộ phận của ${label.toLowerCase()}`}

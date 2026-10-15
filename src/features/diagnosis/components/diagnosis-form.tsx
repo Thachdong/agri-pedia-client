@@ -19,6 +19,7 @@ import {
 import { useCreateDiagnosis } from "../hooks/use-create-diagnosis";
 import { diagnosisFormSchema } from "../schemas/diagnosis.schema";
 import type { TDiagnosisFormImage, TDiagnosisFormValues, TPlantPart } from "../types/diagnosis.types";
+import type { TCropPlantPart } from "../types/knowledge.types";
 import { analyzeImage } from "../utils/blur-score.util";
 import { compressImage, ImageDecodeError } from "../utils/compress-image.util";
 import { AddImageTile } from "./add-image-tile";
@@ -53,8 +54,10 @@ const newImage = (file: File): TDiagnosisFormImage => ({
 });
 
 export type TDiagnosisFormProps = {
-  /** `code` của cây trồng (GET /knowledge/crops), vd. RICE. */
+  /** `code` của cây trồng (GET /knowledge/crops), vd. RICE, DURIAN. */
   cropType: string;
+  /** Bộ phận chọn được của cây (GET /knowledge/crops `plantParts`). */
+  plantParts: TCropPlantPart[];
   className?: string;
 };
 
@@ -63,7 +66,7 @@ export type TDiagnosisFormProps = {
  * → thanh "Gửi" dính cuối màn hình. Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi.
  * Thành công → thay trang bằng trang kết quả (back không quay lại form).
  */
-export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
+export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFormProps) {
   const router = useRouter();
   const createDiagnosis = useCreateDiagnosis();
   const form = useAppForm<TDiagnosisFormValues>({ schema: diagnosisFormSchema, defaultValues: DEFAULT_VALUES });
@@ -76,6 +79,10 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
   const images = form.watch("images");
   const noteLength = form.watch("note").length;
   const busy = isSubmitting || compressing;
+  // Server bắt buộc plantPart thuộc bộ phận của cây — ảnh không chọn gửi "Cả cây" (hoặc bộ phận đầu nếu cây không có).
+  const fallbackPart = plantParts.some((part) => part.code === DEFAULT_PLANT_PART)
+    ? DEFAULT_PLANT_PART
+    : (plantParts[0]?.code ?? DEFAULT_PLANT_PART);
   const remaining = Math.max(DIAGNOSIS_MAX_IMAGES - images.length, 0);
   const brokenCount = images.filter((image) => checks[image.id]?.error).length;
   const canSubmit = images.length > 0 && brokenCount === 0 && !busy && !limitReached;
@@ -153,7 +160,7 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
         cropType,
         images: values.images.map(({ plantPart }, index) => ({
           blob: (results[index] as PromiseFulfilledResult<Blob>).value,
-          plantPart: plantPart || DEFAULT_PLANT_PART,
+          plantPart: plantPart || fallbackPart,
         })),
         note: values.note.trim() || undefined,
       });
@@ -200,6 +207,7 @@ export function DiagnosisForm({ cropType, className }: TDiagnosisFormProps) {
               index={index}
               file={image.file}
               plantPart={image.plantPart}
+              plantPartOptions={plantParts}
               onPlantPartChange={(next) => setPlantPart(image.id, next)}
               onRemove={() => removeImage(image.id)}
               blurry={checks[image.id]?.blurry}

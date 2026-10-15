@@ -23,9 +23,9 @@ export default async function NewDiagnosisPage({ searchParams }: PageProps<"/dia
   const { crop } = await searchParams;
   const crops = cropsQuery(serverHttp);
   const state = await prefetch([meQuery(serverHttp), crops]);
-  const cropName =
+  const selected =
     typeof crop === "string"
-      ? getPrefetchedData<TCropsResponse>(state, crops.queryKey)?.crops.find((item) => item.code === crop)?.nameVi
+      ? getPrefetchedData<TCropsResponse>(state, crops.queryKey)?.crops.find((item) => item.code === crop)
       : undefined;
 
   return (
@@ -44,10 +44,14 @@ export default async function NewDiagnosisPage({ searchParams }: PageProps<"/dia
               }
             />
           }
-          title={cropName ? `Chẩn đoán bệnh — ${cropName}` : "Chẩn đoán bệnh"}
+          title={selected ? `Chẩn đoán bệnh — ${selected.nameVi}` : "Chẩn đoán bệnh"}
           description="Chụp hoặc chọn 1–5 ảnh; có thể chọn bộ phận cây cho từng ảnh."
         >
-          {cropName ? <DiagnosisForm cropType={crop as string} /> : <CropNotSupportedRedirect />}
+          {selected ? (
+            <DiagnosisForm cropType={selected.code} plantParts={selected.plantParts} />
+          ) : (
+            <CropNotSupportedRedirect />
+          )}
         </ContentLayout>
       </RealtimeProvider>
     </HydrateQueries>
