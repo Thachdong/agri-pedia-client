@@ -11,7 +11,7 @@ Kết quả: giữ cấu trúc như lúa (tổng hợp → từng ảnh → disc
 - [x] 6. [atomic-component]  organism  DiagnosisForm        — nhận plantParts của cây, truyền cho PlantPartSelect
 - [x] 7. [atomic-component]  organism  kết quả (Summary, ResultTable, ResultImage, RegionOverlay?, DiseaseArticle / dialog) — nhãn bộ phận / giai đoạn theo cây
 - [x] 8. [page]              /diagnosis/new truyền plantParts của cây; kiểm tra lại /diagnosis/[id], /diseases/[code]
-- [ ] 9. [arch-review]
+- [x] 9. [arch-review]
 
 Components (in order):
   [atom]      DropdownMenu*          reuse  shared
