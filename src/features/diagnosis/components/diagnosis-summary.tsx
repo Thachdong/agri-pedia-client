@@ -146,6 +146,7 @@ function ImageRow({ image, onOpenDisease, partLabel }: TImageRowProps) {
                     name={disease.diseaseName}
                     variantName={disease.variantName}
                     onClick={() => onOpenDisease(disease.diseaseCode)}
+                    className="align-top"
                   />
                 </li>
               ))}

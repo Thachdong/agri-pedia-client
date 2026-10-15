@@ -58,10 +58,14 @@ export function DiagnosisResultTable({
               <ConfidenceBadge level={disease.confidence.level} />
               <Badge>{CATEGORY_LABELS[disease.category]}</Badge>
             </div>
-            <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
+            <dl className="flex flex-col gap-1 text-sm">
               <dt className="text-muted-foreground">Vị trí</dt>
-              <dd>{formatLocation(image, regions.length, partLabel)}</dd>
-              <dt className="text-muted-foreground">Triệu chứng</dt>
+              <dd>
+                <ul className="list-disc pl-4">
+                  <li>{formatLocation(image, regions.length, partLabel)}</li>
+                </ul>
+              </dd>
+              <dt className="mt-1 text-muted-foreground">Triệu chứng</dt>
               <dd>
                 {symptoms.length > 0 ? (
                   <ul className="list-disc space-y-0.5 pl-4">

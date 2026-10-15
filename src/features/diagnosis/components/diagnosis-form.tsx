@@ -180,7 +180,7 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
       ? "Chưa có ảnh"
       : brokenCount > 0
         ? `${brokenCount} ảnh lỗi — hãy xoá hoặc thay`
-        : `${images.length}/${DIAGNOSIS_MAX_IMAGES} ảnh — sẵn sàng`;
+        : "Sẵn sàng gửi";
 
   return (
     <form id={FORM_ID} onSubmit={onSubmit} noValidate className={cn("flex flex-col gap-6", className)} aria-busy={busy}>
@@ -192,12 +192,9 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
       </Callout>
 
       <fieldset className="flex flex-col gap-3" aria-describedby={imagesError ? `${FORM_ID}-images-error` : undefined}>
-        <legend className="mb-3 flex w-full items-baseline justify-between gap-2">
-          <span className="text-sm font-medium">
+        <legend className="mb-3 text-sm font-medium">
+          <span>
             Ảnh cây trồng <span className="text-destructive" aria-hidden>*</span>
-          </span>
-          <span className="text-xs text-muted-foreground tabular-nums">
-            {images.length}/{DIAGNOSIS_MAX_IMAGES} ảnh
           </span>
         </legend>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
