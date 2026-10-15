@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import {
   Button,
   DropdownMenu,
@@ -21,6 +22,7 @@ import {
   DropdownMenuTrigger,
   type TButtonProps,
 } from "@/shared/components/atoms";
+import { LoginRequiredDialog } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { cn } from "@/shared/lib/utils";
 import { useCrops } from "../hooks/use-crops";
@@ -36,34 +38,54 @@ export type TStartDiagnosisButtonProps = Omit<TButtonProps, "onClick" | "loading
   label?: string;
   /** Mobile chỉ hiện icon (header). */
   compact?: boolean;
+  /** Guest: bấm → dialog mời đăng nhập / đăng ký thay vì dropdown chọn cây. Mặc định true. */
+  signedIn?: boolean;
 };
 
 /**
  * Bắt đầu chẩn đoán (header, lịch sử...): bấm → dropdown chọn cây trồng được hỗ trợ (GET /knowledge/crops),
- * mỗi cây mở form /diagnosis/new?crop=<code>.
+ * mỗi cây mở form /diagnosis/new?crop=<code>. Guest (`signedIn={false}`): cùng nút, bấm → dialog mời đăng nhập.
  */
-export function StartDiagnosisButton({
-  label = "Chẩn đoán bệnh",
-  compact = false,
-  size = "sm",
-  className,
-  ...props
-}: TStartDiagnosisButtonProps) {
+export function StartDiagnosisButton({ signedIn = true, ...props }: TStartDiagnosisButtonProps) {
+  return signedIn ? <CropMenuButton {...props} /> : <GuestButton {...props} />;
+}
+
+type TTriggerProps = Omit<TStartDiagnosisButtonProps, "signedIn"> & React.ComponentProps<"button">;
+
+/** Nút chung của guest và người đã đăng nhập (giữ ref / props Radix truyền qua `asChild`). */
+function TriggerButton({ label = "Chẩn đoán bệnh", compact = false, size = "sm", className, ...props }: TTriggerProps) {
+  return (
+    <Button
+      size={size}
+      aria-label={compact ? label : undefined}
+      className={cn(compact && "px-2 sm:px-3", className)}
+      {...props}
+    >
+      <ScanSearchIcon aria-hidden />
+      <span className={cn(compact && "hidden sm:inline")}>{label}</span>
+      <ChevronDownIcon aria-hidden className={cn("opacity-70", compact && "hidden sm:block")} />
+    </Button>
+  );
+}
+
+function GuestButton(props: Omit<TStartDiagnosisButtonProps, "signedIn">) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <TriggerButton {...props} aria-haspopup="dialog" onClick={() => setOpen(true)} />
+      <LoginRequiredDialog open={open} onOpenChange={setOpen} />
+    </>
+  );
+}
+
+function CropMenuButton(props: Omit<TStartDiagnosisButtonProps, "signedIn">) {
   const crops = useCrops();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size={size}
-          aria-label={compact ? label : undefined}
-          className={cn(compact && "px-2 sm:px-3", className)}
-          {...props}
-        >
-          <ScanSearchIcon aria-hidden />
-          <span className={cn(compact && "hidden sm:inline")}>{label}</span>
-          <ChevronDownIcon aria-hidden className={cn("opacity-70", compact && "hidden sm:block")} />
-        </Button>
+        <TriggerButton {...props} />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>Chọn cây trồng</DropdownMenuLabel>

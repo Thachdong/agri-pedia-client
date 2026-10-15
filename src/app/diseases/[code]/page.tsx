@@ -23,7 +23,9 @@ const loadDiseasePage = cache(async (code: string) => {
 
   let state;
   try {
-    state = await prefetch(signedIn ? [meQuery(serverHttp)] : [], { required: [query] });
+    state = await prefetch(signedIn ? [meQuery(serverHttp)] : [], {
+      required: [query],
+    });
   } catch (error) {
     if (isAppError(error) && (error.status === 404 || error.status === 400)) notFound();
     throw error;
@@ -51,7 +53,7 @@ export default async function DiseasePage({ params }: PageProps<"/diseases/[code
   if (!signedIn) {
     return (
       <HydrateQueries state={state}>
-        <ContentLayout header={<SiteHeader />}>
+        <ContentLayout header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}>
           <DiseaseDetail code={code} />
         </ContentLayout>
       </HydrateQueries>

@@ -6,11 +6,13 @@ import { Button } from "../atoms";
 export type TSiteHeaderProps = {
   /** Vùng bên phải (ui-ux.md §6 (1)–(4) khi đã đăng nhập). Bỏ trống → nút Login / Register cho guest. */
   actions?: React.ReactNode;
+  /** Hiện trước actions / nút guest — tính năng chính luôn thấy (vd. "Chẩn đoán bệnh" cho guest). */
+  primaryAction?: React.ReactNode;
   className?: string;
 };
 
 /** Header trang chính (ui-ux.md §6): logo AgriPedia + actions. */
-export function SiteHeader({ actions, className }: TSiteHeaderProps) {
+export function SiteHeader({ actions, primaryAction, className }: TSiteHeaderProps) {
   return (
     <header className={cn("border-b border-border-subtle bg-background", className)}>
       <div className="flex h-14 w-full items-center justify-between gap-4 px-4">
@@ -21,6 +23,7 @@ export function SiteHeader({ actions, className }: TSiteHeaderProps) {
           AgriPedia
         </Link>
         <nav aria-label="Tài khoản" className="flex items-center gap-2">
+          {primaryAction}
           {actions ?? <GuestActions />}
         </nav>
       </div>

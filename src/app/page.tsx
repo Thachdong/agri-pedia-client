@@ -28,7 +28,11 @@ export default async function HomePage() {
   if (!(await hasSession())) {
     return (
       <DistributorExplorerProvider origin="geolocation">
-        <MapListLayout header={<SiteHeader />} map={<DistributorExplorerMap />} list={<DistributorExplorerList />} />
+        <MapListLayout
+          header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}
+          map={<DistributorExplorerMap />}
+          list={<DistributorExplorerList />}
+        />
       </DistributorExplorerProvider>
     );
   }

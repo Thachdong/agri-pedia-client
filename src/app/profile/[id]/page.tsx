@@ -80,7 +80,7 @@ export default async function ProfilePage({ params }: PageProps<"/profile/[id]">
     return (
       <HydrateQueries state={state}>
         <ProfileLayout
-          header={<SiteHeader />}
+          header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}
           info={<DistributorProfileInfo distributorId={id} />}
           tabs={<DistributorProfileTabs distributorId={id} />}
         />
