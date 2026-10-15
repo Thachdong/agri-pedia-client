@@ -668,7 +668,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List crops supported by diagnosis (public) */
+        /**
+         * List crops supported by diagnosis (public)
+         * @description Enabled crops by display order. `plantParts` = the parts a photo of the crop may show (values for POST /diagnoses `images[].plantPart`, dropdown order); `cropStages` = labels of the stage codes used by its diseases.
+         */
         get: operations["KnowledgeController_crops"];
         put?: never;
         post?: never;
@@ -733,7 +736,7 @@ export interface paths {
         put?: never;
         /**
          * Send plant photos for disease diagnosis (processed in background)
-         * @description multipart/form-data: `images` = 1..5 files (jpg/png/webp, <= DIAGNOSIS_MAX_IMAGE_BYTES each; format checked by content), `meta` = JSON string `{ cropType, images: [{ plantPart }], note? }` with one entry per file in the same order. Answers 202 with status PROCESSING; the result comes via realtime `diagnosis.completed` { id, status } or by polling GET /diagnoses/{diagnosisId}. Daily limit per user: DIAGNOSIS_DAILY_LIMIT (Vietnam day).
+         * @description multipart/form-data: `images` = 1..5 files (jpg/png/webp, <= DIAGNOSIS_MAX_IMAGE_BYTES each; format checked by content), `meta` = JSON string `{ cropType, images: [{ plantPart }], note? }` with one entry per file in the same order; `cropType` from GET /knowledge/crops and each `plantPart` from that crop's `plantParts` (otherwise DIAGNOSIS_INVALID_IMAGE). Answers 202 with status PROCESSING; the result comes via realtime `diagnosis.completed` { id, status } or by polling GET /diagnoses/{diagnosisId}. Daily limit per user: DIAGNOSIS_DAILY_LIMIT (Vietnam day).
          */
         post: operations["DiagnosisController_create"];
         delete?: never;
@@ -1216,9 +1219,21 @@ export interface components {
             messages: components["schemas"]["RoomMessageResponse"][];
             nextCursor: string | null;
         };
+        CropPlantPartResponse: {
+            /** @enum {string} */
+            code: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL";
+            nameVi: string;
+        };
+        CropStageResponse: {
+            /** @enum {string} */
+            code: "SEEDLING" | "TILLERING" | "BOOTING" | "HEADING" | "MILK" | "MATURITY" | "YOUNG_TREE" | "FLUSHING" | "FLOWERING" | "FRUIT_SET" | "FRUIT_DEVELOPMENT" | "HARVEST" | "TREE_RECOVERY";
+            nameVi: string;
+        };
         CropItemResponse: {
             code: string;
             nameVi: string;
+            plantParts: components["schemas"]["CropPlantPartResponse"][];
+            cropStages: components["schemas"]["CropStageResponse"][];
         };
         ListCropsResponse: {
             crops: components["schemas"]["CropItemResponse"][];
@@ -1232,10 +1247,10 @@ export interface components {
             /** @enum {string} */
             category: "DISEASE" | "PEST" | "DISORDER";
             /** @enum {string} */
-            agentType: "FUNGUS" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
-            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT")[];
+            agentType: "FUNGUS" | "OOMYCETE" | "ALGA" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
+            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL")[];
             /** @enum {string} */
-            verification: "SOURCED" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+            verification: "SOURCED" | "SECONDARY" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
         };
         ListDiseasesResponse: {
             diseases: components["schemas"]["DiseaseItemResponse"][];
@@ -1269,19 +1284,19 @@ export interface components {
             /** @enum {string} */
             category: "DISEASE" | "PEST" | "DISORDER";
             /** @enum {string} */
-            agentType: "FUNGUS" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
-            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT")[];
+            agentType: "FUNGUS" | "OOMYCETE" | "ALGA" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
+            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL")[];
             pathogens: string[];
             symptoms: string[];
             variants: components["schemas"]["DiseaseVariantResponse"][];
             transmissionMode: string | null;
-            cropStages: ("SEEDLING" | "TILLERING" | "BOOTING" | "HEADING" | "MILK" | "MATURITY")[];
+            cropStages: ("SEEDLING" | "TILLERING" | "BOOTING" | "HEADING" | "MILK" | "MATURITY" | "YOUNG_TREE" | "FLUSHING" | "FLOWERING" | "FRUIT_SET" | "FRUIT_DEVELOPMENT" | "HARVEST" | "TREE_RECOVERY")[];
             favorableConditions: string[];
             treatments: components["schemas"]["DiseaseTreatmentsResponse"];
             similarDiseases: components["schemas"]["SimilarDiseaseResponse"][];
             references: components["schemas"]["DiseaseReferenceResponse"][];
             /** @enum {string} */
-            verification: "SOURCED" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+            verification: "SOURCED" | "SECONDARY" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
             kbVersion: string;
         };
         CreateDiagnosisResponse: {
@@ -1358,9 +1373,9 @@ export interface components {
             mediaId: string | null;
             url: string | null;
             /** @enum {string} */
-            plantPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT";
+            plantPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL";
             /** @enum {string|null} */
-            detectedPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | null;
+            detectedPart: "LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL" | null;
             /** @enum {string|null} */
             status: "DISEASED" | "HEALTHY" | "UNCERTAIN" | "NOT_TARGET_CROP" | "LOW_QUALITY" | null;
             message: string | null;
@@ -3234,7 +3249,7 @@ export interface operations {
                 "multipart/form-data": {
                     /** @description 1..5 photos */
                     images: string[];
-                    /** @description JSON: { "cropType": "RICE", "images": [{ "plantPart": "LEAF" }], "note": "..." }; plantPart: LEAF | SHEATH | STEM | PANICLE | ROOT | WHOLE_PLANT */
+                    /** @description JSON: { "cropType": "RICE", "images": [{ "plantPart": "LEAF" }], "note": "..." }; plantPart: one of the crop's plantParts (GET /knowledge/crops) */
                     meta: string;
                 };
             };

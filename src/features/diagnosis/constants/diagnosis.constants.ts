@@ -6,13 +6,23 @@ import type {
 } from "../types/diagnosis.types";
 import type { TCropStage, TDiseaseAgentType, TDiseaseCategory } from "../types/knowledge.types";
 
-/** Bộ phận cây — thứ tự dùng cho Select. */
+/**
+ * Mọi bộ phận server chấp nhận + nhãn chung (fallback). Bộ phận chọn được và nhãn đúng theo cây
+ * lấy từ GET /knowledge/crops (`plantParts`) — xem useCropLabels.
+ */
 export const PLANT_PART_OPTIONS = [
   { value: "LEAF", label: "Lá" },
   { value: "SHEATH", label: "Bẹ lá" },
   { value: "STEM", label: "Thân" },
   { value: "PANICLE", label: "Bông" },
+  { value: "SHOOT", label: "Đọt / lá non" },
+  { value: "BRANCH", label: "Cành" },
+  { value: "TRUNK", label: "Thân cây" },
+  { value: "COLLAR", label: "Gốc / cổ rễ" },
   { value: "ROOT", label: "Rễ" },
+  { value: "FLOWER", label: "Hoa" },
+  { value: "FRUIT", label: "Trái" },
+  { value: "ARIL", label: "Múi / cơm" },
   { value: "WHOLE_PLANT", label: "Cả cây" },
 ] as const satisfies readonly { value: TPlantPart; label: string }[];
 
@@ -53,6 +63,8 @@ export const IMAGE_STATUS_LABELS: Record<TDiagnosisImageStatus, string> = {
 
 export const AGENT_TYPE_LABELS: Record<TDiseaseAgentType, string> = {
   FUNGUS: "Nấm",
+  OOMYCETE: "Nấm noãn (Oomycete)",
+  ALGA: "Tảo",
   BACTERIA: "Vi khuẩn",
   VIRUS: "Virus",
   NEMATODE: "Tuyến trùng",
@@ -66,13 +78,21 @@ export const AGENT_TYPE_LABELS: Record<TDiseaseAgentType, string> = {
   UNKNOWN: "Chưa rõ",
 };
 
+/** Nhãn giai đoạn chung (fallback) — nhãn theo cây lấy từ GET /knowledge/crops (`cropStages`). */
 export const CROP_STAGE_LABELS: Record<TCropStage, string> = {
-  SEEDLING: "Mạ",
+  SEEDLING: "Cây con / mạ",
   TILLERING: "Đẻ nhánh",
   BOOTING: "Làm đòng",
   HEADING: "Trổ bông",
   MILK: "Ngậm sữa",
   MATURITY: "Chín",
+  YOUNG_TREE: "Kiến thiết cơ bản",
+  FLUSHING: "Ra đọt (lộc non)",
+  FLOWERING: "Ra hoa",
+  FRUIT_SET: "Đậu trái / trái non",
+  FRUIT_DEVELOPMENT: "Nuôi trái",
+  HARVEST: "Thu hoạch",
+  TREE_RECOVERY: "Phục hồi cây sau thu hoạch",
 };
 
 /** POST /diagnoses: 1..5 ảnh, note ≤ 1000 (api.md action 36). */
