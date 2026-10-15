@@ -7,7 +7,7 @@ Kết quả: giữ cấu trúc như lúa (tổng hợp → từng ảnh → disc
 - [x] 2. [shared-unit]        constants: nhãn bộ phận / giai đoạn / tác nhân mở rộng (OOMYCETE, ALGA; SHOOT…ARIL; YOUNG_TREE…TREE_RECOVERY) làm fallback
 - [ ] 3. [shared-unit]        hook useCropLabels(cropType?) — nhãn bộ phận / giai đoạn theo cây (từ GET /knowledge/crops), fallback constants
 - [x] 4. [atomic-component]  molecule  PlantPartSelect      — options theo bộ phận của cây (prop), không cố định 6 bộ phận lúa
-- [ ] 5. [atomic-component]  organism  StartDiagnosisButton — bấm → dropdown chọn cây (Lúa / Sầu riêng…), mỗi option → /diagnosis/new?crop=; bỏ CropPickerDialog
+- [x] 5. [atomic-component]  organism  StartDiagnosisButton — bấm → dropdown chọn cây (Lúa / Sầu riêng…), mỗi option → /diagnosis/new?crop=; bỏ CropPickerDialog
 - [x] 6. [atomic-component]  organism  DiagnosisForm        — nhận plantParts của cây, truyền cho PlantPartSelect
 - [ ] 7. [atomic-component]  organism  kết quả (Summary, ResultTable, ResultImage, RegionOverlay?, DiseaseArticle / dialog) — nhãn bộ phận / giai đoạn theo cây
 - [ ] 8. [page]              /diagnosis/new truyền plantParts của cây; kiểm tra lại /diagnosis/[id], /diseases/[code]
