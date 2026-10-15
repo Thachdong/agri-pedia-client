@@ -6,7 +6,8 @@ import { useState } from "react";
 import { Badge, type TBadgeTone } from "@/shared/components/atoms";
 import { Callout } from "@/shared/components/molecules";
 import { cn } from "@/shared/lib/utils";
-import { IMAGE_STATUS_LABELS, PLANT_PART_LABELS } from "../constants/diagnosis.constants";
+import { IMAGE_STATUS_LABELS } from "../constants/diagnosis.constants";
+import { useCropLabels } from "../hooks/use-crop-labels";
 import type { TDiagnosisImage, TDiagnosisImageStatus } from "../types/diagnosis.types";
 import { resultImageAnchorId } from "../utils/diagnosis-view.util";
 import { DiagnosisResultTable } from "./diagnosis-result-table";
@@ -23,6 +24,8 @@ const IMAGE_STATUS_TONES: Record<TDiagnosisImageStatus, TBadgeTone> = {
 
 export type TDiagnosisResultImageProps = {
   image: TDiagnosisImage;
+  /** Cây của lần chẩn đoán — nhãn bộ phận theo cây. */
+  cropType: string;
   /** Bấm tên bệnh → mở báo cáo bệnh. */
   onOpenDisease: (code: string) => void;
   className?: string;
@@ -32,11 +35,12 @@ export type TDiagnosisResultImageProps = {
  * Kết quả 1 ảnh: ảnh + khung vùng bệnh (bấm → lightbox) và bảng bệnh; ảnh không có bệnh → `message` của server.
  * lg: 2 cột [ảnh | bảng]; mobile: xếp dọc. Hover / chạm hàng bảng ↔ làm nổi khung tương ứng.
  */
-export function DiagnosisResultImage({ image, onOpenDisease, className }: TDiagnosisResultImageProps) {
+export function DiagnosisResultImage({ image, cropType, onOpenDisease, className }: TDiagnosisResultImageProps) {
+  const { partLabel } = useCropLabels(cropType);
   // undefined = không làm nổi; null = vùng chưa xác định.
   const [highlightedCode, setHighlightedCode] = useState<string | null | undefined>(undefined);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const title = `Ảnh ${image.index + 1} · ${PLANT_PART_LABELS[image.plantPart]}`;
+  const title = `Ảnh ${image.index + 1} · ${partLabel(image.plantPart)}`;
   const showTable = image.status === "DISEASED" && image.diseases.length > 0;
 
   return (
@@ -52,7 +56,7 @@ export function DiagnosisResultImage({ image, onOpenDisease, className }: TDiagn
         {image.status && <Badge tone={IMAGE_STATUS_TONES[image.status]}>{IMAGE_STATUS_LABELS[image.status]}</Badge>}
         {image.detectedPart && image.detectedPart !== image.plantPart && (
           <p className="w-full text-xs text-muted-foreground">
-            AI nhận diện đây là {PLANT_PART_LABELS[image.detectedPart].toLowerCase()}
+            AI nhận diện đây là {partLabel(image.detectedPart).toLowerCase()}
           </p>
         )}
       </header>
@@ -98,6 +102,7 @@ export function DiagnosisResultImage({ image, onOpenDisease, className }: TDiagn
             highlightedCode={highlightedCode}
             onHighlightCode={setHighlightedCode}
             onOpenDisease={onOpenDisease}
+            partLabel={partLabel}
           />
         ) : (
           image.message && <Callout tone={image.status === "HEALTHY" ? "success" : "neutral"}>{image.message}</Callout>

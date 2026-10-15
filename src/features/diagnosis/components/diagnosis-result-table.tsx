@@ -3,6 +3,7 @@
 import { Badge } from "@/shared/components/atoms";
 import { cn } from "@/shared/lib/utils";
 import { CATEGORY_LABELS } from "../constants/diagnosis.constants";
+import type { TCropLabels } from "../hooks/use-crop-labels";
 import type { TDiagnosisImage } from "../types/diagnosis.types";
 import { formatLocation, regionsOfDisease, uniqueSymptoms } from "../utils/diagnosis-view.util";
 import { ConfidenceBadge } from "./confidence-badge";
@@ -15,6 +16,8 @@ export type TDiagnosisResultTableProps = {
   onHighlightCode?: (code: string | null | undefined) => void;
   /** Bấm tên bệnh → mở báo cáo bệnh. */
   onOpenDisease: (code: string) => void;
+  /** Nhãn bộ phận theo cây. */
+  partLabel: TCropLabels["partLabel"];
   className?: string;
 };
 
@@ -27,6 +30,7 @@ export function DiagnosisResultTable({
   highlightedCode,
   onHighlightCode,
   onOpenDisease,
+  partLabel,
   className,
 }: TDiagnosisResultTableProps) {
   return (
@@ -56,7 +60,7 @@ export function DiagnosisResultTable({
             </div>
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-sm">
               <dt className="text-muted-foreground">Vị trí</dt>
-              <dd>{formatLocation(image, regions.length)}</dd>
+              <dd>{formatLocation(image, regions.length, partLabel)}</dd>
               <dt className="text-muted-foreground">Triệu chứng</dt>
               <dd>
                 {symptoms.length > 0 ? (

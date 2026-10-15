@@ -85,11 +85,11 @@ function CompletedResult({ diagnosis }: { diagnosis: TDiagnosis }) {
           Kết quả từng ảnh
         </h2>
         {images.map((image) => (
-          <DiagnosisResultImage key={image.index} image={image} onOpenDisease={setDiseaseCode} />
+          <DiagnosisResultImage key={image.index} image={image} cropType={diagnosis.cropType} onOpenDisease={setDiseaseCode} />
         ))}
       </section>
       <p className="text-xs text-muted-foreground">{diagnosis.disclaimer}</p>
-      <DiseaseReportDialog code={diseaseCode} onClose={() => setDiseaseCode(null)} />
+      <DiseaseReportDialog code={diseaseCode} cropType={diagnosis.cropType} onClose={() => setDiseaseCode(null)} />
     </>
   );
 }

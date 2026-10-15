@@ -9,9 +9,8 @@ import { cn } from "@/shared/lib/utils";
 import {
   AGENT_TYPE_LABELS,
   CATEGORY_LABELS,
-  CROP_STAGE_LABELS,
-  PLANT_PART_LABELS,
 } from "../constants/diagnosis.constants";
+import { useCropLabels } from "../hooks/use-crop-labels";
 import { useDisease } from "../hooks/use-disease";
 import type { TDisease } from "../types/knowledge.types";
 
@@ -54,13 +53,16 @@ export function DiseaseDetail({ code, className }: TDiseaseDetailProps) {
 
 export type TDiseaseArticleProps = {
   disease: TDisease;
+  /** Cây đang xem (từ kết quả chẩn đoán) — nhãn bộ phận / giai đoạn theo cây; trang bệnh độc lập dùng nhãn chung. */
+  cropType?: string;
   /** Phần tử tiêu đề — trang: h1; dialog: DialogTitle. */
   titleAs?: React.ElementType;
   className?: string;
 };
 
 /** Nội dung đầy đủ của 1 bệnh — dùng ở trang /diseases/[code] và dialog báo cáo bệnh. */
-export function DiseaseArticle({ disease, titleAs: Title = "h1", className }: TDiseaseArticleProps) {
+export function DiseaseArticle({ disease, cropType, titleAs: Title = "h1", className }: TDiseaseArticleProps) {
+  const { partLabel, stageLabel } = useCropLabels(cropType);
   const subtitle = [disease.nameEn, disease.scientificName].filter(Boolean);
   const { cultural, biological, nutrition } = disease.treatments;
   const hasTreatments = cultural.length + biological.length + nutrition.length > 0;
@@ -89,8 +91,8 @@ export function DiseaseArticle({ disease, titleAs: Title = "h1", className }: TD
             { label: "Tên khác", value: disease.aliases.join(", ") },
             { label: "Nhóm", value: CATEGORY_LABELS[disease.category] },
             { label: "Tác nhân", value: AGENT_TYPE_LABELS[disease.agentType] },
-            { label: "Bộ phận bị hại", value: disease.affectedParts.map((part) => PLANT_PART_LABELS[part]).join(", ") },
-            { label: "Giai đoạn", value: disease.cropStages.map((stage) => CROP_STAGE_LABELS[stage]).join(", ") },
+            { label: "Bộ phận bị hại", value: disease.affectedParts.map(partLabel).join(", ") },
+            { label: "Giai đoạn", value: disease.cropStages.map(stageLabel).join(", ") },
           ]}
         />
       </header>

@@ -9,21 +9,23 @@ import { DiseaseArticle } from "./disease-detail";
 export type TDiseaseReportDialogProps = {
   /** diseaseCode đang xem; `null` = đóng. */
   code: string | null;
+  /** Cây của lần chẩn đoán — nhãn bộ phận / giai đoạn theo cây. */
+  cropType?: string;
   onClose: () => void;
 };
 
 /** Báo cáo đầy đủ 1 bệnh (GET /knowledge/diseases/:code) trong dialog — mở từ tên bệnh ở trang kết quả. */
-export function DiseaseReportDialog({ code, onClose }: TDiseaseReportDialogProps) {
+export function DiseaseReportDialog({ code, cropType, onClose }: TDiseaseReportDialogProps) {
   return (
     <Dialog open={code !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-3xl">
-        {code && <DiseaseReport code={code} />}
+        {code && <DiseaseReport code={code} cropType={cropType} />}
       </DialogContent>
     </Dialog>
   );
 }
 
-function DiseaseReport({ code }: { code: string }) {
+function DiseaseReport({ code, cropType }: { code: string; cropType?: string }) {
   const query = useDisease(code);
 
   if (query.isPending) {
@@ -62,7 +64,7 @@ function DiseaseReport({ code }: { code: string }) {
   return (
     <>
       <DialogDescription className="sr-only">Thông tin chi tiết về bệnh {query.data.nameVi}</DialogDescription>
-      <DiseaseArticle disease={query.data} titleAs={DialogTitle} className="pr-6" />
+      <DiseaseArticle disease={query.data} cropType={cropType} titleAs={DialogTitle} className="pr-6" />
     </>
   );
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Callout } from "@/shared/components/molecules";
 import { cn } from "@/shared/lib/utils";
 import { IMAGE_STATUS_LABELS } from "../constants/diagnosis.constants";
+import { type TCropLabels, useCropLabels } from "../hooks/use-crop-labels";
 import type { TDiagnosis, TDiagnosisImage } from "../types/diagnosis.types";
 import {
   formatLocation,
@@ -17,7 +18,7 @@ import { ConfidenceBadge } from "./confidence-badge";
 import { DiseaseNameButton } from "./disease-name-button";
 
 export type TDiagnosisSummaryProps = {
-  diagnosis: Pick<TDiagnosis, "summary" | "images">;
+  diagnosis: Pick<TDiagnosis, "summary" | "images" | "cropType">;
   /** Bấm tên bệnh → mở báo cáo bệnh. */
   onOpenDisease: (code: string) => void;
   className?: string;
@@ -40,6 +41,7 @@ const scrollToImage = (index: number) => {
  * độ tin cậy, vị trí (theo từng bệnh), triệu chứng. Bảng cuộn ngang trên màn hình hẹp.
  */
 export function DiagnosisSummary({ diagnosis, onOpenDisease, className }: TDiagnosisSummaryProps) {
+  const { partLabel } = useCropLabels(diagnosis.cropType);
   const images = [...diagnosis.images].sort((a, b) => a.index - b.index);
 
   return (
@@ -61,7 +63,7 @@ export function DiagnosisSummary({ diagnosis, onOpenDisease, className }: TDiagn
           </thead>
           <tbody className="divide-y divide-border-subtle">
             {images.map((image) => (
-              <ImageRow key={image.index} image={image} onOpenDisease={onOpenDisease} />
+              <ImageRow key={image.index} image={image} onOpenDisease={onOpenDisease} partLabel={partLabel} />
             ))}
           </tbody>
         </table>
@@ -101,7 +103,13 @@ function Conclusion({ diagnosis }: { diagnosis: Pick<TDiagnosis, "summary" | "im
   );
 }
 
-function ImageRow({ image, onOpenDisease }: { image: TDiagnosisImage; onOpenDisease: (code: string) => void }) {
+type TImageRowProps = {
+  image: TDiagnosisImage;
+  onOpenDisease: (code: string) => void;
+  partLabel: TCropLabels["partLabel"];
+};
+
+function ImageRow({ image, onOpenDisease, partLabel }: TImageRowProps) {
   const label = `Ảnh ${image.index + 1}`;
   const diseases = image.diseases;
   const symptoms = uniqueSymptoms(image.regions);
@@ -125,7 +133,7 @@ function ImageRow({ image, onOpenDisease }: { image: TDiagnosisImage; onOpenDise
               </span>
             )}
           </span>
-          {label} · {imagePartLabel(image)}
+          {label} · {imagePartLabel(image, partLabel)}
         </button>
       </td>
       {diseases.length > 0 ? (
@@ -156,7 +164,7 @@ function ImageRow({ image, onOpenDisease }: { image: TDiagnosisImage; onOpenDise
             <ul className="space-y-1">
               {diseases.map((disease) => (
                 <li key={`${disease.diseaseCode}-${disease.variantCode ?? ""}`} className={DISEASE_ITEM}>
-                  {formatLocation(image, regionsOfDisease(image, disease.diseaseCode).length)}
+                  {formatLocation(image, regionsOfDisease(image, disease.diseaseCode).length, partLabel)}
                 </li>
               ))}
             </ul>
