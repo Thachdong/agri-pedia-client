@@ -9,6 +9,14 @@ export const ARTICLE_CACHE_TAGS = {
   disease: (diseaseCode: string) => `article-disease:${diseaseCode}`,
 } as const;
 
+/** Tag hợp lệ cho webhook POST /api/revalidate — đúng 4 dạng của ARTICLE_CACHE_TAGS. */
+export const ARTICLE_CACHE_TAG_PATTERN =
+  /^(articles|articles:[a-z0-9-]+|article:[a-z0-9-]+:[a-z0-9-]+|article-disease:[A-Z0-9_]+)$/;
+
+/** Webhook: tối đa 500 tag mỗi lần, mỗi tag ≤ 256 ký tự (giới hạn tag của Next). */
+export const ARTICLE_REVALIDATE_MAX_TAGS = 500;
+export const ARTICLE_CACHE_TAG_MAX_LENGTH = 256;
+
 /** Lưới an toàn khi webhook lỗi (30 ngày) — thay đổi thường đến qua revalidateTag. */
 export const ARTICLE_REVALIDATE_SECONDS = 2_592_000;
 
