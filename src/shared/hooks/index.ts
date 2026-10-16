@@ -2,3 +2,4 @@ export { useGeolocation, type TCoordinates, type TGeolocationStatus } from "./us
 export { useCountdown } from "./use-countdown";
 export { useInfiniteSentinel, type TInfiniteSentinelOptions } from "./use-infinite-sentinel";
 export { useImagePreview } from "./use-image-preview";
+export { useCameraStream, type TCameraStatus } from "./use-camera-stream";

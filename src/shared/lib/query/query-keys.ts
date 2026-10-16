@@ -67,4 +67,17 @@ export const queryKeys = {
         "summary",
       ] as const,
   },
+  diagnoses: {
+    all: ["diagnoses"] as const,
+    /** Lịch sử chẩn đoán của tôi (infinite, cursor). */
+    lists: () => [...queryKeys.diagnoses.all, "list"] as const,
+    detail: (id: string) => [...queryKeys.diagnoses.all, "detail", id] as const,
+  },
+  knowledge: {
+    all: ["knowledge"] as const,
+    /** Cây trồng được hỗ trợ chẩn đoán (public). */
+    crops: () => [...queryKeys.knowledge.all, "crops"] as const,
+    /** Bài viết 1 bệnh theo diseaseCode (public). */
+    disease: (code: string) => [...queryKeys.knowledge.all, "disease", code] as const,
+  },
 } as const;

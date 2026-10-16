@@ -7,3 +7,5 @@ export { InfoTable, type TInfoTableItem, type TInfoTableProps } from "./info-tab
 export { ConfirmDialog, type TConfirmDialogProps } from "./confirm-dialog";
 export { MultiImageInput, type TExistingImage, type TMultiImageInputProps } from "./multi-image-input";
 export { MediaGallery, type TGalleryMedia, type TMediaGalleryProps } from "./media-gallery";
+export { Callout, type TCalloutProps } from "./callout";
+export { LoginRequiredDialog, type TLoginRequiredDialogProps } from "./login-required-dialog";

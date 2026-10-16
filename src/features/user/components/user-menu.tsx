@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDownIcon, LogOutIcon, UserIcon } from "lucide-react";
+import { ChevronDownIcon, HistoryIcon, LogOutIcon, UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useLogout } from "@/features/auth";
 import {
@@ -15,7 +15,7 @@ import {
 import { ROUTES } from "@/shared/constants";
 import { useMe } from "../hooks/use-me";
 
-/** Header (3) username + (4) avatar — dropdown: trang cá nhân, đăng xuất (ui-ux.md §6). */
+/** Header (3) username + (4) avatar — dropdown: trang cá nhân, lịch sử chẩn đoán, đăng xuất (ui-ux.md §6). */
 export function UserMenu() {
   const { data: me, isPending } = useMe();
   const logout = useLogout();
@@ -54,6 +54,12 @@ export function UserMenu() {
             </Link>
           </DropdownMenuItem>
         )}
+        <DropdownMenuItem asChild>
+          <Link href={ROUTES.diagnosis.list}>
+            <HistoryIcon aria-hidden />
+            Lịch sử chẩn đoán
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem disabled={logout.isPending} onSelect={() => logout.mutate()}>
           <LogOutIcon aria-hidden />
           {logout.isPending ? "Đang đăng xuất…" : "Đăng xuất"}

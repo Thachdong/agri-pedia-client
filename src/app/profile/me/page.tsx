@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { ChatRoomsMenu } from "@/features/chat";
+import { StartDiagnosisButton } from "@/features/diagnosis";
 import { NotificationMenu } from "@/features/notification";
 import { FarmerProfileInfo, meQuery, myAddressesQuery, type TUserProfile, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
@@ -36,6 +37,7 @@ export default async function MyProfilePage() {
             <SiteHeader
               actions={
                 <>
+                  <StartDiagnosisButton compact />
                   <NotificationMenu />
                   <ChatRoomsMenu />
                   <UserMenu />

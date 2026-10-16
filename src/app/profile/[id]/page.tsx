@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { ChatRoomsMenu } from "@/features/chat";
+import { StartDiagnosisButton } from "@/features/diagnosis";
 import {
   DistributorProfileActions,
   DistributorProfileInfo,
@@ -79,7 +80,7 @@ export default async function ProfilePage({ params }: PageProps<"/profile/[id]">
     return (
       <HydrateQueries state={state}>
         <ProfileLayout
-          header={<SiteHeader />}
+          header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}
           info={<DistributorProfileInfo distributorId={id} />}
           tabs={<DistributorProfileTabs distributorId={id} />}
         />
@@ -94,6 +95,7 @@ export default async function ProfilePage({ params }: PageProps<"/profile/[id]">
           <SiteHeader
             actions={
               <>
+                <StartDiagnosisButton compact />
                 <NotificationMenu />
                 <ChatRoomsMenu />
                 <UserMenu />
