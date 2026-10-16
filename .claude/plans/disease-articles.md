@@ -20,7 +20,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 14. [atomic-component]  molecule  CategoryPlaceholder (new, feature — icon block per DISEASE/PEST/DISORDER, used when no cover)
 - [x] 15. [atomic-component]  molecule  ArticleMeta       (new, feature — updatedAt, reviewedBy/AI, verification badge)
 - [x] 16. [atomic-component]  molecule  DraftBanner       (new, feature — Callout)
-- [ ] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox)
+- [x] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox; next.config images.remotePatterns moved here from 34)
 - [ ] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
 - [ ] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
 - [ ] 20. [atomic-component]  molecule  ArticleCard       (new, feature — cover/placeholder, title, scientific name, summary 2 lines, DRAFT badge)
@@ -37,7 +37,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [ ] 31. [page]              /benh-cay-trong/[crop] — ISR, first page server + ArticleList, not-found
 - [ ] 32. [page]              /benh-cay-trong — ISR, crop cards; link "Bệnh cây trồng" in home / header
 - [ ] 33. [page]              /diseases/[code] → permanentRedirect(article.path) / notFound(); drop loading/error; "Đọc bài viết đầy đủ" in disease-report-dialog
-- [ ] 34. [page]              /api/revalidate (secret timingSafeEqual, tag regex, revalidateTag(tag, "max")), sitemap.ts, robots.ts, next.config images.remotePatterns
+- [ ] 34. [page]              /api/revalidate (secret timingSafeEqual, tag regex, revalidateTag(tag, "max")), sitemap.ts, robots.ts
 - [ ] 35. [arch-review]       + build check: 3 routes ISR (not ƒ)
 
 Components (in order):
