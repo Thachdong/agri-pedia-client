@@ -19,7 +19,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 13. [atomic-component]  molecule  Breadcrumb        (new, shared)
 - [x] 14. [atomic-component]  molecule  CategoryPlaceholder (new, feature — icon block per DISEASE/PEST/DISORDER, used when no cover)
 - [x] 15. [atomic-component]  molecule  ArticleMeta       (new, feature — updatedAt, reviewedBy/AI, verification badge)
-- [ ] 16. [atomic-component]  molecule  DraftBanner       (new, feature — Callout)
+- [x] 16. [atomic-component]  molecule  DraftBanner       (new, feature — Callout)
 - [ ] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox)
 - [ ] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
 - [ ] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
