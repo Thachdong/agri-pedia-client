@@ -34,7 +34,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 27. [atomic-component]  organism  ArticleList       (new, feature, client — category tabs + "Xem thêm")
 - [x] 28. [atomic-component]  organism  SessionHeaderActions (new, feature auth, client — useSession; slots signedIn/guest to avoid user↔chat import cycle; same-size skeleton)
 - [x] 29. [page]              root layout SEO: `lang="vi"`, metadataBase/title template/description, Geist subset `vietnamese`
-- [ ] 30. [page]              /benh-cay-trong/[crop]/[slug] — ISR, generateMetadata (canonical, OG, noindex DRAFT), JSON-LD, not-found, error
+- [x] 30. [page]              /benh-cay-trong/[crop]/[slug] — ISR, generateMetadata (canonical, OG, noindex DRAFT), JSON-LD, not-found, error; + layout /benh-cay-trong (SessionHeaderActions), organism ArticleDetail; home moved to (home) group so its loading.tsx no longer streams every route (real 404)
 - [ ] 31. [page]              /benh-cay-trong/[crop] — ISR, first page server + ArticleList, not-found
 - [ ] 32. [page]              /benh-cay-trong — ISR, crop cards; link "Bệnh cây trồng" in home / header
 - [ ] 33. [page]              /diseases/[code] → permanentRedirect(article.path) / notFound(); drop loading/error; "Đọc bài viết đầy đủ" in disease-report-dialog

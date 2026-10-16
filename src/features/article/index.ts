@@ -6,6 +6,10 @@ export {
   ARTICLE_REVALIDATE_SECONDS,
   articleFetchOptions,
 } from "./constants/article.constants";
+export { ArticleCropCard, type TArticleCropCardProps } from "./components/article-crop-card";
+export { ArticleCtaButton, type TArticleCtaButtonProps } from "./components/article-cta-button";
+export { ArticleDetail, type TArticleDetailProps } from "./components/article-detail";
+export { ArticleList, type TArticleListProps } from "./components/article-list";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
 export { getArticle, getArticleSitemap, getDiseaseArticleLink, listArticleCrops, listArticles } from "./services/article.service";
@@ -29,3 +33,4 @@ export type {
   TDiseaseArticleLink,
   TRelatedDisease,
 } from "./types/article.types";
+export { ARTICLES_INDEX_LABEL, articleJsonLd } from "./utils/article-json-ld.util";
