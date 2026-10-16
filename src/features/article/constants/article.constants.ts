@@ -12,6 +12,11 @@ export const ARTICLE_CACHE_TAGS = {
 /** Lưới an toàn khi webhook lỗi (30 ngày) — thay đổi thường đến qua revalidateTag. */
 export const ARTICLE_REVALIDATE_SECONDS = 2_592_000;
 
+/** `options.next` cho service khi gọi từ route ISR — cache theo tag, hết hạn sau ARTICLE_REVALIDATE_SECONDS. */
+export const articleFetchOptions = {
+  crops: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
+} as const;
+
 /** Trang đầu danh sách bài render ở server (SEO); trang sau tải tiếp phía client. */
 export const ARTICLE_LIST_PAGE_SIZE = 50;
 
