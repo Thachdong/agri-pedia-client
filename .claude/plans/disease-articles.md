@@ -23,7 +23,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox; next.config images.remotePatterns moved here from 34)
 - [x] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
 - [x] 18b. [bff-auth]         GET /api/auth/session → { signedIn } (cookie only, no NestJS) + sessionQuery/useSession (features/auth) — public pages must not hit /users/me (SESSION_EXPIRED → redirect /login)
-- [ ] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
+- [x] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
 - [ ] 20. [atomic-component]  molecule  ArticleCard       (new, feature — cover/placeholder, title, scientific name, summary 2 lines, DRAFT badge)
 - [ ] 21. [atomic-component]  molecule  ArticleCropCard   (new, feature — name, article count)
 - [ ] 22. [atomic-component]  organism  ArticleDiseaseInfo (new, feature — scientific name, category, affected parts, aliases)
