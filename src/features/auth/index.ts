@@ -5,6 +5,7 @@ export { AuthHeader } from "./components/auth-header";
 export { ChangePasswordForm } from "./components/change-password-form";
 export { LoginForm } from "./components/login-form";
 export { RegisterForm } from "./components/register-form";
+export { SessionHeaderActions, type TSessionHeaderActionsProps } from "./components/session-header-actions";
 export { ResetPasswordForm } from "./components/reset-password-form";
 export { sessionQuery } from "./hooks/auth.queries";
 export { useActivate } from "./hooks/use-activate";

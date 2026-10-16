@@ -32,7 +32,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 25. [atomic-component]  organism  RelatedDiseaseList (new, feature)
 - [x] 26. [atomic-component]  organism  ArticleMarkdown   (new, feature, server — prose + component map)
 - [x] 27. [atomic-component]  organism  ArticleList       (new, feature, client — category tabs + "Xem thêm")
-- [ ] 28. [atomic-component]  organism  SessionHeaderActions (new, feature user, client — useSession; signed-in → existing menus; same-size skeleton)
+- [x] 28. [atomic-component]  organism  SessionHeaderActions (new, feature auth, client — useSession; slots signedIn/guest to avoid user↔chat import cycle; same-size skeleton)
 - [ ] 29. [page]              root layout SEO: `lang="vi"`, metadataBase/title template/description, Geist subset `vietnamese`
 - [ ] 30. [page]              /benh-cay-trong/[crop]/[slug] — ISR, generateMetadata (canonical, OG, noindex DRAFT), JSON-LD, not-found, error
 - [ ] 31. [page]              /benh-cay-trong/[crop] — ISR, first page server + ArticleList, not-found

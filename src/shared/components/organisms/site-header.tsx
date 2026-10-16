@@ -31,7 +31,8 @@ export function SiteHeader({ actions, primaryAction, className }: TSiteHeaderPro
   );
 }
 
-function GuestActions() {
+/** Nút Login / Register của guest — export để trang tự quyết khi nào hiện (vd. phiên đọc ở client). */
+export function GuestActions() {
   return (
     <>
       <Button asChild variant="ghost">
