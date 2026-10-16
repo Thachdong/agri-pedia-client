@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -57,6 +58,7 @@
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
   --color-info-subtle: var(--info-subtle);
+  --color-link: var(--link);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -123,6 +125,8 @@
   --info: var(--palette-status-info);
   --info-foreground: #ffffff;
   --info-subtle: var(--palette-status-info-subtle);
+  /* Link trong nội dung (bài viết) — tách khỏi primary vì primary dark quá tối cho chữ trên nền tối */
+  --link: var(--palette-btn-main);
   --destructive: oklch(0.577 0.245 27.325);
   --border: var(--palette-border-subtle);
   --border-subtle: var(--palette-border-subtle);
@@ -178,6 +182,7 @@
   --info: #7fb3e0;
   --info-foreground: #14201a;
   --info-subtle: #1a2c3d;
+  --link: #6cc58f;
   --destructive: oklch(0.704 0.191 22.216);
   --border: #2e3b35;
   --border-subtle: #2e3b35;
@@ -236,6 +241,30 @@
   }
   .table-row-highlight {
     @apply bg-highlight-subtle text-foreground border-l-4 border-highlight;
+  }
+
+  /* --- ARTICLE (markdown bài viết bệnh) --- */
+  /* Map màu của `prose` (@tailwindcss/typography) vào semantic token — tự đổi theo `.dark`,
+     không cần `dark:prose-invert`. Dùng: `prose prose-article`. */
+  .prose.prose-article {
+    --tw-prose-body: var(--foreground);
+    --tw-prose-headings: var(--foreground);
+    --tw-prose-lead: var(--muted-foreground);
+    --tw-prose-links: var(--link);
+    --tw-prose-bold: var(--foreground);
+    --tw-prose-counters: var(--muted-foreground);
+    --tw-prose-bullets: var(--border);
+    --tw-prose-hr: var(--border-subtle);
+    --tw-prose-quotes: var(--foreground);
+    --tw-prose-quote-borders: var(--highlight);
+    --tw-prose-captions: var(--muted-foreground);
+    --tw-prose-kbd: var(--foreground);
+    --tw-prose-kbd-shadows: var(--border);
+    --tw-prose-code: var(--foreground);
+    --tw-prose-pre-code: var(--surface-foreground);
+    --tw-prose-pre-bg: var(--surface);
+    --tw-prose-th-borders: var(--border);
+    --tw-prose-td-borders: var(--border-subtle);
   }
 
   /* --- SCROLLBAR --- */
