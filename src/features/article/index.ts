@@ -8,7 +8,7 @@ export {
 } from "./constants/article.constants";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
-export { getArticle, listArticleCrops, listArticles } from "./services/article.service";
+export { getArticle, getArticleSitemap, listArticleCrops, listArticles } from "./services/article.service";
 export type {
   TArticleAffectedPart,
   TArticleCategory,
@@ -22,6 +22,7 @@ export type {
   TArticleListItem,
   TArticleListParams,
   TArticleListResponse,
+  TArticleSitemap,
   TArticleSource,
   TArticleStatus,
   TArticleVerification,

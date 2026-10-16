@@ -34,3 +34,6 @@ export type TArticleImage = TArticleDetail["images"][number];
 /** Bệnh dễ nhầm / liên quan — `path` null = bệnh chưa có bài (card không link). */
 export type TRelatedDisease = TArticleDetail["relatedDiseases"][number];
 export type TArticleSource = TArticleDetail["sources"][number];
+
+/** GET /knowledge/articles/sitemap — chỉ bài REVIEWED, không phân trang. */
+export type TArticleSitemap = TApiSchema<"ArticleSitemapResponse">;

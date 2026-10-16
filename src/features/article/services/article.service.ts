@@ -4,6 +4,7 @@ import type {
   TArticleDetail,
   TArticleListParams,
   TArticleListResponse,
+  TArticleSitemap,
 } from "../types/article.types";
 
 /*
@@ -25,3 +26,7 @@ export const getArticle = (cropSlug: string, slug: string, client: IHttpClient =
     `/knowledge/articles/${encodeURIComponent(cropSlug)}/${encodeURIComponent(slug)}`,
     options,
   );
+
+/** Bài được index (REVIEWED) + ngày cập nhật mới nhất theo cây — cho `app/sitemap.ts`. */
+export const getArticleSitemap = (client: IHttpClient = http, options?: TRequestOptions) =>
+  client.get<TArticleSitemap>("/knowledge/articles/sitemap", options);

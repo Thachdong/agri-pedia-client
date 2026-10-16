@@ -12,16 +12,20 @@ export const ARTICLE_CACHE_TAGS = {
 /** Lưới an toàn khi webhook lỗi (30 ngày) — thay đổi thường đến qua revalidateTag. */
 export const ARTICLE_REVALIDATE_SECONDS = 2_592_000;
 
-/** `options.next` cho service khi gọi từ route ISR — cache theo tag, hết hạn sau ARTICLE_REVALIDATE_SECONDS. */
+/**
+ * `options.next` cho service khi gọi từ route ISR — cache theo tag, hết hạn sau ARTICLE_REVALIDATE_SECONDS.
+ * Mỗi request chỉ gắn tag hẹp nhất: server gửi `articles` kèm MỌI lần đổi bài, gắn nó vào bài sẽ xoá cache mọi bài.
+ */
 export const articleFetchOptions = {
   crops: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
+  sitemap: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
   list: (cropSlug: string) => ({
-    next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all, ARTICLE_CACHE_TAGS.crop(cropSlug)] },
+    next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.crop(cropSlug)] },
   }),
   detail: (cropSlug: string, slug: string) => ({
     next: {
       revalidate: ARTICLE_REVALIDATE_SECONDS,
-      tags: [ARTICLE_CACHE_TAGS.all, ARTICLE_CACHE_TAGS.article(cropSlug, slug)],
+      tags: [ARTICLE_CACHE_TAGS.article(cropSlug, slug)],
     },
   }),
 } as const;
