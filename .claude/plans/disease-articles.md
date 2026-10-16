@@ -6,7 +6,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 
 - [x] 1. [data-wrapper]       `npm run gen:api`; http `next` option (revalidate/tags) → fetch; `publicServerHttp` (server-only, no cookie); env `REVALIDATE_SECRET`, `NEXT_PUBLIC_SITE_URL` (+ .env.example)
 - [x] 2. [design-token]       `@tailwindcss/typography` plugin + `prose` colors mapped to shadcn tokens
-- [ ] 3. [feature-scaffold]   feature `article` — layers: types, constants, services, hooks, utils, components
+- [x] 3. [feature-scaffold]   feature `article` — layers: types, constants, services, hooks, utils, components
 - [ ] 4. [feature-api]        GET /knowledge/articles/crops → TArticleCrop, listArticleCrops (server fetch, tag `articles`)
 - [ ] 5. [feature-api]        GET /knowledge/articles → TArticleListItem, listArticles; useArticleList (infinite, client BFF); key articles.list(crop, category)
 - [ ] 6. [feature-api]        GET /knowledge/articles/{cropSlug}/{slug} → TArticleDetail, getArticle (tag `article:<crop>:<slug>`)
