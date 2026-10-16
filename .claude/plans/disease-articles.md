@@ -21,7 +21,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 15. [atomic-component]  molecule  ArticleMeta       (new, feature — updatedAt, reviewedBy/AI, verification badge)
 - [x] 16. [atomic-component]  molecule  DraftBanner       (new, feature — Callout)
 - [x] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox; next.config images.remotePatterns moved here from 34)
-- [ ] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
+- [x] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
 - [ ] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
 - [ ] 20. [atomic-component]  molecule  ArticleCard       (new, feature — cover/placeholder, title, scientific name, summary 2 lines, DRAFT badge)
 - [ ] 21. [atomic-component]  molecule  ArticleCropCard   (new, feature — name, article count)
