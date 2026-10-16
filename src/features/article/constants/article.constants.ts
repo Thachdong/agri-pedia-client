@@ -18,6 +18,12 @@ export const articleFetchOptions = {
   list: (cropSlug: string) => ({
     next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all, ARTICLE_CACHE_TAGS.crop(cropSlug)] },
   }),
+  detail: (cropSlug: string, slug: string) => ({
+    next: {
+      revalidate: ARTICLE_REVALIDATE_SECONDS,
+      tags: [ARTICLE_CACHE_TAGS.all, ARTICLE_CACHE_TAGS.article(cropSlug, slug)],
+    },
+  }),
 } as const;
 
 /** Trang đầu danh sách bài render ở server (SEO); trang sau tải tiếp phía client. */

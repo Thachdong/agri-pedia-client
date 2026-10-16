@@ -20,3 +20,17 @@ export type TArticleListParams = {
 };
 /** Filter là một phần của query key (không gồm cursor / limit). */
 export type TArticleListFilters = Pick<TArticleListParams, "crop" | "category">;
+
+/**
+ * GET /knowledge/articles/:cropSlug/:slug — `markdown` đã resolve URL ảnh public và link `/diseases/<CODE>`;
+ * directive `:::warning`, `:::tip`, `::disease-card{code}`, `::cta-diagnosis` để client render.
+ */
+export type TArticleDetail = TApiSchema<"ArticleDetailResponse">;
+export type TArticleDisease = NonNullable<TArticleDetail["disease"]>;
+export type TArticleVerification = TArticleDisease["verification"];
+export type TArticleAffectedPart = TArticleDisease["affectedParts"][number];
+export type TArticleCover = NonNullable<TArticleDetail["cover"]>;
+export type TArticleImage = TArticleDetail["images"][number];
+/** Bệnh dễ nhầm / liên quan — `path` null = bệnh chưa có bài (card không link). */
+export type TRelatedDisease = TArticleDetail["relatedDiseases"][number];
+export type TArticleSource = TArticleDetail["sources"][number];

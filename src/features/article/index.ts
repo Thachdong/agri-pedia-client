@@ -8,14 +8,22 @@ export {
 } from "./constants/article.constants";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
-export { listArticleCrops, listArticles } from "./services/article.service";
+export { getArticle, listArticleCrops, listArticles } from "./services/article.service";
 export type {
+  TArticleAffectedPart,
   TArticleCategory,
+  TArticleCover,
   TArticleCrop,
   TArticleCropsResponse,
+  TArticleDetail,
+  TArticleDisease,
+  TArticleImage,
   TArticleListFilters,
   TArticleListItem,
   TArticleListParams,
   TArticleListResponse,
+  TArticleSource,
   TArticleStatus,
+  TArticleVerification,
+  TRelatedDisease,
 } from "./types/article.types";

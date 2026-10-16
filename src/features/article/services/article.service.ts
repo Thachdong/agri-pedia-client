@@ -1,5 +1,10 @@
 import { http, type IHttpClient, type TRequestOptions } from "@/shared/lib/http";
-import type { TArticleCropsResponse, TArticleListParams, TArticleListResponse } from "../types/article.types";
+import type {
+  TArticleCropsResponse,
+  TArticleDetail,
+  TArticleListParams,
+  TArticleListResponse,
+} from "../types/article.types";
 
 /*
  * Public — mọi hàm nhận `options` để page server truyền cache của Next (`articleFetchOptions`).
@@ -13,3 +18,10 @@ export const listArticleCrops = (client: IHttpClient = http, options?: TRequestO
 /** Tóm tắt bài của 1 cây theo tiêu đề, phân trang cursor; slug cây lạ → 404 KNOWLEDGE_CROP_NOT_FOUND. */
 export const listArticles = (params: TArticleListParams, client: IHttpClient = http, options?: TRequestOptions) =>
   client.get<TArticleListResponse>("/knowledge/articles", { ...options, query: params });
+
+/** Bài viết sẵn để render; cây hoặc bài không có → 404 KNOWLEDGE_CROP_NOT_FOUND / KNOWLEDGE_ARTICLE_NOT_FOUND. */
+export const getArticle = (cropSlug: string, slug: string, client: IHttpClient = http, options?: TRequestOptions) =>
+  client.get<TArticleDetail>(
+    `/knowledge/articles/${encodeURIComponent(cropSlug)}/${encodeURIComponent(slug)}`,
+    options,
+  );
