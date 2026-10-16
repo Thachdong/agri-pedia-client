@@ -15,7 +15,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 9. [shared-unit]        util remarkArticleDirectives (warning/tip/disease-card/cta-diagnosis, others dropped) — install react-markdown, remark-gfm, remark-directive, unist-util-visit
 - [x] 10. [shared-unit]       util remarkHeadingIds + extractArticleToc (h2/h3, Vietnamese de-accent slug, github-slugger)
 - [x] 11. [shared-unit]       util articleJsonLd (Article + BreadcrumbList, escape `<`)
-- [ ] 12. [atomic-component]  molecule  ImageLightbox      (move diagnosis → shared)
+- [x] 12. [atomic-component]  molecule  ImageLightbox      (move diagnosis → shared)
 - [ ] 13. [atomic-component]  molecule  Breadcrumb        (new, shared)
 - [ ] 14. [atomic-component]  molecule  CategoryPlaceholder (new, feature — icon block per DISEASE/PEST/DISORDER, used when no cover)
 - [ ] 15. [atomic-component]  molecule  ArticleMeta       (new, feature — updatedAt, reviewedBy/AI, verification badge)

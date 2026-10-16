@@ -4,14 +4,13 @@ import { ImageOffIcon, Maximize2Icon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Badge, type TBadgeTone } from "@/shared/components/atoms";
-import { Callout } from "@/shared/components/molecules";
+import { Callout, ImageLightbox } from "@/shared/components/molecules";
 import { cn } from "@/shared/lib/utils";
 import { IMAGE_STATUS_LABELS } from "../constants/diagnosis.constants";
 import { useCropLabels } from "../hooks/use-crop-labels";
 import type { TDiagnosisImage, TDiagnosisImageStatus } from "../types/diagnosis.types";
 import { resultImageAnchorId } from "../utils/diagnosis-view.util";
 import { DiagnosisResultTable } from "./diagnosis-result-table";
-import { ImageLightbox } from "./image-lightbox";
 import { RegionOverlay } from "./region-overlay";
 
 const IMAGE_STATUS_TONES: Record<TDiagnosisImageStatus, TBadgeTone> = {
@@ -115,7 +114,8 @@ export function DiagnosisResultImage({ image, cropType, onOpenDisease, className
           onOpenChange={setLightboxOpen}
           url={image.url}
           title={title}
-          regions={image.regions}
+          description="Ảnh phóng to kèm khung vùng bệnh"
+          overlay={<RegionOverlay regions={image.regions} />}
         />
       )}
     </article>

@@ -9,3 +9,4 @@ export { MultiImageInput, type TExistingImage, type TMultiImageInputProps } from
 export { MediaGallery, type TGalleryMedia, type TMediaGalleryProps } from "./media-gallery";
 export { Callout, type TCalloutProps } from "./callout";
 export { LoginRequiredDialog, type TLoginRequiredDialogProps } from "./login-required-dialog";
+export { ImageLightbox, type TImageLightboxProps } from "./image-lightbox";
