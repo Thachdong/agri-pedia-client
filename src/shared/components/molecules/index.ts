@@ -10,3 +10,4 @@ export { MediaGallery, type TGalleryMedia, type TMediaGalleryProps } from "./med
 export { Callout, type TCalloutProps } from "./callout";
 export { LoginRequiredDialog, type TLoginRequiredDialogProps } from "./login-required-dialog";
 export { ImageLightbox, type TImageLightboxProps } from "./image-lightbox";
+export { Breadcrumb, type TBreadcrumbItem, type TBreadcrumbProps } from "./breadcrumb";
