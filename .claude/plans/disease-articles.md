@@ -8,7 +8,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 2. [design-token]       `@tailwindcss/typography` plugin + `prose` colors mapped to shadcn tokens
 - [x] 3. [feature-scaffold]   feature `article` — layers: types, constants, services, hooks, utils, components
 - [x] 4. [feature-api]        GET /knowledge/articles/crops → TArticleCrop, listArticleCrops (server fetch, tag `articles`)
-- [ ] 5. [feature-api]        GET /knowledge/articles → TArticleListItem, listArticles; useArticleList (infinite, client BFF); key articles.list(crop, category)
+- [x] 5. [feature-api]        GET /knowledge/articles → TArticleListItem, listArticles; useArticleList (infinite, client BFF); key articles.list(crop, category)
 - [ ] 6. [feature-api]        GET /knowledge/articles/{cropSlug}/{slug} → TArticleDetail, getArticle (tag `article:<crop>:<slug>`)
 - [ ] 7. [feature-api]        GET /knowledge/articles/sitemap → TArticleSitemap, getArticleSitemap
 - [ ] 8. [feature-api]        GET /knowledge/diseases/{code}: TDisease gets `article`; getDiseaseArticlePath (public, tag `article-disease:<CODE>`)

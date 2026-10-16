@@ -1,3 +1,4 @@
+import type { TArticleListFilters } from "@/features/article";
 import type { TNearbyDistributorsParams } from "@/features/distributor";
 import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features/review";
 
@@ -79,5 +80,11 @@ export const queryKeys = {
     crops: () => [...queryKeys.knowledge.all, "crops"] as const,
     /** Bài viết 1 bệnh theo diseaseCode (public). */
     disease: (code: string) => [...queryKeys.knowledge.all, "disease", code] as const,
+  },
+  articles: {
+    all: ["articles"] as const,
+    lists: () => [...queryKeys.articles.all, "list"] as const,
+    /** Bài của 1 cây theo tab category (infinite, cursor) — "Xem thêm" ở /benh-cay-trong/[crop]. */
+    list: (filters: TArticleListFilters) => [...queryKeys.articles.lists(), filters] as const,
   },
 } as const;
