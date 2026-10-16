@@ -11,11 +11,10 @@ export {
   PLANT_PART_LABELS,
 } from "./constants/diagnosis.constants";
 export { diagnosisHistoryQuery, diagnosisQuery } from "./hooks/diagnosis.queries";
-export { cropsQuery, diseaseQuery } from "./hooks/knowledge.queries";
+export { cropsQuery } from "./hooks/knowledge.queries";
 export { useCreateDiagnosis } from "./hooks/use-create-diagnosis";
 export { useCrops } from "./hooks/use-crops";
 export { useDiagnosis } from "./hooks/use-diagnosis";
 export { useDiagnosisHistory } from "./hooks/use-diagnosis-history";
-export { useDisease } from "./hooks/use-disease";
 export type { TDiagnosis, TDiagnosisListItem, TDiagnosisStatus, TPlantPart } from "./types/diagnosis.types";
 export type { TCrop, TCropsResponse, TDisease } from "./types/knowledge.types";

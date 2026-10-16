@@ -39,7 +39,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 32. [page]              /benh-cay-trong — ISR, crop cards; link "Bệnh cây trồng" in home / header
 - [x] 33. [page]              /diseases/[code] → permanentRedirect(article.path) / notFound(); drop loading/error; "Đọc bài viết đầy đủ" in disease-report-dialog
 - [x] 34. [page]              /api/revalidate (secret timingSafeEqual, tag regex, revalidateTag(tag, "max")), sitemap.ts, robots.ts
-- [ ] 35. [arch-review]       + build check: 3 routes ISR (not ƒ)
+- [x] 35. [arch-review]       + build check: 3 routes ISR (not ƒ)
 
 Components (in order):
   [molecule]  Callout              reuse  shared
