@@ -62,7 +62,7 @@ export async function generateMetadata({ params }: PageProps<"/profile/[id]">): 
   const { profile } = await loadProfilePage(id);
   const businessType = profile.bussinessType ? BUSINESS_TYPE_LABELS[profile.bussinessType] : "Nhà phân phối";
   return {
-    title: `${profile.username} | AgriPedia`,
+    title: profile.username,
     description: profile.bio?.slice(0, 160) || `${profile.username} — ${businessType} trên AgriPedia.`,
   };
 }

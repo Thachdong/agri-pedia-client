@@ -3,7 +3,7 @@ import { AuthFooterLinks, AuthHeader, ChangePasswordForm } from "@/features/auth
 import { AuthLayout } from "@/shared/components/templates";
 
 export const metadata: Metadata = {
-  title: "Đặt mật khẩu mới | AgriPedia",
+  title: "Đặt mật khẩu mới",
   description: "Nhập mã xác nhận đã gửi tới email/số điện thoại và đặt mật khẩu mới.",
 };
 

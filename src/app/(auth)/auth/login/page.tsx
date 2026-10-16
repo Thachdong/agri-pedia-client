@@ -4,7 +4,7 @@ import { AuthLayout } from "@/shared/components/templates";
 import { LOGIN_NEXT_PARAM } from "@/shared/lib/auth/auth.constants";
 
 export const metadata: Metadata = {
-  title: "Đăng nhập | AgriPedia",
+  title: "Đăng nhập",
   description: "Đăng nhập AgriPedia bằng email hoặc số điện thoại.",
 };
 

@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: PageProps<"/diseases/[code]">
   const { code } = await params;
   const { disease } = await loadDiseasePage(code);
   return {
-    title: `${disease.nameVi} | AgriPedia`,
+    title: disease.nameVi,
     description: disease.symptoms[0]?.slice(0, 160) || `Thông tin bệnh ${disease.nameVi} trên cây trồng.`,
   };
 }

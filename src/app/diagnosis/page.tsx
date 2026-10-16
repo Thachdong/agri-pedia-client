@@ -10,7 +10,7 @@ import { HydrateQueries, prefetch } from "@/shared/lib/query/server";
 import { RealtimeProvider } from "@/shared/lib/realtime";
 
 export const metadata: Metadata = {
-  title: "Lịch sử chẩn đoán | AgriPedia",
+  title: "Lịch sử chẩn đoán",
   description: "Các lần chẩn đoán bệnh cây trồng của bạn.",
   robots: { index: false },
 };

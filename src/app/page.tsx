@@ -14,7 +14,7 @@ import { RealtimeProvider } from "@/shared/lib/realtime";
 import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/server";
 
 export const metadata: Metadata = {
-  title: "AgriPedia | Tìm nhà phân phối gần bạn",
+  title: { absolute: "AgriPedia | Tìm nhà phân phối gần bạn" },
   description: "Bản đồ và danh sách nhà phân phối vật tư, giống cây trồng, giống thuỷ sản gần bạn hoặc trên toàn quốc.",
 };
 
