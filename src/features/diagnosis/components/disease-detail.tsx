@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRightIcon, ExternalLinkIcon, RefreshCwIcon } from "lucide-react";
+import { ArrowRightIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { Badge, Button } from "@/shared/components/atoms";
 import { Callout, InfoTable } from "@/shared/components/molecules";
@@ -11,56 +11,18 @@ import {
   CATEGORY_LABELS,
 } from "../constants/diagnosis.constants";
 import { useCropLabels } from "../hooks/use-crop-labels";
-import { useDisease } from "../hooks/use-disease";
 import type { TDisease } from "../types/knowledge.types";
-
-export type TDiseaseDetailProps = { code: string; className?: string };
-
-/** Bài viết 1 bệnh (public, dữ liệu prefetch ở page). Không có mục thuốc hoá học. */
-export function DiseaseDetail({ code, className }: TDiseaseDetailProps) {
-  const query = useDisease(code);
-
-  if (query.isPending) {
-    return (
-      <div className="flex animate-pulse flex-col gap-4" aria-busy aria-label="Đang tải bài viết">
-        <div className="h-8 w-2/3 rounded bg-muted" />
-        <div className="h-4 w-1/2 rounded bg-muted" />
-        <div className="h-48 rounded-lg bg-muted" />
-      </div>
-    );
-  }
-
-  if (query.isError) {
-    return (
-      <Callout
-        tone="danger"
-        role="alert"
-        title="Không tải được bài viết"
-        action={
-          <Button size="sm" variant="outline" onClick={() => void query.refetch()}>
-            <RefreshCwIcon aria-hidden />
-            Thử lại
-          </Button>
-        }
-      >
-        {query.error.message}
-      </Callout>
-    );
-  }
-
-  return <DiseaseArticle disease={query.data} className={className} />;
-}
 
 export type TDiseaseArticleProps = {
   disease: TDisease;
-  /** Cây đang xem (từ kết quả chẩn đoán) — nhãn bộ phận / giai đoạn theo cây; trang bệnh độc lập dùng nhãn chung. */
+  /** Cây đang xem (từ kết quả chẩn đoán) — nhãn bộ phận / giai đoạn theo cây; không có → nhãn chung. */
   cropType?: string;
-  /** Phần tử tiêu đề — trang: h1; dialog: DialogTitle. */
+  /** Phần tử tiêu đề — mặc định h1; dialog: DialogTitle. */
   titleAs?: React.ElementType;
   className?: string;
 };
 
-/** Nội dung đầy đủ của 1 bệnh — dùng ở trang /diseases/[code] và dialog báo cáo bệnh. */
+/** Nội dung đầy đủ của 1 bệnh — dialog báo cáo bệnh ở trang kết quả chẩn đoán; có bài viết → link "Đọc bài viết đầy đủ". */
 export function DiseaseArticle({ disease, cropType, titleAs: Title = "h1", className }: TDiseaseArticleProps) {
   const { partLabel, stageLabel } = useCropLabels(cropType);
   const subtitle = [disease.nameEn, disease.scientificName].filter(Boolean);
@@ -86,6 +48,14 @@ export function DiseaseArticle({ disease, cropType, titleAs: Title = "h1", class
             </p>
           )}
         </div>
+        {disease.article && (
+          <Button asChild variant="outline" size="sm" className="self-start">
+            <Link href={disease.article.path}>
+              Đọc bài viết đầy đủ
+              <ArrowRightIcon aria-hidden />
+            </Link>
+          </Button>
+        )}
         <InfoTable
           items={[
             { label: "Tên khác", value: disease.aliases.join(", ") },

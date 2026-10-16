@@ -1,85 +1,30 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { cache } from "react";
-import { ChatRoomsMenu } from "@/features/chat";
-import { diseaseQuery, DiseaseDetail, StartDiagnosisButton, type TDisease } from "@/features/diagnosis";
-import { NotificationMenu } from "@/features/notification";
-import { meQuery, UserMenu } from "@/features/user";
-import { SiteHeader } from "@/shared/components/organisms";
-import { ContentLayout } from "@/shared/components/templates";
-import { hasSession } from "@/shared/lib/auth";
+import { notFound, permanentRedirect } from "next/navigation";
+import { articleFetchOptions, getDiseaseArticleLink } from "@/features/article";
 import { isAppError } from "@/shared/lib/http";
-import { serverHttp } from "@/shared/lib/http/server";
-import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/server";
-import { RealtimeProvider } from "@/shared/lib/realtime";
+import { publicServerHttp } from "@/shared/lib/http/public-server";
+
+/** ISR 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — bài mới / đổi slug đến qua tag `article-disease:<CODE>`. */
+export const revalidate = 2592000;
+
+export function generateStaticParams() {
+  return [];
+}
 
 /**
- * Dữ liệu trang — `cache` để generateMetadata và page dùng chung 1 lần gọi NestJS mỗi request.
- * Bài viết là query bắt buộc: 404 KNOWLEDGE_DISEASE_NOT_FOUND hoặc 400 (mã sai dạng) → notFound(). Guest không gọi /users/me.
+ * Link cũ / link từ kết quả chẩn đoán: redirect 308 sang bài viết của bệnh (`/benh-cay-trong/<crop>/<slug>`).
+ * Bệnh chưa có bài, mã lạ (404) hoặc sai dạng (400) → notFound().
  */
-const loadDiseasePage = cache(async (code: string) => {
-  const signedIn = await hasSession();
-  const query = diseaseQuery(code, serverHttp);
+export default async function DiseaseRedirectPage({ params }: PageProps<"/diseases/[code]">) {
+  const { code } = await params;
 
-  let state;
+  let article;
   try {
-    state = await prefetch(signedIn ? [meQuery(serverHttp)] : [], {
-      required: [query],
-    });
+    article = await getDiseaseArticleLink(code, publicServerHttp, articleFetchOptions.diseaseLink(code));
   } catch (error) {
     if (isAppError(error) && (error.status === 404 || error.status === 400)) notFound();
     throw error;
   }
 
-  const disease = getPrefetchedData<TDisease>(state, query.queryKey);
-  if (!disease) notFound();
-  return { state, disease, signedIn };
-});
-
-export async function generateMetadata({ params }: PageProps<"/diseases/[code]">): Promise<Metadata> {
-  const { code } = await params;
-  const { disease } = await loadDiseasePage(code);
-  return {
-    title: disease.nameVi,
-    description: disease.symptoms[0]?.slice(0, 160) || `Thông tin bệnh ${disease.nameVi} trên cây trồng.`,
-  };
-}
-
-/** Bài viết bệnh (public) — mở từ "Bài viết liên quan" của kết quả chẩn đoán hoặc link "Bệnh dễ nhầm". */
-export default async function DiseasePage({ params }: PageProps<"/diseases/[code]">) {
-  const { code } = await params;
-  const { state, signedIn } = await loadDiseasePage(code);
-
-  if (!signedIn) {
-    return (
-      <HydrateQueries state={state}>
-        <ContentLayout header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}>
-          <DiseaseDetail code={code} />
-        </ContentLayout>
-      </HydrateQueries>
-    );
-  }
-
-  return (
-    <HydrateQueries state={state}>
-      <RealtimeProvider>
-        <ContentLayout
-          header={
-            <SiteHeader
-              actions={
-                <>
-                  <StartDiagnosisButton compact />
-                  <NotificationMenu />
-                  <ChatRoomsMenu />
-                  <UserMenu />
-                </>
-              }
-            />
-          }
-        >
-          <DiseaseDetail code={code} />
-        </ContentLayout>
-      </RealtimeProvider>
-    </HydrateQueries>
-  );
+  if (!article) notFound();
+  permanentRedirect(article.path);
 }

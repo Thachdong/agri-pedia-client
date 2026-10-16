@@ -3,7 +3,6 @@ export { CropNotSupportedRedirect } from "./components/crop-not-supported-redire
 export { DiagnosisForm, type TDiagnosisFormProps } from "./components/diagnosis-form";
 export { DiagnosisHistoryList, type TDiagnosisHistoryListProps } from "./components/diagnosis-history-list";
 export { DiagnosisResult, type TDiagnosisResultProps } from "./components/diagnosis-result";
-export { DiseaseDetail, type TDiseaseDetailProps } from "./components/disease-detail";
 export { StartDiagnosisButton, type TStartDiagnosisButtonProps } from "./components/start-diagnosis-button";
 export {
   AGENT_TYPE_LABELS,

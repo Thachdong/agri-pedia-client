@@ -37,7 +37,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 30. [page]              /benh-cay-trong/[crop]/[slug] — ISR, generateMetadata (canonical, OG, noindex DRAFT), JSON-LD, not-found, error; + layout /benh-cay-trong (SessionHeaderActions), organism ArticleDetail; home moved to (home) group so its loading.tsx no longer streams every route (real 404)
 - [x] 31. [page]              /benh-cay-trong/[crop] — ISR, first page server + ArticleList, not-found
 - [x] 32. [page]              /benh-cay-trong — ISR, crop cards; link "Bệnh cây trồng" in home / header
-- [ ] 33. [page]              /diseases/[code] → permanentRedirect(article.path) / notFound(); drop loading/error; "Đọc bài viết đầy đủ" in disease-report-dialog
+- [x] 33. [page]              /diseases/[code] → permanentRedirect(article.path) / notFound(); drop loading/error; "Đọc bài viết đầy đủ" in disease-report-dialog
 - [ ] 34. [page]              /api/revalidate (secret timingSafeEqual, tag regex, revalidateTag(tag, "max")), sitemap.ts, robots.ts
 - [ ] 35. [arch-review]       + build check: 3 routes ISR (not ƒ)
 
