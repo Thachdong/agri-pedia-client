@@ -18,6 +18,11 @@ import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features
 export const queryKeys = {
   /** Prefix của MỌI query — chỉ dùng khi đổi phiên (login/logout) làm cả cache stale. */
   all: [] as const,
+  auth: {
+    all: ["auth"] as const,
+    /** Có cookie phiên hay không (BFF) — trang public ISR dùng thay cho /users/me để không bị đẩy về /login. */
+    session: () => [...queryKeys.auth.all, "session"] as const,
+  },
   location: {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,

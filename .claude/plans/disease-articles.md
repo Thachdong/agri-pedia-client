@@ -22,6 +22,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 16. [atomic-component]  molecule  DraftBanner       (new, feature — Callout)
 - [x] 17. [atomic-component]  molecule  ArticleFigure     (new, feature — next/image + caption/credit + lightbox; next.config images.remotePatterns moved here from 34)
 - [x] 18. [atomic-component]  molecule  DiseaseCard       (new, feature — related disease, path null → no link)
+- [x] 18b. [bff-auth]         GET /api/auth/session → { signedIn } (cookie only, no NestJS) + sessionQuery/useSession (features/auth) — public pages must not hit /users/me (SESSION_EXPIRED → redirect /login)
 - [ ] 19. [atomic-component]  molecule  ArticleCtaButton  (new, feature, client — diagnosisEnabled; guest → LoginRequiredDialog)
 - [ ] 20. [atomic-component]  molecule  ArticleCard       (new, feature — cover/placeholder, title, scientific name, summary 2 lines, DRAFT badge)
 - [ ] 21. [atomic-component]  molecule  ArticleCropCard   (new, feature — name, article count)
@@ -31,7 +32,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [ ] 25. [atomic-component]  organism  RelatedDiseaseList (new, feature)
 - [ ] 26. [atomic-component]  organism  ArticleMarkdown   (new, feature, server — prose + component map)
 - [ ] 27. [atomic-component]  organism  ArticleList       (new, feature, client — category tabs + "Xem thêm")
-- [ ] 28. [atomic-component]  organism  SessionHeaderActions (new, feature user, client — meQuery via BFF, same-size skeleton)
+- [ ] 28. [atomic-component]  organism  SessionHeaderActions (new, feature user, client — useSession; signed-in → existing menus; same-size skeleton)
 - [ ] 29. [page]              root layout SEO: `lang="vi"`, metadataBase/title template/description, Geist subset `vietnamese`
 - [ ] 30. [page]              /benh-cay-trong/[crop]/[slug] — ISR, generateMetadata (canonical, OG, noindex DRAFT), JSON-LD, not-found, error
 - [ ] 31. [page]              /benh-cay-trong/[crop] — ISR, first page server + ArticleList, not-found
