@@ -8,7 +8,7 @@ export {
 } from "./constants/article.constants";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
-export { getArticle, getArticleSitemap, listArticleCrops, listArticles } from "./services/article.service";
+export { getArticle, getArticleSitemap, getDiseaseArticleLink, listArticleCrops, listArticles } from "./services/article.service";
 export type {
   TArticleAffectedPart,
   TArticleCategory,
@@ -26,5 +26,6 @@ export type {
   TArticleSource,
   TArticleStatus,
   TArticleVerification,
+  TDiseaseArticleLink,
   TRelatedDisease,
 } from "./types/article.types";

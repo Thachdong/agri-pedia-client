@@ -37,3 +37,8 @@ export type TArticleSource = TArticleDetail["sources"][number];
 
 /** GET /knowledge/articles/sitemap — chỉ bài REVIEWED, không phân trang. */
 export type TArticleSitemap = TApiSchema<"ArticleSitemapResponse">;
+
+/** `article` của GET /knowledge/diseases/:code — đường dẫn + trạng thái bài của bệnh, null = chưa có bài. */
+export type TDiseaseArticleLink = TApiSchema<"DiseaseArticleResponse">;
+/** Phần của GET /knowledge/diseases/:code mà feature article cần. */
+export type TDiseaseArticleSource = Pick<TApiSchema<"DiseaseDetailResponse">, "article">;

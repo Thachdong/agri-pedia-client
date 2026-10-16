@@ -18,6 +18,9 @@ export const ARTICLE_REVALIDATE_SECONDS = 2_592_000;
  */
 export const articleFetchOptions = {
   crops: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
+  diseaseLink: (diseaseCode: string) => ({
+    next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.disease(diseaseCode)] },
+  }),
   sitemap: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
   list: (cropSlug: string) => ({
     next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.crop(cropSlug)] },
