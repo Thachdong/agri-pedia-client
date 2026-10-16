@@ -2,33 +2,30 @@ import type { NextConfig } from "next";
 import type { RemotePattern } from "next/dist/shared/lib/image-config";
 
 /**
- * Ảnh bài viết bệnh (object `public/` của storage, URL bất biến) được next/image tối ưu.
- * Mặc định server trả URL Firebase `?alt=media`; nếu server đặt STORAGE_PUBLIC_BASE_URL (CDN) thì đặt
- * cùng giá trị cho ARTICLE_IMAGE_BASE_URL ở đây.
+ * Ảnh bài viết bệnh nằm ở bucket public riêng của server (URL bất biến) → next/image tối ưu được.
+ * ARTICLE_IMAGE_BASE_URL = base URL ảnh public của server: STORAGE_PUBLIC_BASE_URL (CDN) nếu server đặt,
+ * không thì `https://storage.googleapis.com/<FIREBASE_PUBLIC_STORAGE_BUCKET>`. Chỉ cho phép đúng prefix này.
  */
-const articleImagePatterns: RemotePattern[] = [
-  {
-    protocol: "https",
-    hostname: "firebasestorage.googleapis.com",
-    pathname: "/v0/b/*/o/public%2F**",
-    search: "?alt=media",
-  },
-];
-
-const articleImageBaseUrl = process.env.ARTICLE_IMAGE_BASE_URL;
-if (articleImageBaseUrl) {
-  const base = new URL(articleImageBaseUrl);
-  articleImagePatterns.push({
-    protocol: base.protocol.replace(":", "") as "http" | "https",
-    hostname: base.hostname,
-    port: base.port,
-    pathname: `${base.pathname.replace(/\/+$/, "")}/**`,
-    search: "",
-  });
+function articleImagePatterns(): RemotePattern[] {
+  const baseUrl = process.env.ARTICLE_IMAGE_BASE_URL;
+  if (!baseUrl) {
+    console.warn("[next.config] ARTICLE_IMAGE_BASE_URL chưa đặt — ảnh bài viết sẽ không hiển thị. Xem .env.example.");
+    return [];
+  }
+  const base = new URL(baseUrl);
+  return [
+    {
+      protocol: base.protocol.replace(":", "") as "http" | "https",
+      hostname: base.hostname,
+      port: base.port,
+      pathname: `${base.pathname.replace(/\/+$/, "")}/**`,
+      search: "",
+    },
+  ];
 }
 
 const nextConfig: NextConfig = {
-  images: { remotePatterns: articleImagePatterns },
+  images: { remotePatterns: articleImagePatterns() },
 };
 
 export default nextConfig;
