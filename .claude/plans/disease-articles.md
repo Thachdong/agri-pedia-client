@@ -12,7 +12,7 @@ API: GET /knowledge/articles/crops, GET /knowledge/articles, GET /knowledge/arti
 - [x] 6. [feature-api]        GET /knowledge/articles/{cropSlug}/{slug} → TArticleDetail, getArticle (tag `article:<crop>:<slug>`)
 - [x] 7. [feature-api]        GET /knowledge/articles/sitemap → TArticleSitemap, getArticleSitemap
 - [x] 8. [feature-api]        GET /knowledge/diseases/{code}: TDisease gets `article`; getDiseaseArticlePath (public, tag `article-disease:<CODE>`)
-- [ ] 9. [shared-unit]        util remarkArticleDirectives (warning/tip/disease-card/cta-diagnosis, others dropped) — install react-markdown, remark-gfm, remark-directive, unist-util-visit
+- [x] 9. [shared-unit]        util remarkArticleDirectives (warning/tip/disease-card/cta-diagnosis, others dropped) — install react-markdown, remark-gfm, remark-directive, unist-util-visit
 - [ ] 10. [shared-unit]       util rehypeHeadingIds + extractToc (h2/h3, Vietnamese de-accent slug, github-slugger)
 - [ ] 11. [shared-unit]       util articleJsonLd (Article + BreadcrumbList, escape `<`)
 - [ ] 12. [atomic-component]  molecule  ImageLightbox      (move diagnosis → shared)
