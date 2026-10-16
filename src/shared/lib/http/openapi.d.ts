@@ -710,9 +710,89 @@ export interface paths {
         };
         /**
          * Get the Vietnamese detail of a disease (public)
-         * @description No chemical recommendations. When `verification` is not SOURCED, show that experts have not confirmed the content yet.
+         * @description No chemical recommendations. When `verification` is not SOURCED, show that experts have not confirmed the content yet. `article` = path and status of the disease's article (GET /knowledge/articles/:cropSlug/:slug), null when it has none.
          */
         get: operations["KnowledgeController_disease"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/articles/crops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List crops that have disease articles (public)
+         * @description Crops with at least one article, by display order, including crops not yet enabled for diagnosis (`diagnosisEnabled` = false). `slug` is the value for `crop` of GET /knowledge/articles. Sent with `Cache-Control: public, max-age=60`.
+         */
+        get: operations["ArticleController_crops"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/articles/sitemap": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List indexable articles for the sitemap (public)
+         * @description REVIEWED articles only, unpaginated; `crops[].updatedAt` = latest update of the crop's articles. Sent with `Cache-Control: public, max-age=60`.
+         */
+        get: operations["ArticleController_sitemap"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/articles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List article summaries of a crop, by title (public)
+         * @description Vietnamese title order, keyset-paginated (`nextCursor`). DRAFT articles are included: render them noindex. `category` filters by the category of the article's disease. Sent with `Cache-Control: public, max-age=60`.
+         */
+        get: operations["ArticleController_list"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/knowledge/articles/{cropSlug}/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get a disease article, ready to render (public)
+         * @description `markdown` has public image URLs and `/diseases/<CODE>` links turned into article paths (plain text when that disease has no article); directives `:::warning`, `:::tip`, `::disease-card{code="..."}` and `::cta-diagnosis` stay for the client. `relatedDiseases` feeds the cards. Sent with `Cache-Control: public, max-age=60`.
+         */
+        get: operations["ArticleController_detail"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1275,6 +1355,11 @@ export interface components {
             title: string;
             url: string;
         };
+        DiseaseArticleResponse: {
+            path: string;
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+        };
         DiseaseDetailResponse: {
             code: string;
             nameVi: string;
@@ -1298,6 +1383,130 @@ export interface components {
             /** @enum {string} */
             verification: "SOURCED" | "SECONDARY" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
             kbVersion: string;
+            article: components["schemas"]["DiseaseArticleResponse"] | null;
+        };
+        ArticleCropItemResponse: {
+            code: string;
+            slug: string;
+            nameVi: string;
+            diagnosisEnabled: boolean;
+            articleCount: number;
+        };
+        ListArticleCropsResponse: {
+            crops: components["schemas"]["ArticleCropItemResponse"][];
+        };
+        ArticleSitemapCropResponse: {
+            slug: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ArticleSitemapItemResponse: {
+            path: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ArticleSitemapResponse: {
+            crops: components["schemas"]["ArticleSitemapCropResponse"][];
+            articles: components["schemas"]["ArticleSitemapItemResponse"][];
+        };
+        ArticleCropResponse: {
+            code: string;
+            slug: string;
+            nameVi: string;
+            diagnosisEnabled: boolean;
+        };
+        ArticleDiseaseSummaryResponse: {
+            code: string;
+            nameVi: string;
+            scientificName: string | null;
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+        };
+        ArticleListItemResponse: {
+            path: string;
+            slug: string;
+            title: string;
+            summary: string;
+            coverUrl: string | null;
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+            /** Format: date-time */
+            updatedAt: string;
+            disease: components["schemas"]["ArticleDiseaseSummaryResponse"] | null;
+        };
+        ListArticlesResponse: {
+            crop: components["schemas"]["ArticleCropResponse"];
+            articles: components["schemas"]["ArticleListItemResponse"][];
+            nextCursor: string | null;
+        };
+        ArticleDiseaseResponse: {
+            code: string;
+            nameVi: string;
+            nameEn: string;
+            scientificName: string | null;
+            aliases: string[];
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+            /** @enum {string} */
+            agentType: "FUNGUS" | "OOMYCETE" | "ALGA" | "BACTERIA" | "VIRUS" | "NEMATODE" | "INSECT" | "MITE" | "MOLLUSC" | "VERTEBRATE" | "NUTRIENT" | "ABIOTIC" | "COMPLEX" | "UNKNOWN";
+            affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL")[];
+            /** @enum {string} */
+            verification: "SOURCED" | "SECONDARY" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+        };
+        ArticleCoverResponse: {
+            url: string;
+            alt: string;
+            width: number;
+            height: number;
+        };
+        ArticleImageCreditResponse: {
+            source: string;
+            author: string;
+            license: string;
+            url: string;
+        };
+        ArticleImageResponse: {
+            url: string;
+            alt: string;
+            caption: string | null;
+            width: number;
+            height: number;
+            credit: components["schemas"]["ArticleImageCreditResponse"];
+        };
+        RelatedDiseaseResponse: {
+            code: string;
+            nameVi: string;
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+            path: string | null;
+            coverUrl: string | null;
+        };
+        ArticleSourceResponse: {
+            title: string;
+            url: string;
+        };
+        ArticleDetailResponse: {
+            id: string;
+            path: string;
+            slug: string;
+            title: string;
+            summary: string;
+            markdown: string;
+            crop: components["schemas"]["ArticleCropResponse"];
+            disease: components["schemas"]["ArticleDiseaseResponse"] | null;
+            cover: components["schemas"]["ArticleCoverResponse"] | null;
+            images: components["schemas"]["ArticleImageResponse"][];
+            relatedDiseases: components["schemas"]["RelatedDiseaseResponse"][];
+            sources: components["schemas"]["ArticleSourceResponse"][];
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+            reviewedBy: string | null;
+            /** Format: date-time */
+            reviewedAt: string | null;
+            /** Format: date-time */
+            publishedAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
         CreateDiagnosisResponse: {
             id: string;
@@ -3187,6 +3396,126 @@ export interface operations {
                 };
             };
             /** @description KNOWLEDGE_DISEASE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ArticleController_crops: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListArticleCropsResponse"];
+                };
+            };
+        };
+    };
+    ArticleController_sitemap: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArticleSitemapResponse"];
+                };
+            };
+        };
+    };
+    ArticleController_list: {
+        parameters: {
+            query: {
+                crop: string;
+                category?: "DISEASE" | "PEST" | "DISORDER";
+                cursor?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListArticlesResponse"];
+                };
+            };
+            /** @description Request validation failed, or: KNOWLEDGE_ARTICLE_INVALID_CURSOR */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    ArticleController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cropSlug: string;
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArticleDetailResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_CROP_NOT_FOUND, KNOWLEDGE_ARTICLE_NOT_FOUND */
             404: {
                 headers: {
                     [name: string]: unknown;

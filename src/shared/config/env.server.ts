@@ -6,6 +6,8 @@ type TServerEnv = {
   API_URL: string;
   /** Khớp AUTH_REFRESH_TOKEN_TTL_SECONDS của server — maxAge của cookie refresh token. */
   AUTH_REFRESH_TOKEN_TTL_SECONDS: number;
+  /** Secret của webhook POST /api/revalidate (header `x-revalidate-secret`). Bỏ trống → webhook luôn 401. */
+  REVALIDATE_SECRET?: string;
 };
 
 const serverEnvSchema = v.object<TServerEnv>({
@@ -15,12 +17,14 @@ const serverEnvSchema = v.object<TServerEnv>({
     .replace(/\/+$/, "")
     .required(),
   AUTH_REFRESH_TOKEN_TTL_SECONDS: v.number().integer().positive().default(2_592_000),
+  REVALIDATE_SECRET: v.string().min(32).empty(""),
 });
 
 const { value, error } = serverEnvSchema.validate(
   {
     API_URL: process.env.API_URL,
     AUTH_REFRESH_TOKEN_TTL_SECONDS: process.env.AUTH_REFRESH_TOKEN_TTL_SECONDS,
+    REVALIDATE_SECRET: process.env.REVALIDATE_SECRET,
   },
   { stripUnknown: true },
 );

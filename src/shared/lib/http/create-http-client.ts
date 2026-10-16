@@ -61,6 +61,7 @@ export function createHttpClient(config: TCreateHttpClientConfig): IHttpClient {
         credentials: config.credentials,
         signal: options?.signal,
         cache: options?.cache,
+        next: options?.next,
       });
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === "AbortError") throw cause;
