@@ -5,7 +5,12 @@ export { DiagnosisHistoryList, type TDiagnosisHistoryListProps } from "./compone
 export { DiagnosisResult, type TDiagnosisResultProps } from "./components/diagnosis-result";
 export { DiseaseDetail, type TDiseaseDetailProps } from "./components/disease-detail";
 export { StartDiagnosisButton, type TStartDiagnosisButtonProps } from "./components/start-diagnosis-button";
-export { DIAGNOSIS_ERROR_CODE } from "./constants/diagnosis.constants";
+export {
+  AGENT_TYPE_LABELS,
+  CATEGORY_LABELS,
+  DIAGNOSIS_ERROR_CODE,
+  PLANT_PART_LABELS,
+} from "./constants/diagnosis.constants";
 export { diagnosisHistoryQuery, diagnosisQuery } from "./hooks/diagnosis.queries";
 export { cropsQuery, diseaseQuery } from "./hooks/knowledge.queries";
 export { useCreateDiagnosis } from "./hooks/use-create-diagnosis";
