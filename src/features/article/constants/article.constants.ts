@@ -42,3 +42,13 @@ export const ARTICLE_ERROR_CODE = {
   articleNotFound: "KNOWLEDGE_ARTICLE_NOT_FOUND",
   invalidCursor: "KNOWLEDGE_ARTICLE_INVALID_CURSOR",
 } as const;
+
+/** Tab lọc ở trang danh sách bài — `all` = không gửi `category`. Nhãn ngắn (khác CATEGORY_LABELS của diagnosis). */
+export const ARTICLE_CATEGORY_TABS = [
+  { value: "all", label: "Tất cả" },
+  { value: "DISEASE", label: "Bệnh" },
+  { value: "PEST", label: "Sâu hại" },
+  { value: "DISORDER", label: "Rối loạn" },
+] as const;
+
+export type TArticleCategoryTab = (typeof ARTICLE_CATEGORY_TABS)[number]["value"];
