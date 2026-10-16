@@ -20,6 +20,13 @@ export const ROUTES = {
     new: (crop: string) => `/diagnosis/new?crop=${encodeURIComponent(crop)}`,
     detail: (id: string) => `/diagnosis/${encodeURIComponent(id)}`,
   },
-  /** Bài viết chi tiết 1 bệnh (public) — `code` là diseaseCode. */
+  /** Bài viết của 1 bệnh (public) — `code` là diseaseCode; redirect 308 sang `articles.detail` (link cũ / kết quả chẩn đoán). */
   disease: (code: string) => `/diseases/${encodeURIComponent(code)}`,
+  /** Bài viết bệnh cây trồng (public, ISR, SEO) — slug lấy từ API (`crop.slug`, `article.slug`). */
+  articles: {
+    index: "/benh-cay-trong",
+    crop: (cropSlug: string) => `/benh-cay-trong/${encodeURIComponent(cropSlug)}`,
+    detail: (cropSlug: string, slug: string) =>
+      `/benh-cay-trong/${encodeURIComponent(cropSlug)}/${encodeURIComponent(slug)}`,
+  },
 } as const;
