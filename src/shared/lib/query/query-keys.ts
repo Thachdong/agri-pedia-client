@@ -92,4 +92,10 @@ export const queryKeys = {
     /** Bài của 1 cây theo tab category (infinite, cursor) — "Xem thêm" ở /benh-cay-trong/[crop]. */
     list: (filters: TArticleListFilters) => [...queryKeys.articles.lists(), filters] as const,
   },
+  /** Khu quản trị bài viết (ADMIN) — tách khỏi `articles` public (khác endpoint, gồm cả bài unpublished). */
+  adminArticles: {
+    all: ["admin-articles"] as const,
+    /** Mọi cây kèm số bài / số bệnh. */
+    crops: () => [...queryKeys.adminArticles.all, "crops"] as const,
+  },
 } as const;
