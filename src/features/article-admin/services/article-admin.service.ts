@@ -3,6 +3,7 @@ import type {
   TAdminArticleCropsResponse,
   TAdminArticleDetail,
   TAdminArticleTargetsResponse,
+  TArticleVisibilityResponse,
   TCreateArticleInput,
   TCreateArticleResponse,
   TUpdateArticleInput,
@@ -32,3 +33,12 @@ export const createArticle = (input: TCreateArticleInput, client: IHttpClient = 
 /** Thay nội dung bài — cùng luật nội dung với tạo mới. 404 KNOWLEDGE_ARTICLE_NOT_FOUND. */
 export const updateArticle = (code: string, input: TUpdateArticleInput, client: IHttpClient = http) =>
   client.put<TUpdateArticleResponse>(`/admin/knowledge/articles/${encodeURIComponent(code)}`, input);
+
+/**
+ * Ẩn (`published: false`) / hiện lại bài. Ẩn: trang public 404, bài rời list / sitemap, link tới bài thành chữ thường;
+ * vẫn sửa được.
+ */
+export const setArticlePublished = (code: string, published: boolean, client: IHttpClient = http) =>
+  client.post<TArticleVisibilityResponse>(
+    `/admin/knowledge/articles/${encodeURIComponent(code)}/${published ? "publish" : "unpublish"}`,
+  );

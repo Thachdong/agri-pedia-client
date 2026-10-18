@@ -36,3 +36,7 @@ export type TArticleSourceInput = TCreateArticleInput["sources"][number];
  */
 export type TUpdateArticleInput = TApiSchema<"UpdateArticleDto">;
 export type TUpdateArticleResponse = TApiSchema<"UpdateArticleResponse">;
+
+/** POST /admin/knowledge/articles/:code/{publish|unpublish} — đã đúng trạng thái = no-op. */
+export type TArticleVisibilityResponse = TApiSchema<"ArticleVisibilityResponse">;
+export type TSetArticlePublishedInput = { code: string; published: boolean };
