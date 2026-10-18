@@ -10,7 +10,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 2. [bff-auth]           ROUTES.admin.*; BFF login set cookie httpOnly `ap_role` (refresh giữ, logout xoá); getPostLoginPath: ADMIN → /admin/articles;
                                proxy: chưa login + /admin → /login; role ADMIN + front page (ngoài /admin, /api) → /admin/articles; role ≠ ADMIN + /admin → home.
                                Cookie role chỉ để điều hướng — quyền thật vẫn check ở layout /admin (meQuery) + NestJS 403
-- [ ] 3. [feature-scaffold]   feature `article-admin` — layers: types, constants, services, hooks, schemas, utils, components
+- [x] 3. [feature-scaffold]   feature `article-admin` — layers: types, constants, services, hooks, schemas, utils, components
 - [ ] 4. [feature-api]        GET /admin/knowledge/crops → TAdminArticleCrop, listAdminArticleCrops, useAdminArticleCrops; key adminArticles.crops
 - [ ] 5. [feature-api]        GET /admin/knowledge/crops/{cropSlug}/articles → TAdminArticleTarget, useAdminArticleTargets; key adminArticles.targets(crop)
 - [ ] 6. [feature-api]        GET /admin/knowledge/articles/{code} → TAdminArticleDetail, useAdminArticle; key adminArticles.detail(code)
