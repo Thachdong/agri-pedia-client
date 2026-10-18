@@ -7,6 +7,7 @@ export { StarRating, type TStarRatingProps } from "./star-rating";
 export { StarRatingInput, type TStarRatingInputProps } from "./star-rating-input";
 
 // Primitive shadcn dùng nguyên bản — import qua atoms, không import thẳng `ui/`.
+export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 export {
   Dialog,
   DialogClose,

@@ -23,7 +23,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 13. [atomic-component]  atom      Table             (new, shared — shadcn table)
 - [x] 14. [atomic-component]  molecule  ArticleOriginBadge (new, feature article — dùng ở public ArticleMeta + bảng admin)
 - [x] 15. [atomic-component]  molecule  ArticleMeta       (update, feature article — thay dòng reviewedBy bằng ArticleOriginBadge)
-- [ ] 16. [atomic-component]  organism  SidebarNav        (new, shared — nhóm thu gọn/mở rộng, item active/disabled, Collapsible của radix)
+- [x] 16. [atomic-component]  organism  SidebarNav        (new, shared — nhóm thu gọn/mở rộng, item active/disabled, Collapsible của radix)
 - [ ] 17. [atomic-component]  template  AdminLayout       (new, shared — header logo + user icon, sidebar, content cuộn, khung 100dvh; mobile: sidebar thành drawer)
 - [ ] 18. [atomic-component]  molecule  AdminUserMenu     (new, feature user — dropdown: email/phone + Đăng xuất)
 - [ ] 19. [atomic-component]  molecule  AdminCropSelect   (new, feature — chọn cây, kèm articleCount/targetCount)
