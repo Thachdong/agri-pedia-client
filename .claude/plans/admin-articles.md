@@ -30,7 +30,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 20. [atomic-component]  molecule  ArticleRowActions (new, feature — chưa có bài: Create; có bài: View / Update / Unpublish|Publish + ConfirmDialog)
 - [x] 21. [atomic-component]  organism  ArticleTargetTable (new, feature — cột: Tên bệnh (variant thụt lề) · Kiểm duyệt · Cập nhật lần cuối · Actions; filter "Chưa có bài"; loading/empty/error)
 - [x] 22. [atomic-component]  organism  ArticleImagesField (new, feature — upload qua useMediaUploads, file name, alt, caption, credit, chọn cover)
-- [ ] 23. [atomic-component]  organism  ArticleSourcesField (new, feature — useFieldArray title + url)
+- [x] 23. [atomic-component]  organism  ArticleSourcesField (new, feature — useFieldArray title + url)
 - [ ] 24. [atomic-component]  organism  ArticleMarkdownEditor (new, feature — textarea + tab Xem trước, tái dùng ArticleMarkdown)
 - [ ] 25. [atomic-component]  organism  ArticleForm       (new, feature — mode create|update, map lỗi KNOWLEDGE_ARTICLE_INVALID_CONTENT `details.issues` vào field)
 - [ ] 26. [atomic-component]  organism  AdminArticlePreview (new, feature — meta + origin + trạng thái publish + ArticleMarkdown; xem được cả bài unpublished)
