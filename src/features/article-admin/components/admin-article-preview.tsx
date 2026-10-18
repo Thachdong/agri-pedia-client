@@ -1,10 +1,9 @@
 "use client";
 
 import { EyeOffIcon, LinkIcon, PencilIcon, SendIcon } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { ArticleMarkdown, ArticleOriginBadge } from "@/features/article";
+import { ArticleOriginBadge } from "@/features/article";
 import { Badge, Button } from "@/shared/components/atoms";
 import { Callout, ConfirmDialog } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
@@ -15,7 +14,8 @@ import { useAdminArticle } from "../hooks/use-admin-article";
 import { useAdminArticleCrops } from "../hooks/use-admin-article-crops";
 import { useSetArticlePublished } from "../hooks/use-set-article-published";
 import { toArticleFormValues } from "../utils/article-form.util";
-import { toArticlePreview, toPreviewCrop } from "../utils/article-preview.util";
+import { toPreviewCrop } from "../utils/article-preview.util";
+import { ArticlePreviewBody } from "./article-preview-body";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("vi-VN", {
   day: "2-digit",
@@ -57,8 +57,6 @@ export function AdminArticlePreview({ code, className }: TAdminArticlePreviewPro
   }
 
   const data = article.data;
-  const preview = toArticlePreview(toArticleFormValues(data), toPreviewCrop(crops.data?.crops, data.crop));
-  const cover = data.images.find((image) => image.file === data.cover);
   const willPublish = !data.isPublished;
 
   const confirmToggle = () =>
@@ -73,71 +71,52 @@ export function AdminArticlePreview({ code, className }: TAdminArticlePreviewPro
     );
 
   return (
-    <article className={cn("flex flex-col gap-6", className)}>
-      <header className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center gap-2">
-          <ArticleOriginBadge origin={data.origin} />
-          {data.isPublished ? <Badge tone="success">Đang hiển thị</Badge> : <Badge tone="warning">Đang ẩn</Badge>}
-          <code className="text-xs text-muted-foreground">{data.code}</code>
-        </div>
-        <h1 className="text-2xl font-bold sm:text-3xl">{data.title}</h1>
-        <p className="text-muted-foreground">{data.summary}</p>
-        <p className="text-sm text-muted-foreground">
-          Cập nhật <time dateTime={data.updatedAt}>{dateTimeFormatter.format(new Date(data.updatedAt))}</time>
-          {data.editedBy && ` · Sửa bởi ${data.editedBy}`}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="highlight" size="sm">
-            <Link href={ROUTES.admin.articles.edit(data.code)}>
-              <PencilIcon aria-hidden />
-              Sửa
-            </Link>
-          </Button>
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={() => {
-              setPublished.reset();
-              setConfirming(true);
-            }}
-          >
-            {willPublish ? <SendIcon aria-hidden /> : <EyeOffIcon aria-hidden />}
-            {willPublish ? "Publish" : "Unpublish"}
-          </Button>
-        </div>
-        {/* ADMIN không mở được trang public (proxy chuyển về khu quản trị) → chỉ hiện đường dẫn. */}
-        <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <LinkIcon className="size-3.5" aria-hidden />
-          Đường dẫn public: <code className="break-all">{data.path}</code>
-          {!data.isPublished && " (đang trả 404)"}
-        </p>
-      </header>
-
-      {cover && (
-        <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-muted">
-          <Image src={cover.url} alt={cover.alt} fill sizes="(max-width: 1152px) 100vw, 1152px" className="object-cover" />
-        </div>
-      )}
-
-      <ArticleMarkdown article={preview} />
-
-      {data.sources.length > 0 && (
-        <section aria-labelledby="admin-article-sources" className="flex flex-col gap-2 border-t border-border-subtle pt-4">
-          <h2 id="admin-article-sources" className="text-lg font-semibold">
-            Nguồn tham khảo
-          </h2>
-          <ol className="list-decimal pl-5 text-sm">
-            {data.sources.map((source) => (
-              <li key={source.url}>
-                <a href={source.url} target="_blank" rel="noopener noreferrer nofollow" className="underline underline-offset-2">
-                  {source.title}
-                </a>
-              </li>
-            ))}
-          </ol>
-        </section>
-      )}
+    <div className={className}>
+      <ArticlePreviewBody
+        values={toArticleFormValues(data)}
+        crop={toPreviewCrop(crops.data?.crops, data.crop)}
+        badges={
+          <>
+            <ArticleOriginBadge origin={data.origin} />
+            {data.isPublished ? <Badge tone="success">Đang hiển thị</Badge> : <Badge tone="warning">Đang ẩn</Badge>}
+            <code className="text-xs text-muted-foreground">{data.code}</code>
+          </>
+        }
+        meta={
+          <>
+            <p className="text-sm text-muted-foreground">
+              Cập nhật <time dateTime={data.updatedAt}>{dateTimeFormatter.format(new Date(data.updatedAt))}</time>
+              {data.editedBy && ` · Sửa bởi ${data.editedBy}`}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button asChild variant="highlight" size="sm">
+                <Link href={ROUTES.admin.articles.edit(data.code)}>
+                  <PencilIcon aria-hidden />
+                  Sửa
+                </Link>
+              </Button>
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => {
+                  setPublished.reset();
+                  setConfirming(true);
+                }}
+              >
+                {willPublish ? <SendIcon aria-hidden /> : <EyeOffIcon aria-hidden />}
+                {willPublish ? "Publish" : "Unpublish"}
+              </Button>
+            </div>
+            {/* ADMIN không mở được trang public (proxy chuyển về khu quản trị) → chỉ hiện đường dẫn. */}
+            <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <LinkIcon className="size-3.5" aria-hidden />
+              Đường dẫn public: <code className="break-all">{data.path}</code>
+              {!data.isPublished && " (đang trả 404)"}
+            </p>
+          </>
+        }
+      />
 
       <ConfirmDialog
         open={confirming}
@@ -160,7 +139,7 @@ export function AdminArticlePreview({ code, className }: TAdminArticlePreviewPro
         }
         onConfirm={confirmToggle}
       />
-    </article>
+    </div>
   );
 }
 

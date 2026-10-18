@@ -31,6 +31,7 @@ import {
 import type { TArticlePreviewCrop } from "../utils/article-preview.util";
 import { ArticleImagesField } from "./article-images-field";
 import { ArticleMarkdownEditor } from "./article-markdown-editor";
+import { ArticlePreviewDialog } from "./article-preview-dialog";
 import { ArticleSourcesField } from "./article-sources-field";
 
 export type TArticleFormProps = {
@@ -161,9 +162,10 @@ export function ArticleForm(props: TArticleFormProps) {
 
       <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-end gap-2 border-t border-border-subtle bg-background px-4 py-3 sm:-mx-6 sm:px-6">
         {isUploading && <p className="mr-auto text-xs text-muted-foreground">Đang tải ảnh lên…</p>}
-        <Button asChild variant="outline">
+        <Button asChild variant="ghost">
           <Link href={cancelHref}>Huỷ</Link>
         </Button>
+        <ArticlePreviewDialog form={form} crop={crop} disabled={isSubmitting} />
         <Button type="submit" variant="highlight" loading={isSubmitting} disabled={isUploading}>
           {creating ? "Tạo bài viết" : "Lưu thay đổi"}
         </Button>
