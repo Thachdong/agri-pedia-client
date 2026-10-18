@@ -710,7 +710,7 @@ export interface paths {
         };
         /**
          * Get the Vietnamese detail of a disease (public)
-         * @description No chemical recommendations. When `verification` is not SOURCED, show that experts have not confirmed the content yet. `article` = path and status of the disease's article (GET /knowledge/articles/:cropSlug/:slug), null when it has none.
+         * @description No chemical recommendations. When `verification` is not SOURCED, show that experts have not confirmed the content yet. `article` = path and status of the disease's main article (GET /knowledge/articles/:cropSlug/:slug), null when it has none or it is unpublished; `variants[].article` = the variant's own article, if any.
          */
         get: operations["KnowledgeController_disease"];
         put?: never;
@@ -750,7 +750,7 @@ export interface paths {
         };
         /**
          * List indexable articles for the sitemap (public)
-         * @description REVIEWED articles only, unpaginated; `crops[].updatedAt` = latest update of the crop's articles. Sent with `Cache-Control: public, max-age=60`.
+         * @description REVIEWED, published articles only, unpaginated; `crops[].updatedAt` = latest update of the crop's articles. Sent with `Cache-Control: public, max-age=60`.
          */
         get: operations["ArticleController_sitemap"];
         put?: never;
@@ -770,7 +770,7 @@ export interface paths {
         };
         /**
          * List article summaries of a crop, by title (public)
-         * @description Vietnamese title order, keyset-paginated (`nextCursor`). DRAFT articles are included: render them noindex. `category` filters by the category of the article's disease. Sent with `Cache-Control: public, max-age=60`.
+         * @description Vietnamese title order, keyset-paginated (`nextCursor`). Unpublished articles are left out; DRAFT ones are included: render them noindex. `category` filters by the category of the article's disease. Variant articles are listed too (`variant` set). Sent with `Cache-Control: public, max-age=60`.
          */
         get: operations["ArticleController_list"];
         put?: never;
@@ -790,11 +790,135 @@ export interface paths {
         };
         /**
          * Get a disease article, ready to render (public)
-         * @description `markdown` has public image URLs and `/diseases/<CODE>` links turned into article paths (plain text when that disease has no article); directives `:::warning`, `:::tip`, `::disease-card{code="..."}` and `::cta-diagnosis` stay for the client. `relatedDiseases` feeds the cards. Sent with `Cache-Control: public, max-age=60`.
+         * @description `markdown` has public image URLs and `/diseases/<CODE>` links turned into article paths (a variant id without its own article links to the disease's main article; plain text when there is no article); a variant article has `variant` + `parentArticle` (breadcrumb), a main article lists `variantArticles` (each with its `coverUrl`); every article has a 16:9 `cover` (cards, Open Graph); directives `:::warning`, `:::tip`, `::disease-card{code="..."}` and `::cta-diagnosis` stay for the client. `relatedDiseases` feeds the cards. An unpublished article answers 404 and counts as no article in links. Sent with `Cache-Control: public, max-age=60`.
          */
         get: operations["ArticleController_detail"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/crops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List every crop with its article counts (admin)
+         * @description All crops by display order, including crops not enabled for diagnosis and crops without any article. `targetCount` = diseases + variants of the crop; `targetCount - articleCount` entries have no article yet (see GET /admin/knowledge/crops/:cropSlug/articles).
+         */
+        get: operations["AdminArticleController_crops"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/crops/{cropSlug}/articles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List the diseases of a crop with their articles (admin)
+         * @description Every disease of the crop by Vietnamese name, each followed by its variants (KB order). `article` is the article in any visibility (`origin` AI | ADMIN | AI_REVIEWED, `isPublished`), or null when none is written yet: create it with POST /admin/knowledge/articles and `code`.
+         */
+        get: operations["AdminArticleController_targets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/articles/{code}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the stored content of an article (admin)
+         * @description `code` = variant code, else disease code (main article). Published or not. `markdown` is as stored (image file names, `/diseases/<CODE>` links): send it back as is in PUT. `images[].url` is the public URL to preview.
+         */
+        get: operations["AdminArticleController_detail"];
+        /**
+         * Replace the content of an article (admin)
+         * @description Slug, crop and code stay; visibility is kept. `images` is the full list: an entry without `tmpKey` keeps the stored image of that `file` (alt / caption / credit updated), images left out are dropped. The article becomes REVIEWED by the caller; an AI article becomes AI_REVIEWED and the crop pack seed no longer overwrites it. Content rules (`details.issues` of KNOWLEDGE_ARTICLE_INVALID_CONTENT lists every broken one): title 1-70 chars, summary 50-160 chars, image `file` names `^[a-z0-9-]+\.webp$` without duplicates, `cover` one of them, every body image (`![alt](<file>)`) listed, `/diseases/<CODE>` links and `::disease-card{code="..."}` (disease ids only) inside the crop KB, no HTML outside code. A new image is a key from POST /media/presign-url (jpg, png or webp, uploaded by the caller); it is stored as webp at most 1600px wide. The client page cache is revalidated in the background.
+         */
+        put: operations["AdminArticleController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/articles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Write the article of a disease or variant without one (admin)
+         * @description Created published, `origin` ADMIN, `status` REVIEWED by the caller. `slug` is fixed afterwards and unique in the crop. A variant article needs the main article of its disease. Every image needs a `tmpKey`. Content rules (`details.issues` of KNOWLEDGE_ARTICLE_INVALID_CONTENT lists every broken one): title 1-70 chars, summary 50-160 chars, image `file` names `^[a-z0-9-]+\.webp$` without duplicates, `cover` one of them, every body image (`![alt](<file>)`) listed, `/diseases/<CODE>` links and `::disease-card{code="..."}` (disease ids only) inside the crop KB, no HTML outside code. A new image is a key from POST /media/presign-url (jpg, png or webp, uploaded by the caller); it is stored as webp at most 1600px wide. The client page cache is revalidated in the background.
+         */
+        post: operations["AdminArticleController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/articles/{code}/unpublish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Hide an article from the public API (admin)
+         * @description The page answers 404, the article leaves lists, counts, the sitemap and disease detail, and links to it render as plain text. It stays editable. Already hidden = no-op.
+         */
+        post: operations["AdminArticleController_unpublish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/knowledge/articles/{code}/publish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Show an unpublished article again (admin)
+         * @description Already published = no-op.
+         */
+        post: operations["AdminArticleController_publish"];
         delete?: never;
         options?: never;
         head?: never;
@@ -933,7 +1057,7 @@ export interface components {
             phone: string | null;
             username: string;
             /** @enum {string} */
-            role: "FARMER" | "DISTRIBUTOR";
+            role: "FARMER" | "DISTRIBUTOR" | "ADMIN";
             /** @enum {string|null} */
             bussinessType: "AGRICULTURAL_CHEMICAL_SUPPLIES" | "SEEDS_SEEDLINGS" | "AQUACULTURE_SEEDLINGS" | null;
             bussinessLicense: string | null;
@@ -1335,11 +1459,17 @@ export interface components {
         ListDiseasesResponse: {
             diseases: components["schemas"]["DiseaseItemResponse"][];
         };
+        DiseaseArticleResponse: {
+            path: string;
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+        };
         DiseaseVariantResponse: {
             code: string;
             name: string;
             affectedParts: string;
             symptoms: string[];
+            article: components["schemas"]["DiseaseArticleResponse"] | null;
         };
         DiseaseTreatmentsResponse: {
             cultural: string[];
@@ -1354,11 +1484,6 @@ export interface components {
         DiseaseReferenceResponse: {
             title: string;
             url: string;
-        };
-        DiseaseArticleResponse: {
-            path: string;
-            /** @enum {string} */
-            status: "DRAFT" | "REVIEWED";
         };
         DiseaseDetailResponse: {
             code: string;
@@ -1422,6 +1547,10 @@ export interface components {
             /** @enum {string} */
             category: "DISEASE" | "PEST" | "DISORDER";
         };
+        ArticleVariantSummaryResponse: {
+            code: string;
+            name: string;
+        };
         ArticleListItemResponse: {
             path: string;
             slug: string;
@@ -1430,9 +1559,12 @@ export interface components {
             coverUrl: string | null;
             /** @enum {string} */
             status: "DRAFT" | "REVIEWED";
+            /** @enum {string} */
+            origin: "AI" | "ADMIN" | "AI_REVIEWED";
             /** Format: date-time */
             updatedAt: string;
             disease: components["schemas"]["ArticleDiseaseSummaryResponse"] | null;
+            variant: components["schemas"]["ArticleVariantSummaryResponse"] | null;
         };
         ListArticlesResponse: {
             crop: components["schemas"]["ArticleCropResponse"];
@@ -1452,6 +1584,22 @@ export interface components {
             affectedParts: ("LEAF" | "SHEATH" | "STEM" | "PANICLE" | "ROOT" | "WHOLE_PLANT" | "SHOOT" | "BRANCH" | "TRUNK" | "COLLAR" | "FLOWER" | "FRUIT" | "ARIL")[];
             /** @enum {string} */
             verification: "SOURCED" | "SECONDARY" | "GEMINI_REVIEWED" | "GEMINI_ONLY";
+        };
+        ArticleVariantResponse: {
+            code: string;
+            name: string;
+            affectedParts: string;
+        };
+        ArticleLinkResponse: {
+            path: string;
+            title: string;
+        };
+        VariantArticleResponse: {
+            path: string;
+            title: string;
+            variantCode: string;
+            variantName: string;
+            coverUrl: string | null;
         };
         ArticleCoverResponse: {
             url: string;
@@ -1494,12 +1642,17 @@ export interface components {
             markdown: string;
             crop: components["schemas"]["ArticleCropResponse"];
             disease: components["schemas"]["ArticleDiseaseResponse"] | null;
+            variant: components["schemas"]["ArticleVariantResponse"] | null;
+            parentArticle: components["schemas"]["ArticleLinkResponse"] | null;
+            variantArticles: components["schemas"]["VariantArticleResponse"][];
             cover: components["schemas"]["ArticleCoverResponse"] | null;
             images: components["schemas"]["ArticleImageResponse"][];
             relatedDiseases: components["schemas"]["RelatedDiseaseResponse"][];
             sources: components["schemas"]["ArticleSourceResponse"][];
             /** @enum {string} */
             status: "DRAFT" | "REVIEWED";
+            /** @enum {string} */
+            origin: "AI" | "ADMIN" | "AI_REVIEWED";
             reviewedBy: string | null;
             /** Format: date-time */
             reviewedAt: string | null;
@@ -1507,6 +1660,151 @@ export interface components {
             publishedAt: string;
             /** Format: date-time */
             updatedAt: string;
+        };
+        AdminArticleCropItemResponse: {
+            code: string;
+            slug: string;
+            nameVi: string;
+            diagnosisEnabled: boolean;
+            targetCount: number;
+            articleCount: number;
+            publishedCount: number;
+        };
+        ListAdminArticleCropsResponse: {
+            crops: components["schemas"]["AdminArticleCropItemResponse"][];
+        };
+        AdminArticleCropResponse: {
+            code: string;
+            slug: string;
+            nameVi: string;
+        };
+        AdminArticleSummaryResponse: {
+            slug: string;
+            title: string;
+            path: string;
+            /** @enum {string} */
+            origin: "AI" | "ADMIN" | "AI_REVIEWED";
+            isPublished: boolean;
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+            editedBy: string | null;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        AdminArticleTargetResponse: {
+            code: string;
+            diseaseCode: string;
+            variantCode: string | null;
+            nameVi: string;
+            /** @enum {string} */
+            category: "DISEASE" | "PEST" | "DISORDER";
+            article: components["schemas"]["AdminArticleSummaryResponse"] | null;
+        };
+        ListAdminArticleTargetsResponse: {
+            crop: components["schemas"]["AdminArticleCropResponse"];
+            targets: components["schemas"]["AdminArticleTargetResponse"][];
+        };
+        AdminArticleCropRefResponse: {
+            code: string;
+            slug: string;
+        };
+        AdminArticleImageCreditResponse: {
+            source: string;
+            author: string;
+            license: string;
+            url: string;
+        };
+        AdminArticleImageResponse: {
+            file: string;
+            url: string;
+            width: number;
+            height: number;
+            alt: string;
+            caption: string | null;
+            credit: components["schemas"]["AdminArticleImageCreditResponse"];
+        };
+        AdminArticleSourceResponse: {
+            title: string;
+            url: string;
+        };
+        AdminArticleDetailResponse: {
+            code: string;
+            crop: components["schemas"]["AdminArticleCropRefResponse"];
+            diseaseCode: string | null;
+            variantCode: string | null;
+            slug: string;
+            path: string;
+            title: string;
+            summary: string;
+            markdown: string;
+            cover: string | null;
+            images: components["schemas"]["AdminArticleImageResponse"][];
+            sources: components["schemas"]["AdminArticleSourceResponse"][];
+            /** @enum {string} */
+            status: "DRAFT" | "REVIEWED";
+            reviewedBy: string | null;
+            /** Format: date-time */
+            reviewedAt: string | null;
+            /** @enum {string} */
+            origin: "AI" | "ADMIN" | "AI_REVIEWED";
+            isPublished: boolean;
+            editedBy: string | null;
+            kbVersion: string;
+            /** Format: date-time */
+            publishedAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        ArticleImageCreditDto: {
+            source: string;
+            author: string;
+            license: string;
+            url: string;
+        };
+        AdminArticleImageDto: {
+            file: string;
+            tmpKey?: string;
+            alt: string;
+            caption?: string | null;
+            credit: components["schemas"]["ArticleImageCreditDto"];
+        };
+        ArticleSourceDto: {
+            title: string;
+            url: string;
+        };
+        CreateArticleDto: {
+            code: string;
+            slug: string;
+            title: string;
+            summary: string;
+            markdown: string;
+            cover: string;
+            images: components["schemas"]["AdminArticleImageDto"][];
+            sources: components["schemas"]["ArticleSourceDto"][];
+        };
+        CreateArticleResponse: {
+            code: string;
+            slug: string;
+            path: string;
+        };
+        UpdateArticleDto: {
+            title: string;
+            summary: string;
+            markdown: string;
+            cover: string;
+            images: components["schemas"]["AdminArticleImageDto"][];
+            sources: components["schemas"]["ArticleSourceDto"][];
+        };
+        UpdateArticleResponse: {
+            code: string;
+            slug: string;
+            path: string;
+            /** @enum {string} */
+            origin: "AI" | "ADMIN" | "AI_REVIEWED";
+        };
+        ArticleVisibilityResponse: {
+            code: string;
+            isPublished: boolean;
         };
         CreateDiagnosisResponse: {
             id: string;
@@ -3516,6 +3814,400 @@ export interface operations {
                 };
             };
             /** @description KNOWLEDGE_CROP_NOT_FOUND, KNOWLEDGE_ARTICLE_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_crops: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListAdminArticleCropsResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_targets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cropSlug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListAdminArticleTargetsResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_detail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminArticleDetailResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ARTICLE_NOT_FOUND, KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateArticleDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateArticleResponse"];
+                };
+            };
+            /** @description Request validation failed, or: KNOWLEDGE_ARTICLE_INVALID_CONTENT, KNOWLEDGE_ARTICLE_IMAGE_INVALID */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ARTICLE_NOT_FOUND, KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateArticleDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateArticleResponse"];
+                };
+            };
+            /** @description Request validation failed, or: KNOWLEDGE_ARTICLE_INVALID_CONTENT, KNOWLEDGE_ARTICLE_IMAGE_INVALID */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_DISEASE_NOT_FOUND, KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ARTICLE_ALREADY_EXISTS, KNOWLEDGE_ARTICLE_SLUG_TAKEN */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_unpublish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArticleVisibilityResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ARTICLE_NOT_FOUND, KNOWLEDGE_CROP_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminArticleController_publish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                code: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ArticleVisibilityResponse"];
+                };
+            };
+            /** @description Request validation failed */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description KNOWLEDGE_ARTICLE_NOT_FOUND, KNOWLEDGE_CROP_NOT_FOUND */
             404: {
                 headers: {
                     [name: string]: unknown;
