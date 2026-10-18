@@ -26,7 +26,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 16. [atomic-component]  organism  SidebarNav        (new, shared — nhóm thu gọn/mở rộng, item active/disabled, Collapsible của radix)
 - [x] 17. [atomic-component]  template  AdminLayout       (new, shared — header logo + user icon, sidebar, content cuộn, khung 100dvh; mobile: sidebar thành drawer)
 - [x] 18. [atomic-component]  molecule  AdminUserMenu     (new, feature user — dropdown: email/phone + Đăng xuất)
-- [ ] 19. [atomic-component]  molecule  AdminCropSelect   (new, feature — chọn cây, kèm articleCount/targetCount)
+- [x] 19. [atomic-component]  molecule  AdminCropSelect   (new, feature — chọn cây, kèm articleCount/targetCount)
 - [ ] 20. [atomic-component]  molecule  ArticleRowActions (new, feature — chưa có bài: Create; có bài: View / Update / Unpublish|Publish + ConfirmDialog)
 - [ ] 21. [atomic-component]  organism  ArticleTargetTable (new, feature — cột: Tên bệnh (variant thụt lề) · Kiểm duyệt · Cập nhật lần cuối · Actions; filter "Chưa có bài"; loading/empty/error)
 - [ ] 22. [atomic-component]  organism  ArticleImagesField (new, feature — upload qua useMediaUploads, file name, alt, caption, credit, chọn cover)
