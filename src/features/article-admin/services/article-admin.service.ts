@@ -5,6 +5,8 @@ import type {
   TAdminArticleTargetsResponse,
   TCreateArticleInput,
   TCreateArticleResponse,
+  TUpdateArticleInput,
+  TUpdateArticleResponse,
 } from "../types/article-admin.types";
 
 /** Mọi cây theo thứ tự hiển thị, kèm số bài. 403 KNOWLEDGE_ADMIN_REQUIRED nếu không phải ADMIN. */
@@ -26,3 +28,7 @@ export const getAdminArticle = (code: string, client: IHttpClient = http) =>
  */
 export const createArticle = (input: TCreateArticleInput, client: IHttpClient = http) =>
   client.post<TCreateArticleResponse>("/admin/knowledge/articles", input);
+
+/** Thay nội dung bài — cùng luật nội dung với tạo mới. 404 KNOWLEDGE_ARTICLE_NOT_FOUND. */
+export const updateArticle = (code: string, input: TUpdateArticleInput, client: IHttpClient = http) =>
+  client.put<TUpdateArticleResponse>(`/admin/knowledge/articles/${encodeURIComponent(code)}`, input);

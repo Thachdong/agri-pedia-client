@@ -28,3 +28,11 @@ export type TCreateArticleInput = TApiSchema<"CreateArticleDto">;
 export type TCreateArticleResponse = TApiSchema<"CreateArticleResponse">;
 export type TArticleImageInput = TCreateArticleInput["images"][number];
 export type TArticleSourceInput = TCreateArticleInput["sources"][number];
+
+/**
+ * PUT /admin/knowledge/articles/:code — thay toàn bộ nội dung (slug / cây / code / hiển thị giữ nguyên).
+ * `images` là danh sách đầy đủ: ảnh không có `tmpKey` = giữ ảnh đã lưu cùng `file`; ảnh bị bỏ khỏi danh sách = xoá.
+ * Bài AI → AI_REVIEWED (seed không ghi đè nữa).
+ */
+export type TUpdateArticleInput = TApiSchema<"UpdateArticleDto">;
+export type TUpdateArticleResponse = TApiSchema<"UpdateArticleResponse">;
