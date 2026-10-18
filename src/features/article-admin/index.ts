@@ -9,3 +9,4 @@ export type { TAdminArticleCrop, TAdminArticleDetail, TAdminArticleTarget } from
 export { ArticleTargetTable, type TArticleTargetTableProps } from "./components/article-target-table";
 export { ArticleForm, type TArticleFormProps } from "./components/article-form";
 export { AdminArticlePreview, type TAdminArticlePreviewProps } from "./components/admin-article-preview";
+export { ArticleTargetPicker, type TArticleTargetPickerProps } from "./components/article-target-picker";

@@ -35,11 +35,12 @@ export const ROUTES = {
     articles: {
       /** Bảng bệnh + bài viết của 1 cây; không có `crop` → cây đầu tiên. */
       list: (crop?: string) => (crop ? `/admin/articles?crop=${encodeURIComponent(crop)}` : "/admin/articles"),
-      /** Viết bài cho 1 bệnh / variant chưa có bài; không có `code` → chọn bệnh trước. */
-      new: (target?: { crop: string; code: string }) =>
-        target
-          ? `/admin/articles/new?crop=${encodeURIComponent(target.crop)}&code=${encodeURIComponent(target.code)}`
-          : "/admin/articles/new",
+      /** Viết bài cho 1 bệnh / variant chưa có bài; không có `code` → chọn bệnh (của `crop`) trước. */
+      new: (target?: { crop: string; code?: string }) => {
+        if (!target) return "/admin/articles/new";
+        const params = new URLSearchParams({ crop: target.crop, ...(target.code && { code: target.code }) });
+        return `/admin/articles/new?${params}`;
+      },
       detail: (code: string) => `/admin/articles/${encodeURIComponent(code)}`,
       edit: (code: string) => `/admin/articles/${encodeURIComponent(code)}/edit`,
     },
