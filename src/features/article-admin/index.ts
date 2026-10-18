@@ -6,3 +6,4 @@ export { useUpdateArticle } from "./hooks/use-update-article";
 export { useAdminArticleCrops } from "./hooks/use-admin-article-crops";
 export { useAdminArticleTargets } from "./hooks/use-admin-article-targets";
 export type { TAdminArticleCrop, TAdminArticleDetail, TAdminArticleTarget } from "./types/article-admin.types";
+export { ArticleTargetTable, type TArticleTargetTableProps } from "./components/article-target-table";
