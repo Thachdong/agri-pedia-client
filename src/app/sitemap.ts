@@ -4,8 +4,8 @@ import { publicEnv } from "@/shared/config";
 import { ROUTES } from "@/shared/constants";
 import { publicServerHttp } from "@/shared/lib/http/public-server";
 
-/** ISR 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua tag `articles`. */
-export const revalidate = 2592000;
+/** ISR 1 giờ (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua tag `articles`. */
+export const revalidate = 3600;
 
 /**
  * Sitemap: trang danh sách, trang từng cây, mỗi bài REVIEWED (bài DRAFT không có — server đã lọc).

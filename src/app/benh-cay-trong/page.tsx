@@ -4,8 +4,8 @@ import { Callout } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { publicServerHttp } from "@/shared/lib/http/public-server";
 
-/** ISR 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi danh sách đến qua tag `articles`. */
-export const revalidate = 2592000;
+/** ISR 1 giờ (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi danh sách đến qua tag `articles`. */
+export const revalidate = 3600;
 
 const DESCRIPTION =
   "Thư viện bệnh hại cây trồng: triệu chứng, nguyên nhân và cách phòng bệnh, sâu hại, rối loạn sinh lý theo từng loại cây.";

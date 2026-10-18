@@ -19,8 +19,12 @@ export const ARTICLE_CACHE_TAG_PATTERN =
 export const ARTICLE_REVALIDATE_MAX_TAGS = 500;
 export const ARTICLE_CACHE_TAG_MAX_LENGTH = 256;
 
-/** Lưới an toàn khi webhook lỗi (30 ngày) — thay đổi thường đến qua revalidateTag. */
-export const ARTICLE_REVALIDATE_SECONDS = 2_592_000;
+/**
+ * Lưới an toàn khi webhook bị lỡ (1 giờ) — thay đổi thường đến ngay qua revalidateTag. Webhook lỡ khi client không
+ * chạy lúc server gửi (vd. server seed bài lúc deploy trước khi client lên): số liệu / danh sách tự khớp lại sau ≤ 1 giờ.
+ * Đổi giá trị thì sửa cả các `export const revalidate` (phải là literal) ở route ISR.
+ */
+export const ARTICLE_REVALIDATE_SECONDS = 3600;
 
 /**
  * `options.next` cho service khi gọi từ route ISR — cache theo tag, hết hạn sau ARTICLE_REVALIDATE_SECONDS.

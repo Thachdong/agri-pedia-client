@@ -14,8 +14,8 @@ import { ROUTES } from "@/shared/constants";
 import { isAppError } from "@/shared/lib/http";
 import { publicServerHttp } from "@/shared/lib/http/public-server";
 
-/** ISR 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua tag `articles:<crop>`. */
-export const revalidate = 2592000;
+/** ISR 1 giờ (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua tag `articles:<crop>`. */
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return [];

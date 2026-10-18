@@ -47,6 +47,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 36. [atomic-component]  molecule  ArticleRowActions — "Xem" mở tab mới
 - [x] 37. [atomic-component]  organism  ArticlePreviewBody (tách từ AdminArticlePreview) + ArticlePreviewDialog — nút "Xem trước" toàn bài ở form tạo/sửa
 - [x] 38. [bff-auth]           fix: vòng lặp /auth/login ↔ /admin khi access hết hạn — proxy gửi /admin qua GET /api/auth/refresh?next= (refresh xong quay lại, hỏng → xoá phiên → login); layout /admin không redirect login nữa
+- [x] 39. [page]              fix: số bài ở /benh-cay-trong lệch danh sách — webhook revalidate expire ngay ({ expire: 0 }), lưới an toàn ISR 30 ngày → 1 giờ (webhook bị lỡ khi client chưa chạy lúc server seed)
 
 Components (in order):
   [atom]      Table                 new     shared

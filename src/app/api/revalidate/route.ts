@@ -33,8 +33,8 @@ function error(status: number, code: string, message: string) {
 }
 
 /**
- * Webhook từ NestJS khi bài viết đổi: `{ tags: string[] }` → revalidateTag(tag, "max") — lần mở kế tiếp
- * nhận trang cũ trong lúc render lại nền, lần sau nữa có nội dung mới. Không đi qua BFF forward (route cụ thể hơn).
+ * Webhook từ NestJS khi bài viết đổi: `{ tags: string[] }` → revalidateTag(tag, { expire: 0 }) — lần mở kế tiếp
+ * render lại với dữ liệu mới (không phục vụ bản cũ). Không đi qua BFF forward (route cụ thể hơn).
  * Secret thiếu / sai → 401; body sai → 400. Self-host nhiều instance cần cache handler dùng chung.
  */
 export async function POST(request: NextRequest) {
@@ -53,6 +53,7 @@ export async function POST(request: NextRequest) {
   if (validationError) return error(400, "VALIDATION_ERROR", validationError.message);
 
   const tags = [...new Set(value.tags)];
-  for (const tag of tags) revalidateTag(tag, "max");
+  // Hết hạn ngay: lần mở kế tiếp chờ dữ liệu mới thay vì nhận bản cũ (số bài ở /benh-cay-trong phải khớp danh sách).
+  for (const tag of tags) revalidateTag(tag, { expire: 0 });
   return NextResponse.json({ revalidated: tags.length });
 }

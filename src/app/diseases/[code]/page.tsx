@@ -3,8 +3,8 @@ import { articleFetchOptions, getDiseaseArticleLink } from "@/features/article";
 import { isAppError } from "@/shared/lib/http";
 import { publicServerHttp } from "@/shared/lib/http/public-server";
 
-/** ISR 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — bài mới / đổi slug đến qua tag `article-disease:<CODE>`. */
-export const revalidate = 2592000;
+/** ISR 1 giờ (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — bài mới / đổi slug đến qua tag `article-disease:<CODE>`. */
+export const revalidate = 3600;
 
 export function generateStaticParams() {
   return [];

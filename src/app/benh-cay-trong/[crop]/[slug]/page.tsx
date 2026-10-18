@@ -6,8 +6,8 @@ import { publicEnv } from "@/shared/config";
 import { isAppError } from "@/shared/lib/http";
 import { publicServerHttp } from "@/shared/lib/http/public-server";
 
-/** ISR: render lần đầu khi có người mở, cache 30 ngày (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua revalidateTag. */
-export const revalidate = 2592000;
+/** ISR: render lần đầu khi có người mở, cache 1 giờ (= ARTICLE_REVALIDATE_SECONDS; phải là literal) — đổi bài đến qua revalidateTag. */
+export const revalidate = 3600;
 
 /** Không prerender lúc build; mọi bài render theo yêu cầu rồi được cache. */
 export function generateStaticParams() {
