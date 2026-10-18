@@ -101,5 +101,7 @@ export const queryKeys = {
     targetLists: () => [...queryKeys.adminArticles.all, "targets"] as const,
     /** Bệnh + variant của 1 cây kèm bài. */
     targets: (cropSlug: string) => [...queryKeys.adminArticles.targetLists(), cropSlug] as const,
+    /** Nội dung đang lưu của 1 bài (theo code bệnh / variant). */
+    detail: (code: string) => [...queryKeys.adminArticles.all, "detail", code] as const,
   },
 } as const;

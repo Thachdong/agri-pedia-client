@@ -15,3 +15,10 @@ export type TAdminArticleTargetsResponse = TApiSchema<"ListAdminArticleTargetsRe
 export type TAdminArticleTarget = TApiSchema<"AdminArticleTargetResponse">;
 export type TAdminArticleSummary = TApiSchema<"AdminArticleSummaryResponse">;
 export type TAdminArticleCategory = TAdminArticleTarget["category"];
+
+/**
+ * GET /admin/knowledge/articles/:code — nội dung như lưu: `markdown` dùng tên file ảnh + link `/diseases/<CODE>`
+ * (gửi lại nguyên trạng khi PUT); `images[].url` là URL public để xem trước.
+ */
+export type TAdminArticleDetail = TApiSchema<"AdminArticleDetailResponse">;
+export type TAdminArticleImage = TAdminArticleDetail["images"][number];
