@@ -1,12 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button, Input, Textarea } from "@/shared/components/atoms";
 import { Callout, FormField } from "@/shared/components/molecules";
 import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
 import { isAppError } from "@/shared/lib/http";
 import { toast } from "@/shared/lib/toast";
 import { cn } from "@/shared/lib/utils";
+import { ROUTES } from "@/shared/constants";
 import {
   ARTICLE_ADMIN_ERROR_CODE,
   ARTICLE_ADMIN_ERROR_MESSAGES,
@@ -35,8 +37,6 @@ export type TArticleFormProps = {
   crop: TArticlePreviewCrop;
   /** Đích của nút Huỷ. */
   cancelHref: string;
-  /** Lưu thành công — `code` của bài. */
-  onSaved: (code: string) => void;
   className?: string;
 } & (
   | { mode: "create"; /** Bệnh / variant chưa có bài. */ target: { code: string; nameVi: string } }
@@ -47,10 +47,11 @@ const FORM_ID = "article-form";
 
 /**
  * Form viết / sửa bài. Tạo mới → bài published, origin ADMIN; sửa → bài AI thành AI_REVIEWED.
- * Lỗi nội dung của server (`details.issues`) được gắn vào field tương ứng.
+ * Lỗi nội dung của server (`details.issues`) được gắn vào field tương ứng. Lưu xong → trang xem bài.
  */
 export function ArticleForm(props: TArticleFormProps) {
-  const { crop, cancelHref, onSaved, className } = props;
+  const { crop, cancelHref, className } = props;
+  const router = useRouter();
   const creating = props.mode === "create";
   const createArticle = useCreateArticle(crop.slug);
   const updateArticle = useUpdateArticle(creating ? "" : props.article.code, crop.slug);
@@ -68,12 +69,12 @@ export function ArticleForm(props: TArticleFormProps) {
       if (props.mode === "create") {
         const { code } = await createArticle.mutateAsync(toCreateArticleInput(props.target.code, values));
         toast.success("Đã tạo bài viết");
-        onSaved(code);
+        router.push(ROUTES.admin.articles.detail(code));
       } else {
         const { code } = await updateArticle.mutateAsync(toUpdateArticleInput(values));
         toast.success("Đã lưu bài viết");
         form.reset(values);
-        onSaved(code);
+        router.push(ROUTES.admin.articles.detail(code));
       }
     } catch (error) {
       if (!isAppError(error)) {
