@@ -14,7 +14,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 4. [feature-api]        GET /admin/knowledge/crops → TAdminArticleCrop, listAdminArticleCrops, useAdminArticleCrops; key adminArticles.crops
 - [x] 5. [feature-api]        GET /admin/knowledge/crops/{cropSlug}/articles → TAdminArticleTarget, useAdminArticleTargets; key adminArticles.targets(crop)
 - [x] 6. [feature-api]        GET /admin/knowledge/articles/{code} → TAdminArticleDetail, useAdminArticle; key adminArticles.detail(code)
-- [ ] 7. [feature-api]        POST /admin/knowledge/articles → useCreateArticle; invalidates adminArticles.crops + targets(crop)
+- [x] 7. [feature-api]        POST /admin/knowledge/articles → useCreateArticle; invalidates adminArticles.crops + targets(crop)
 - [ ] 8. [feature-api]        PUT /admin/knowledge/articles/{code} → useUpdateArticle; invalidates detail(code) + targets(crop)
 - [ ] 9. [feature-api]        POST …/{code}/unpublish + …/publish → useSetArticlePublished; invalidates detail(code) + targets + crops
 - [ ] 10. [validation-schema] articleFormSchema (create: + code, slug) — title 1-70, summary 50-160, slug SLUG, image file `^[a-z0-9-]+\.webp$` unique, cover ∈ images, credit required, sources

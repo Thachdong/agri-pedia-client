@@ -22,3 +22,9 @@ export type TAdminArticleCategory = TAdminArticleTarget["category"];
  */
 export type TAdminArticleDetail = TApiSchema<"AdminArticleDetailResponse">;
 export type TAdminArticleImage = TAdminArticleDetail["images"][number];
+
+/** POST /admin/knowledge/articles — bài mới published, origin ADMIN, REVIEWED bởi người gọi. Mọi ảnh cần `tmpKey`. */
+export type TCreateArticleInput = TApiSchema<"CreateArticleDto">;
+export type TCreateArticleResponse = TApiSchema<"CreateArticleResponse">;
+export type TArticleImageInput = TCreateArticleInput["images"][number];
+export type TArticleSourceInput = TCreateArticleInput["sources"][number];
