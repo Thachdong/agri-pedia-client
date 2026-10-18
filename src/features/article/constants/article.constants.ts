@@ -1,3 +1,5 @@
+import type { TArticleOrigin } from "../types/article.types";
+
 /**
  * Tag cache của Next cho route bài viết — CHUỖI PHẢI KHỚP server (server spec disease-articles-plan.md mục 7),
  * server gọi POST /api/revalidate với các tag này khi bài đổi.
@@ -60,3 +62,10 @@ export const ARTICLE_CATEGORY_TABS = [
 ] as const;
 
 export type TArticleCategoryTab = (typeof ARTICLE_CATEGORY_TABS)[number]["value"];
+
+/** Nhãn kiểm duyệt theo `origin` — bài AI chưa ai sửa vs bài admin viết / đã sửa (trang public + bảng admin). */
+export const ARTICLE_ORIGIN_LABELS: Record<TArticleOrigin, string> = {
+  AI: "Nội dung được tạo bởi AI",
+  ADMIN: "Nội dung được kiểm duyệt bởi Admin",
+  AI_REVIEWED: "Nội dung được kiểm duyệt bởi Admin",
+};

@@ -34,6 +34,8 @@ export type TArticleImage = TArticleDetail["images"][number];
 /** Bệnh dễ nhầm / liên quan — `path` null = bệnh chưa có bài (card không link). */
 export type TRelatedDisease = TArticleDetail["relatedDiseases"][number];
 export type TArticleSource = TArticleDetail["sources"][number];
+/** Nguồn gốc nội dung: AI = seed lúc deploy; ADMIN = admin viết; AI_REVIEWED = bài AI đã được admin sửa. */
+export type TArticleOrigin = TArticleDetail["origin"];
 
 /** GET /knowledge/articles/sitemap — chỉ bài REVIEWED, không phân trang. */
 export type TArticleSitemap = TApiSchema<"ArticleSitemapResponse">;

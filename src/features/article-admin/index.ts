@@ -5,4 +5,4 @@ export { useSetArticlePublished } from "./hooks/use-set-article-published";
 export { useUpdateArticle } from "./hooks/use-update-article";
 export { useAdminArticleCrops } from "./hooks/use-admin-article-crops";
 export { useAdminArticleTargets } from "./hooks/use-admin-article-targets";
-export type { TAdminArticleCrop, TAdminArticleDetail, TAdminArticleTarget, TArticleOrigin } from "./types/article-admin.types";
+export type { TAdminArticleCrop, TAdminArticleDetail, TAdminArticleTarget } from "./types/article-admin.types";
