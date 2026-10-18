@@ -7,7 +7,7 @@ export default function AdminNotFound() {
   return (
     <div className="flex flex-col items-center gap-4 py-12 text-center">
       <h1 className="text-xl font-semibold">Không tìm thấy</h1>
-      <p className="text-sm text-muted-foreground">Bài viết hoặc bệnh này không tồn tại.</p>
+      <p className="text-sm text-muted-foreground">Bài viết không tồn tại, hoặc bệnh này chưa có bài viết riêng.</p>
       <Button asChild>
         <Link href={ROUTES.admin.articles.list()}>Về danh sách bài viết</Link>
       </Button>

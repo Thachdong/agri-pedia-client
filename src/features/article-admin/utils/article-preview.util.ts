@@ -1,6 +1,7 @@
 import type { TArticleMarkdownSource } from "@/features/article";
+import { ROUTES } from "@/shared/constants";
 import type { TAdminArticleCrop, TArticleFormValues } from "../types/article-admin.types";
-import { resolvePreviewImages } from "./article-markdown.util";
+import { resolvePreviewDiseaseLinks, resolvePreviewImages } from "./article-markdown.util";
 
 /** Kích thước tạm cho next/image khi chưa biết kích thước thật (ảnh mới) — ảnh vẫn hiển thị đúng tỉ lệ. */
 const PREVIEW_IMAGE_WIDTH = 1600;
@@ -10,6 +11,7 @@ export type TArticlePreviewCrop = Pick<TAdminArticleCrop, "code" | "slug" | "nam
 
 /**
  * Nội dung form → dữ liệu cho ArticleMarkdown: ảnh trỏ tới URL xem trước (ảnh đã lưu / object URL của ảnh mới).
+ * Link `/diseases/<CODE>` trỏ sang trang xem bài trong admin (ADMIN không vào được trang public).
  * `::disease-card` không hiện trong xem trước (cần dữ liệu bệnh liên quan mà server chỉ trả ở trang public).
  */
 export const toArticlePreview = (
@@ -18,7 +20,10 @@ export const toArticlePreview = (
 ): TArticleMarkdownSource => {
   const withUrl = images.filter((image): image is typeof image & { previewUrl: string } => Boolean(image.previewUrl));
   return {
-    markdown: resolvePreviewImages(markdown, new Map(withUrl.map((image) => [image.file, image.previewUrl]))),
+    markdown: resolvePreviewDiseaseLinks(
+      resolvePreviewImages(markdown, new Map(withUrl.map((image) => [image.file, image.previewUrl]))),
+      ROUTES.admin.articles.detail,
+    ),
     images: withUrl.map(({ previewUrl, alt, caption, credit }) => ({
       url: previewUrl,
       alt,
