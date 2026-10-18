@@ -46,6 +46,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 35. [bff-auth]           fix: ADMIN sau login chỉ nhận `next` thuộc khu đang có (/admin/articles…), còn lại → /admin/articles (bị đưa tới /admin/settings/boost-prices)
 - [x] 36. [atomic-component]  molecule  ArticleRowActions — "Xem" mở tab mới
 - [x] 37. [atomic-component]  organism  ArticlePreviewBody (tách từ AdminArticlePreview) + ArticlePreviewDialog — nút "Xem trước" toàn bài ở form tạo/sửa
+- [x] 38. [bff-auth]           fix: vòng lặp /auth/login ↔ /admin khi access hết hạn — proxy gửi /admin qua GET /api/auth/refresh?next= (refresh xong quay lại, hỏng → xoá phiên → login); layout /admin không redirect login nữa
 
 Components (in order):
   [atom]      Table                 new     shared

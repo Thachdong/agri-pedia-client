@@ -9,6 +9,8 @@ import {
   LOGIN_NEXT_PARAM,
   LOGIN_PATH,
   PROTECTED_PATHS,
+  REFRESH_NEXT_PARAM,
+  REFRESH_PATH,
   REFRESH_TOKEN_COOKIE,
   ROLE_COOKIE,
 } from "@/shared/lib/auth/auth.constants";
@@ -38,6 +40,14 @@ export function proxy(request: NextRequest) {
   // ADMIN chỉ dùng khu quản trị; user thường không vào khu quản trị.
   if (isAdmin && !inAdminArea) return NextResponse.redirect(new URL(ADMIN_HOME_PATH, request.url));
   if (!isAdmin && inAdminArea) return NextResponse.redirect(new URL(HOME_PATH, request.url));
+
+  // Khu quản trị render ở server bằng access token: hết hạn (cookie đã mất, còn refresh) → làm mới trước khi render,
+  // không thì layout nhận 401 và đẩy về login → proxy lại đẩy ADMIN về đây (vòng lặp).
+  if (inAdminArea && !request.cookies.has(ACCESS_TOKEN_COOKIE)) {
+    const refreshUrl = new URL(REFRESH_PATH, request.url);
+    refreshUrl.searchParams.set(REFRESH_NEXT_PARAM, `${pathname}${search}`);
+    return NextResponse.redirect(refreshUrl);
+  }
 
   if (matchesPath(pathname, GUEST_ONLY_PATHS)) {
     return NextResponse.redirect(new URL(HOME_PATH, request.url));

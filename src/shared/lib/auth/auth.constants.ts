@@ -20,6 +20,12 @@ export const HOME_PATH = ROUTES.home;
 export const ADMIN_PATH = ROUTES.admin.root;
 export const ADMIN_HOME_PATH = ROUTES.admin.articles.list();
 export const LOGIN_NEXT_PARAM = "next";
+/**
+ * Làm mới phiên rồi quay lại `?next=` (GET, route BFF) — proxy dùng cho trang render cần token
+ * (khu quản trị) khi chỉ còn cookie refresh.
+ */
+export const REFRESH_PATH = "/api/auth/refresh";
+export const REFRESH_NEXT_PARAM = "next";
 
 /** Đã đăng nhập mà vào các trang này → về HOME_PATH. */
 export const GUEST_ONLY_PATHS: readonly string[] = [
