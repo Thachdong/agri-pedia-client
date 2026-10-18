@@ -44,7 +44,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 33. [atomic-component]  organism  ArticleEditorHeader (new, feature) + utils findArticleTarget / toPreviewCrop — page new/edit gọn lại (arch-review #14)
 - [x] 34. [atomic-component]  molecule  SidebarDrawer — mô tả thành prop `description` (arch-review)
 - [x] 35. [bff-auth]           fix: ADMIN sau login chỉ nhận `next` thuộc khu đang có (/admin/articles…), còn lại → /admin/articles (bị đưa tới /admin/settings/boost-prices)
-- [ ] 36. [atomic-component]  molecule  ArticleRowActions — "Xem" mở tab mới
+- [x] 36. [atomic-component]  molecule  ArticleRowActions — "Xem" mở tab mới
 
 Components (in order):
   [atom]      Table                 new     shared

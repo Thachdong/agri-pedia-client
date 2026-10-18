@@ -17,7 +17,7 @@ export type TArticleRowActionsProps = {
 
 const LABEL_CLASS = "hidden lg:inline";
 
-/** Cột Actions: chưa có bài → Tạo; có bài → Xem / Sửa / Unpublish (bài đang ẩn → Publish). */
+/** Cột Actions: chưa có bài → Tạo; có bài → Xem (tab mới) / Sửa / Unpublish (bài đang ẩn → Publish). */
 export function ArticleRowActions({ target, cropSlug, canCreate, onTogglePublished, className }: TArticleRowActionsProps) {
   const { article } = target;
 
@@ -53,8 +53,9 @@ export function ArticleRowActions({ target, cropSlug, canCreate, onTogglePublish
 
   return (
     <div className={cn("flex justify-end gap-1", className)}>
-      <Button asChild size="sm" variant="ghost" aria-label={`Xem bài ${target.nameVi}`}>
-        <Link href={ROUTES.admin.articles.detail(target.code)}>
+      <Button asChild size="sm" variant="ghost" aria-label={`Xem bài ${target.nameVi} (mở tab mới)`}>
+        {/* Mở tab mới để giữ bảng (cây, bộ lọc) ở tab hiện tại. */}
+        <Link href={ROUTES.admin.articles.detail(target.code)} target="_blank" rel="noopener noreferrer">
           <EyeIcon aria-hidden />
           <span className={LABEL_CLASS}>Xem</span>
         </Link>
