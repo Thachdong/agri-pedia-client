@@ -31,3 +31,17 @@ export const toArticlePreview = (
     crop,
   };
 };
+
+/** Cây cho xem trước từ danh sách cây (có thể chưa tải được) — thiếu thì dùng slug, coi như chưa bật chẩn đoán. */
+export const toPreviewCrop = (
+  crops: readonly TAdminArticleCrop[] | undefined,
+  crop: { slug: string; code?: string },
+): TArticlePreviewCrop => {
+  const found = crops?.find((item) => item.slug === crop.slug);
+  return {
+    code: found?.code ?? crop.code ?? "",
+    slug: crop.slug,
+    nameVi: found?.nameVi ?? crop.slug,
+    diagnosisEnabled: found?.diagnosisEnabled ?? false,
+  };
+};

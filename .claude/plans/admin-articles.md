@@ -41,6 +41,8 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 30. [page]              /admin/articles/[code]/edit — prefetch detail, ArticleForm update
 - [x] 31. [page]              /admin/articles/[code] — prefetch detail, AdminArticlePreview + link public (nếu published)
 - [x] 32. [arch-review]
+- [x] 33. [atomic-component]  organism  ArticleEditorHeader (new, feature) + utils findArticleTarget / toPreviewCrop — page new/edit gọn lại (arch-review #14)
+- [ ] 34. [atomic-component]  molecule  SidebarDrawer — mô tả thành prop `description` (arch-review)
 
 Components (in order):
   [atom]      Table                 new     shared

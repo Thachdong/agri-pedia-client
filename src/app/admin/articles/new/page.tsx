@@ -3,8 +3,11 @@ import { notFound, redirect } from "next/navigation";
 import {
   adminArticleCropsQuery,
   adminArticleTargetsQuery,
+  ArticleEditorHeader,
   ArticleForm,
   ArticleTargetPicker,
+  findArticleTarget,
+  toPreviewCrop,
   type TAdminArticleCropsResponse,
   type TAdminArticleTargetsResponse,
 } from "@/features/article-admin";
@@ -46,35 +49,21 @@ export default async function AdminArticleCreatePage({ searchParams }: PageProps
     throw error;
   }
 
-  const target = getPrefetchedData<TAdminArticleTargetsResponse>(state, targets.queryKey)?.targets.find(
-    (item) => item.code === code,
-  );
+  const target = findArticleTarget(getPrefetchedData<TAdminArticleTargetsResponse>(state, targets.queryKey), code);
   if (!target) notFound();
   if (target.article) redirect(ROUTES.admin.articles.edit(target.code));
-
-  const cropInfo = getPrefetchedData<TAdminArticleCropsResponse>(state, crops.queryKey)?.crops.find(
-    (item) => item.slug === crop,
-  );
+  const previewCrop = toPreviewCrop(getPrefetchedData<TAdminArticleCropsResponse>(state, crops.queryKey)?.crops, {
+    slug: crop,
+  });
 
   return (
     <HydrateQueries state={state}>
       <div className="flex flex-col gap-6">
-        <header className="flex flex-col gap-1">
-          <h1 className="text-xl font-semibold">Viết bài: {target.nameVi}</h1>
-          <p className="text-sm text-muted-foreground">
-            <code>{target.code}</code> · {cropInfo?.nameVi ?? crop} — bài được publish ngay, đánh dấu “Nội dung được kiểm
-            duyệt bởi Admin”.
-          </p>
-        </header>
+        <ArticleEditorHeader mode="create" name={target.nameVi} code={target.code} cropName={previewCrop.nameVi} />
         <ArticleForm
           mode="create"
           target={{ code: target.code, nameVi: target.nameVi }}
-          crop={{
-            code: cropInfo?.code ?? "",
-            slug: crop,
-            nameVi: cropInfo?.nameVi ?? crop,
-            diagnosisEnabled: cropInfo?.diagnosisEnabled ?? false,
-          }}
+          crop={previewCrop}
           cancelHref={ROUTES.admin.articles.list(crop)}
         />
       </div>

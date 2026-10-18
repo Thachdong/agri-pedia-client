@@ -2,6 +2,8 @@ import { removeDiacritics } from "@/shared/utils";
 import { ARTICLE_SLUG_MAX } from "../constants/article-admin.constants";
 import type {
   TAdminArticleDetail,
+  TAdminArticleTarget,
+  TAdminArticleTargetsResponse,
   TArticleFormValues,
   TArticleImageFormValue,
   TArticleImageInput,
@@ -82,3 +84,9 @@ export const toCreateArticleInput = (code: string, values: TArticleFormValues): 
   slug: values.slug,
   ...toContentInput(values),
 });
+
+/** Bệnh / variant `code` trong danh sách của 1 cây; không có → undefined. */
+export const findArticleTarget = (
+  response: TAdminArticleTargetsResponse | undefined,
+  code: string,
+): TAdminArticleTarget | undefined => response?.targets.find((target) => target.code === code);

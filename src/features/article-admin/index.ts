@@ -16,3 +16,6 @@ export { ArticleTargetTable, type TArticleTargetTableProps } from "./components/
 export { ArticleForm, type TArticleFormProps } from "./components/article-form";
 export { AdminArticlePreview, type TAdminArticlePreviewProps } from "./components/admin-article-preview";
 export { ArticleTargetPicker, type TArticleTargetPickerProps } from "./components/article-target-picker";
+export { ArticleEditorHeader, type TArticleEditorHeaderProps } from "./components/article-editor-header";
+export { findArticleTarget } from "./utils/article-form.util";
+export { toPreviewCrop } from "./utils/article-preview.util";

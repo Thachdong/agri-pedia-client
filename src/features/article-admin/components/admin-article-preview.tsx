@@ -15,7 +15,7 @@ import { useAdminArticle } from "../hooks/use-admin-article";
 import { useAdminArticleCrops } from "../hooks/use-admin-article-crops";
 import { useSetArticlePublished } from "../hooks/use-set-article-published";
 import { toArticleFormValues } from "../utils/article-form.util";
-import { toArticlePreview } from "../utils/article-preview.util";
+import { toArticlePreview, toPreviewCrop } from "../utils/article-preview.util";
 
 const dateTimeFormatter = new Intl.DateTimeFormat("vi-VN", {
   day: "2-digit",
@@ -57,14 +57,7 @@ export function AdminArticlePreview({ code, className }: TAdminArticlePreviewPro
   }
 
   const data = article.data;
-  const crop = crops.data?.crops.find((item) => item.slug === data.crop.slug);
-  const formValues = toArticleFormValues(data);
-  const preview = toArticlePreview(formValues, {
-    code: data.crop.code,
-    slug: data.crop.slug,
-    nameVi: crop?.nameVi ?? data.crop.slug,
-    diagnosisEnabled: crop?.diagnosisEnabled ?? false,
-  });
+  const preview = toArticlePreview(toArticleFormValues(data), toPreviewCrop(crops.data?.crops, data.crop));
   const cover = data.images.find((image) => image.file === data.cover);
   const willPublish = !data.isPublished;
 
