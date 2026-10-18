@@ -21,7 +21,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 11. [shared-unit]       utils article-form: detail → form values, form → Create/Update DTO, preview markdown (file name → images[].url), slug từ tên bệnh (tái dùng de-accent của heading-ids)
 - [x] 12. [shared-unit]       constant ARTICLE_ORIGIN_LABELS (feature article): AI → "Nội dung được tạo bởi AI"; ADMIN | AI_REVIEWED → "Nội dung được kiểm duyệt bởi Admin"
 - [x] 13. [atomic-component]  atom      Table             (new, shared — shadcn table)
-- [ ] 14. [atomic-component]  molecule  ArticleOriginBadge (new, feature article — dùng ở public ArticleMeta + bảng admin)
+- [x] 14. [atomic-component]  molecule  ArticleOriginBadge (new, feature article — dùng ở public ArticleMeta + bảng admin)
 - [ ] 15. [atomic-component]  molecule  ArticleMeta       (update, feature article — thay dòng reviewedBy bằng ArticleOriginBadge)
 - [ ] 16. [atomic-component]  organism  SidebarNav        (new, shared — nhóm thu gọn/mở rộng, item active/disabled, Collapsible của radix)
 - [ ] 17. [atomic-component]  template  AdminLayout       (new, shared — header logo + user icon, sidebar, content cuộn, khung 100dvh; mobile: sidebar thành drawer)
