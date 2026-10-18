@@ -32,6 +32,15 @@ export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/
 export { Label } from "../ui/label";
 export { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "../ui/popover";
 export { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 export {
   Table,
