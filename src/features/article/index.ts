@@ -14,6 +14,11 @@ export { ArticleCropCard, type TArticleCropCardProps } from "./components/articl
 export { ArticleCtaButton, type TArticleCtaButtonProps } from "./components/article-cta-button";
 export { ArticleDetail, type TArticleDetailProps } from "./components/article-detail";
 export { ArticleList, type TArticleListProps } from "./components/article-list";
+export {
+  ArticleMarkdown,
+  type TArticleMarkdownProps,
+  type TArticleMarkdownSource,
+} from "./components/article-markdown";
 export { ArticleOriginBadge, type TArticleOriginBadgeProps } from "./components/article-origin-badge";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";

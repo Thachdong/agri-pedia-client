@@ -38,7 +38,7 @@ type TDirectiveComponents = {
   [ARTICLE_DIRECTIVE_ELEMENT.cta]: () => React.ReactNode;
 };
 
-function articleComponents(article: TArticleDetail): Components {
+function articleComponents(article: TArticleMarkdownSource): Components {
   const imagesByUrl = new Map(article.images.map((image) => [image.url, image]));
   const relatedByCode = new Map(article.relatedDiseases.map((disease) => [disease.code, disease]));
 
@@ -95,8 +95,11 @@ function articleComponents(article: TArticleDetail): Components {
   };
 }
 
+/** Phần của bài cần để render nội dung — trang public truyền cả bài, trang admin dựng bản xem trước. */
+export type TArticleMarkdownSource = Pick<TArticleDetail, "markdown" | "images" | "relatedDiseases" | "crop">;
+
 export type TArticleMarkdownProps = {
-  article: TArticleDetail;
+  article: TArticleMarkdownSource;
   className?: string;
 };
 
