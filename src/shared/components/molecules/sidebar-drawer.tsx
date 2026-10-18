@@ -8,12 +8,14 @@ import { Button, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle,
 export type TSidebarDrawerProps = {
   /** Tiêu đề drawer (đọc bởi screen reader, hiện ở đầu drawer). */
   title: string;
+  /** Mô tả cho screen reader (ẩn), vd. "Điều hướng khu quản trị". */
+  description: string;
   children: React.ReactNode;
   className?: string;
 };
 
 /** Nút ☰ mở menu bên trái dạng drawer (mobile). Tự đóng khi đổi trang. */
-export function SidebarDrawer({ title, children, className }: TSidebarDrawerProps) {
+export function SidebarDrawer({ title, description, children, className }: TSidebarDrawerProps) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   // Đổi trang → đóng drawer (state gắn với pathname đang mở, không cần effect).
@@ -36,7 +38,7 @@ export function SidebarDrawer({ title, children, className }: TSidebarDrawerProp
       <SheetContent side="left" className="w-72 gap-0 p-0">
         <SheetHeader className="border-b border-border-subtle">
           <SheetTitle>{title}</SheetTitle>
-          <SheetDescription className="sr-only">Điều hướng khu quản trị</SheetDescription>
+          <SheetDescription className="sr-only">{description}</SheetDescription>
         </SheetHeader>
         <div className="scrollbar-thin min-h-0 flex-1 overflow-y-auto">{children}</div>
       </SheetContent>

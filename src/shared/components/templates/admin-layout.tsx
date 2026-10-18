@@ -22,7 +22,7 @@ export function AdminLayout({ homeHref, sidebar, actions, children, className }:
     <div className={cn("flex h-dvh flex-col bg-background", className)}>
       <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-border-subtle px-4">
         <div className="flex min-w-0 items-center gap-2">
-          <SidebarDrawer title="AgriPedia Admin" className="md:hidden">
+          <SidebarDrawer title="AgriPedia Admin" description="Điều hướng khu quản trị" className="md:hidden">
             {sidebar}
           </SidebarDrawer>
           <Link
