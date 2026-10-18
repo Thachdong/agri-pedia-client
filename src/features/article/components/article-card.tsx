@@ -39,10 +39,12 @@ export function ArticleCard({ article, priority = false, className }: TArticleCa
         )}
       </div>
       <div className="flex flex-1 flex-col gap-1.5 p-4">
-        <div className="flex flex-wrap items-center gap-1.5">
-          {category && <Badge>{CATEGORY_LABELS[category]}</Badge>}
-          {article.status === "DRAFT" && <Badge tone="warning">Bản nháp</Badge>}
-        </div>
+        {/* Không hiện trạng thái DRAFT trên thẻ — trang bài vẫn noindex bài DRAFT. */}
+        {category && (
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Badge>{CATEGORY_LABELS[category]}</Badge>
+          </div>
+        )}
         <h2 className="font-semibold text-foreground group-hover:text-primary">{article.title}</h2>
         {article.disease?.scientificName && (
           <p className="text-sm text-muted-foreground italic">{article.disease.scientificName}</p>
