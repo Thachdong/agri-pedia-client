@@ -43,7 +43,7 @@ export function ArticleDetail({ article, className }: TArticleDetailProps) {
         <p className="text-muted-foreground">{article.summary}</p>
         <ArticleMeta
           updatedAt={article.updatedAt}
-          reviewedBy={article.reviewedBy}
+          origin={article.origin}
           verification={article.disease?.verification ?? null}
         />
       </header>
