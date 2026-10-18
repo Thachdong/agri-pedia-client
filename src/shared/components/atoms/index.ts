@@ -32,6 +32,16 @@ export { Label } from "../ui/label";
 export { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "../ui/popover";
 export { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 export { Textarea } from "../ui/textarea";
 export { Toaster } from "../ui/sonner";
