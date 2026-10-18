@@ -8,3 +8,4 @@ export { useAdminArticleTargets } from "./hooks/use-admin-article-targets";
 export type { TAdminArticleCrop, TAdminArticleDetail, TAdminArticleTarget } from "./types/article-admin.types";
 export { ArticleTargetTable, type TArticleTargetTableProps } from "./components/article-target-table";
 export { ArticleForm, type TArticleFormProps } from "./components/article-form";
+export { AdminArticlePreview, type TAdminArticlePreviewProps } from "./components/admin-article-preview";

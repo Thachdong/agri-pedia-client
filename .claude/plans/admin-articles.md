@@ -33,7 +33,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 23. [atomic-component]  organism  ArticleSourcesField (new, feature — useFieldArray title + url)
 - [x] 24. [atomic-component]  organism  ArticleMarkdownEditor (new, feature — textarea + tab Xem trước, tái dùng ArticleMarkdown)
 - [x] 25. [atomic-component]  organism  ArticleForm       (new, feature — mode create|update, map lỗi KNOWLEDGE_ARTICLE_INVALID_CONTENT `details.issues` vào field)
-- [ ] 26. [atomic-component]  organism  AdminArticlePreview (new, feature — meta + origin + trạng thái publish + ArticleMarkdown; xem được cả bài unpublished)
+- [x] 26. [atomic-component]  organism  AdminArticlePreview (new, feature — meta + origin + trạng thái publish + ArticleMarkdown; xem được cả bài unpublished; chỉ hiện path public vì ADMIN không vào được front pages)
 - [ ] 26b. [atomic-component] molecule ArticleTargetPicker (new, feature — chọn cây + bệnh chưa có bài; dùng khi vào Create từ sidebar, không có `code`)
 - [ ] 27. [page]              layout /admin — guard server (meQuery, role ≠ ADMIN → redirect home), AdminLayout + SidebarNav (Article: List/Create — không có Update; AI Provider: mock); /admin → redirect /admin/articles
 - [ ] 28. [page]              /admin/articles?crop=<slug> — prefetch crops + targets, ArticleTargetTable
