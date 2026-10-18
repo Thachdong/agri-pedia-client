@@ -12,7 +12,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
                                Cookie role chỉ để điều hướng — quyền thật vẫn check ở layout /admin (meQuery) + NestJS 403
 - [x] 3. [feature-scaffold]   feature `article-admin` — layers: types, constants, services, hooks, schemas, utils, components
 - [x] 4. [feature-api]        GET /admin/knowledge/crops → TAdminArticleCrop, listAdminArticleCrops, useAdminArticleCrops; key adminArticles.crops
-- [ ] 5. [feature-api]        GET /admin/knowledge/crops/{cropSlug}/articles → TAdminArticleTarget, useAdminArticleTargets; key adminArticles.targets(crop)
+- [x] 5. [feature-api]        GET /admin/knowledge/crops/{cropSlug}/articles → TAdminArticleTarget, useAdminArticleTargets; key adminArticles.targets(crop)
 - [ ] 6. [feature-api]        GET /admin/knowledge/articles/{code} → TAdminArticleDetail, useAdminArticle; key adminArticles.detail(code)
 - [ ] 7. [feature-api]        POST /admin/knowledge/articles → useCreateArticle; invalidates adminArticles.crops + targets(crop)
 - [ ] 8. [feature-api]        PUT /admin/knowledge/articles/{code} → useUpdateArticle; invalidates detail(code) + targets(crop)
