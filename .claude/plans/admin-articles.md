@@ -7,7 +7,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
      POST /media/presign-url (reuse)
 
 - [x] 1. [data-wrapper]       `npm run gen:api` — openapi.d.ts chưa có Admin* schema + `origin` của ArticleDetailResponse
-- [ ] 2. [bff-auth]           ROUTES.admin.*; BFF login set cookie httpOnly `ap_role` (refresh giữ, logout xoá); getPostLoginPath: ADMIN → /admin/articles;
+- [x] 2. [bff-auth]           ROUTES.admin.*; BFF login set cookie httpOnly `ap_role` (refresh giữ, logout xoá); getPostLoginPath: ADMIN → /admin/articles;
                                proxy: chưa login + /admin → /login; role ADMIN + front page (ngoài /admin, /api) → /admin/articles; role ≠ ADMIN + /admin → home.
                                Cookie role chỉ để điều hướng — quyền thật vẫn check ở layout /admin (meQuery) + NestJS 403
 - [ ] 3. [feature-scaffold]   feature `article-admin` — layers: types, constants, services, hooks, schemas, utils, components

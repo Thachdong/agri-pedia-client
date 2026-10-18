@@ -29,4 +29,19 @@ export const ROUTES = {
     detail: (cropSlug: string, slug: string) =>
       `/benh-cay-trong/${encodeURIComponent(cropSlug)}/${encodeURIComponent(slug)}`,
   },
+  /** Khu quản trị — chỉ ADMIN (proxy điều hướng theo cookie role, layout `/admin` kiểm role thật). */
+  admin: {
+    root: "/admin",
+    articles: {
+      /** Bảng bệnh + bài viết của 1 cây; không có `crop` → cây đầu tiên. */
+      list: (crop?: string) => (crop ? `/admin/articles?crop=${encodeURIComponent(crop)}` : "/admin/articles"),
+      /** Viết bài cho 1 bệnh / variant chưa có bài; không có `code` → chọn bệnh trước. */
+      new: (target?: { crop: string; code: string }) =>
+        target
+          ? `/admin/articles/new?crop=${encodeURIComponent(target.crop)}&code=${encodeURIComponent(target.code)}`
+          : "/admin/articles/new",
+      detail: (code: string) => `/admin/articles/${encodeURIComponent(code)}`,
+      edit: (code: string) => `/admin/articles/${encodeURIComponent(code)}/edit`,
+    },
+  },
 } as const;

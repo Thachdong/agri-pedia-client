@@ -2,7 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { publicEnv } from "@/shared/config";
 import { serverEnv } from "@/shared/config/env.server";
-import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_FALLBACK_MAX_AGE, REFRESH_TOKEN_COOKIE } from "./auth.constants";
+import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_FALLBACK_MAX_AGE, REFRESH_TOKEN_COOKIE, ROLE_COOKIE } from "./auth.constants";
 
 export type TTokenPair = { accessToken: string; refreshToken: string };
 
@@ -24,19 +24,24 @@ const cookieOptions = () => ({
   path: "/",
 });
 
-export async function setAuthCookies({ accessToken, refreshToken }: TTokenPair): Promise<void> {
+/**
+ * Ghi cặp token + cookie role (cùng tuổi với refresh). Không truyền `role` (refresh) → giữ role cũ, gia hạn theo refresh.
+ */
+export async function setAuthCookies({ accessToken, refreshToken }: TTokenPair, role?: string): Promise<void> {
   const store = await cookies();
+  const sessionMaxAge = serverEnv.AUTH_REFRESH_TOKEN_TTL_SECONDS;
   store.set(ACCESS_TOKEN_COOKIE, accessToken, { ...cookieOptions(), maxAge: secondsUntilExpiry(accessToken) });
-  store.set(REFRESH_TOKEN_COOKIE, refreshToken, {
-    ...cookieOptions(),
-    maxAge: serverEnv.AUTH_REFRESH_TOKEN_TTL_SECONDS,
-  });
+  store.set(REFRESH_TOKEN_COOKIE, refreshToken, { ...cookieOptions(), maxAge: sessionMaxAge });
+
+  const nextRole = role ?? store.get(ROLE_COOKIE)?.value;
+  if (nextRole) store.set(ROLE_COOKIE, nextRole, { ...cookieOptions(), maxAge: sessionMaxAge });
 }
 
 export async function clearAuthCookies(): Promise<void> {
   const store = await cookies();
   store.delete({ name: ACCESS_TOKEN_COOKIE, path: "/" });
   store.delete({ name: REFRESH_TOKEN_COOKIE, path: "/" });
+  store.delete({ name: ROLE_COOKIE, path: "/" });
 }
 
 export async function getAccessToken(): Promise<string | undefined> {
