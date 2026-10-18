@@ -17,7 +17,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 7. [feature-api]        POST /admin/knowledge/articles → useCreateArticle; invalidates adminArticles.crops + targets(crop)
 - [x] 8. [feature-api]        PUT /admin/knowledge/articles/{code} → useUpdateArticle; invalidates detail(code) + targets(crop)
 - [x] 9. [feature-api]        POST …/{code}/unpublish + …/publish → useSetArticlePublished; invalidates detail(code) + targets + crops
-- [ ] 10. [validation-schema] articleFormSchema (create: + code, slug) — title 1-70, summary 50-160, slug SLUG, image file `^[a-z0-9-]+\.webp$` unique, cover ∈ images, credit required, sources
+- [x] 10. [validation-schema] articleFormSchema (create: + code, slug) — title 1-70, summary 50-160, slug SLUG, image file `^[a-z0-9-]+\.webp$` unique, cover ∈ images, credit required, sources
 - [ ] 11. [shared-unit]       utils article-form: detail → form values, form → Create/Update DTO, preview markdown (file name → images[].url), slug từ tên bệnh (tái dùng de-accent của heading-ids)
 - [ ] 12. [shared-unit]       constant ARTICLE_ORIGIN_LABELS (feature article): AI → "Nội dung được tạo bởi AI"; ADMIN | AI_REVIEWED → "Nội dung được kiểm duyệt bởi Admin"
 - [ ] 13. [atomic-component]  atom      Table             (new, shared — shadcn table)

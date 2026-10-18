@@ -1,3 +1,4 @@
+import type { TMediaUpload } from "@/features/media";
 import type { TApiSchema } from "@/shared/lib/http";
 
 /** Nguồn gốc nội dung: AI = seed lúc deploy; ADMIN = admin viết; AI_REVIEWED = bài AI đã được admin sửa. */
@@ -40,3 +41,18 @@ export type TUpdateArticleResponse = TApiSchema<"UpdateArticleResponse">;
 /** POST /admin/knowledge/articles/:code/{publish|unpublish} — đã đúng trạng thái = no-op. */
 export type TArticleVisibilityResponse = TApiSchema<"ArticleVisibilityResponse">;
 export type TSetArticlePublishedInput = { code: string; published: boolean };
+
+/**
+ * 1 ảnh trong form: `upload` null = ảnh đã lưu (giữ theo `file`), có `upload` = ảnh mới (gửi `tmpKey` khi xong).
+ * `previewUrl` = URL public của ảnh đã lưu hoặc object URL của file mới — chỉ để xem trước, không gửi server.
+ */
+export type TArticleImageFormValue = Omit<TArticleImageInput, "tmpKey" | "caption"> & {
+  caption: string;
+  previewUrl: string | null;
+  upload: TMediaUpload<"IMAGE"> | null;
+};
+
+/** Giá trị form tạo / sửa bài — `code` lấy từ route; `slug` chỉ sửa được lúc tạo. */
+export type TArticleFormValues = Omit<TCreateArticleInput, "code" | "images"> & {
+  images: TArticleImageFormValue[];
+};
