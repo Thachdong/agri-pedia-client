@@ -5,6 +5,8 @@ import type { TSetArticlePublishedInput } from "../types/article-admin.types";
 /** Publish / unpublish 1 bài của cây `cropSlug` — bài, bảng của cây và số bài published của cây bị stale. */
 export const useSetArticlePublished = (cropSlug: string) =>
   useAppMutation({
+    // Lỗi hiện ngay trong form / hộp xác nhận → không toast thêm.
+    meta: { silent: true },
     mutationFn: ({ code, published }: TSetArticlePublishedInput) => setArticlePublished(code, published),
     invalidates: ({ code }) => [
       queryKeys.adminArticles.detail(code),

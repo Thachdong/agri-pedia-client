@@ -5,6 +5,8 @@ import type { TCreateArticleInput } from "../types/article-admin.types";
 /** Viết bài mới cho 1 bệnh của cây `cropSlug` — bảng của cây đó và số bài của các cây bị stale. */
 export const useCreateArticle = (cropSlug: string) =>
   useAppMutation({
+    // Lỗi hiện ngay trong form / hộp xác nhận → không toast thêm.
+    meta: { silent: true },
     mutationFn: (input: TCreateArticleInput) => createArticle(input),
     invalidates: (_input, { code }) => [
       queryKeys.adminArticles.crops(),
