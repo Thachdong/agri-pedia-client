@@ -40,7 +40,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 29. [page]              /admin/articles/new[?code=<CODE>&crop=<slug>] — có code: ArticleForm create (slug gợi ý từ tên bệnh); không có: ArticleTargetPicker trước
 - [x] 30. [page]              /admin/articles/[code]/edit — prefetch detail, ArticleForm update
 - [x] 31. [page]              /admin/articles/[code] — prefetch detail, AdminArticlePreview + link public (nếu published)
-- [ ] 32. [arch-review]
+- [x] 32. [arch-review]
 
 Components (in order):
   [atom]      Table                 new     shared
