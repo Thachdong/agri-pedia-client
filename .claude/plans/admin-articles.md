@@ -38,7 +38,7 @@ API: GET /admin/knowledge/crops, GET /admin/knowledge/crops/{cropSlug}/articles,
 - [x] 27. [page]              layout /admin — guard server (meQuery, role ≠ ADMIN → redirect home), AdminLayout + SidebarNav (Article: List/Create — không có Update; AI Provider: mock); /admin → redirect /admin/articles
 - [x] 28. [page]              /admin/articles?crop=<slug> — prefetch crops + targets, ArticleTargetTable
 - [x] 29. [page]              /admin/articles/new[?code=<CODE>&crop=<slug>] — có code: ArticleForm create (slug gợi ý từ tên bệnh); không có: ArticleTargetPicker trước
-- [ ] 30. [page]              /admin/articles/[code]/edit — prefetch detail, ArticleForm update
+- [x] 30. [page]              /admin/articles/[code]/edit — prefetch detail, ArticleForm update
 - [ ] 31. [page]              /admin/articles/[code] — prefetch detail, AdminArticlePreview + link public (nếu published)
 - [ ] 32. [arch-review]
 
