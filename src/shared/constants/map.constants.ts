@@ -4,10 +4,10 @@ export type TLatLngTuple = [number, number];
 export type TBoundsTuple = [TLatLngTuple, TLatLngTuple];
 
 /**
- * Khung lãnh thổ Việt Nam, gồm quần đảo Hoàng Sa và Trường Sa — mọi bản đồ bị giới hạn trong khung này
- * và mặc định hiển thị vừa khung.
+ * Khung hiển thị mặc định + giới hạn của mọi bản đồ (Specs/19102026/map-size.png): trọn đất liền Việt Nam và
+ * quần đảo Hoàng Sa, mép đông tới khoảng Hồng Kông — bỏ bớt biển phía đông / nam để bản đồ không quá nhỏ.
  */
 export const VN_BOUNDS: TBoundsTuple = [
-  [6.0, 102.0],
-  [23.5, 117.0],
+  [8.0, 102.1],
+  [23.8, 115.8],
 ];
