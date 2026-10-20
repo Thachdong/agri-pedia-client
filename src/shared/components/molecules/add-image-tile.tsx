@@ -3,7 +3,6 @@
 import { CameraIcon, ImagePlusIcon } from "lucide-react";
 import { useRef } from "react";
 import { cn } from "@/shared/lib/utils";
-import { DIAGNOSIS_IMAGE_ACCEPT } from "../constants/diagnosis.constants";
 
 export type TAddImageTileProps = {
   /** Số ảnh còn được thêm — file chọn dư bị cắt bớt. */
@@ -11,6 +10,10 @@ export type TAddImageTileProps = {
   /** Mở camera trong trang (dialog). */
   onCapture: () => void;
   onPick: (files: File[]) => void;
+  /** `accept` của input file (vd. "image/jpeg,image/png"). */
+  accept?: string;
+  /** Chọn nhiều file một lần (mặc định có). */
+  multiple?: boolean;
   disabled?: boolean;
   invalid?: boolean;
   className?: string;
@@ -19,8 +22,20 @@ export type TAddImageTileProps = {
 const ACTION =
   "flex flex-1 flex-col items-center justify-center gap-1 px-2 text-xs font-medium text-muted-foreground outline-none transition-colors hover:bg-highlight-subtle hover:text-highlight focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset disabled:cursor-not-allowed disabled:opacity-50";
 
-/** Ô thêm ảnh trong lưới: nửa trên "Chụp ảnh" (camera), nửa dưới "Chọn từ máy" (input file, chọn nhiều). */
-export function AddImageTile({ remaining, onCapture, onPick, disabled = false, invalid, className }: TAddImageTileProps) {
+/**
+ * Ô thêm ảnh: nửa trên "Chụp ảnh" (camera trong trang — bên gọi mở CameraCaptureDialog), nửa dưới "Chọn từ máy"
+ * (input file). Mặc định ô vuông trong lưới; đổi khung qua `className`.
+ */
+export function AddImageTile({
+  remaining,
+  onCapture,
+  onPick,
+  accept = "image/*",
+  multiple = true,
+  disabled = false,
+  invalid,
+  className,
+}: TAddImageTileProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,8 +56,8 @@ export function AddImageTile({ remaining, onCapture, onPick, disabled = false, i
       <input
         ref={inputRef}
         type="file"
-        accept={DIAGNOSIS_IMAGE_ACCEPT}
-        multiple
+        accept={accept}
+        multiple={multiple}
         disabled={disabled}
         onChange={handleChange}
         tabIndex={-1}
