@@ -20,7 +20,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - [x] 3. [atomic-component]   organism  SessionHeaderActions  (update, auth) — thêm slot `admin`
 - [x] 4. [page]               header ADMIN (chỉ AdminUserMenu có link trang quản trị, không chat / notification / nút chẩn đoán): /benh-cay-trong layout, /profile/[id], /diagnosis, /diagnosis/[id]
 ### B. Map ADMIN hiện toàn bộ (T26)
-- [ ] 5. [atomic-component]   organism  DistributorExplorer   (update, distributor) — origin `all` tự tải hết các trang để map đủ marker
+- [x] 5. [atomic-component]   organism  DistributorExplorer   (update, distributor) — origin `all` tự tải hết các trang để map đủ marker
 ### C. Thống kê article (T25)
 - [ ] 6. [atomic-component]   organism  ArticleCropStats      (new, article-admin) — mỗi cây: số bệnh, có bài, đã publish, còn thiếu; click → chọn cây; gắn đầu /admin/articles
 ### D. /admin/settings (T18–T21)

@@ -5,7 +5,8 @@ import { MarkerMap, type TMapMarker } from "@/shared/components/organisms";
 import { type TCoordinates, useGeolocation } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { useMe } from "@/features/user";
-import { LOCATE_WAIT_MS, USER_LABELS } from "../constants/distributor.constants";
+import { ALL_ORIGIN_MAX_PAGES, LOCATE_WAIT_MS, USER_LABELS } from "../constants/distributor.constants";
+import { NEARBY_DISTRIBUTORS_PAGE_SIZE } from "../hooks/distributor.queries";
 import { useNearbyDistributors } from "../hooks/use-nearby-distributors";
 import type { TNearbyDistributorsParams } from "../types/distributor.types";
 import { DistributorList } from "./distributor-list";
@@ -34,7 +35,7 @@ function useExplorer() {
 
 /**
  * Nguồn vị trí: `geolocation` = guest (xin định vị trình duyệt); `profile` = FARMER / DISTRIBUTOR (primary address);
- * `all` = ADMIN (không vị trí, toàn quốc).
+ * `all` = ADMIN (không vị trí, toàn quốc, tự tải hết các trang để map đủ marker).
  */
 export type TExplorerOrigin = "geolocation" | "profile" | "all";
 
@@ -63,7 +64,13 @@ export function DistributorExplorerProvider({ origin = "geolocation", ownShopId,
   return (
     <Origin active={active}>
       {(location) => (
-        <ExplorerCore {...location} active={active} activate={activate} ownShopId={ownShopId}>
+        <ExplorerCore
+          {...location}
+          active={active}
+          activate={activate}
+          ownShopId={ownShopId}
+          loadAll={origin === "all"}
+        >
           {children}
         </ExplorerCore>
       )}
@@ -118,7 +125,11 @@ const ORIGINS: Record<TExplorerOrigin, (props: TOriginProps) => React.ReactNode>
 };
 
 type TExplorerCoreProps = TOriginState &
-  Pick<TExplorerContext, "active" | "activate" | "ownShopId"> & { children: React.ReactNode };
+  Pick<TExplorerContext, "active" | "activate" | "ownShopId"> & {
+    /** Tự tải hết các trang (ADMIN xem toàn bộ trên map), tối đa ALL_ORIGIN_MAX_PAGES. */
+    loadAll?: boolean;
+    children: React.ReactNode;
+  };
 
 function ExplorerCore({
   params,
@@ -128,9 +139,19 @@ function ExplorerCore({
   userLocation,
   userLabel,
   ownShopId,
+  loadAll = false,
   children,
 }: TExplorerCoreProps) {
   const query = useNearbyDistributors(params, { enabled: active && !locating });
+  const { hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage } = query;
+  const loadedPages = query.data ? Math.ceil(query.data.items.length / NEARBY_DISTRIBUTORS_PAGE_SIZE) : 0;
+
+  // Trang kế lỗi → dừng (list có nút thử lại), không tự gọi lại liên tục.
+  useEffect(() => {
+    if (!loadAll || !hasNextPage || isFetchingNextPage || isFetchNextPageError) return;
+    if (loadedPages >= ALL_ORIGIN_MAX_PAGES) return;
+    void fetchNextPage();
+  }, [loadAll, hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage, loadedPages]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const value = useMemo<TExplorerContext>(

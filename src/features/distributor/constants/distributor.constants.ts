@@ -36,3 +36,6 @@ export const PROFILE_INFO_LABELS = {
   businessType: "Lĩnh vực kinh doanh",
   bio: "Giới thiệu",
 } as const;
+
+/** ADMIN (origin `all`): tự tải tiếp tối đa chừng này trang để map đủ marker — chặn trên phòng dữ liệu quá lớn. */
+export const ALL_ORIGIN_MAX_PAGES = 25;
