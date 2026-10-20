@@ -60,5 +60,5 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - Dung lượng ảnh nhập theo MB (API nhận bytes); ràng buộc giống server (xem step 14).
 
 ## Thêm (đã duyệt) — form chẩn đoán đang hardcode giới hạn ảnh; làm sau step 14
-- [ ] 14a. [shared-unit]       compressImage nhận giới hạn từ GET /diagnoses/settings (cạnh ≤ min(2048, maxImageWidth/Height), ≤ maxImageBytes) thay hằng số 2048px / 5 MB
+- [x] 14a. [shared-unit]       compressImage nhận giới hạn từ GET /diagnoses/settings (cạnh ≤ min(2048, maxImageWidth/Height), ≤ maxImageBytes) thay hằng số 2048px / 5 MB
 - [ ] 14b. [atomic-component]  organism DiagnosisForm (update) — số ảnh tối đa + schema theo settings.maxImages thay DIAGNOSIS_MAX_IMAGES = 5
