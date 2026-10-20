@@ -2,6 +2,7 @@ import { http, type IHttpClient } from "@/shared/lib/http";
 import type {
   TCropTopArticles,
   TDiagnosisSettingsAdmin,
+  TSetCropTopArticlesInput,
   TTopArticleSettings,
   TUpdateDiagnosisSettingsInput,
   TUpdateTopArticleSettingsInput,
@@ -29,3 +30,7 @@ export const updateTopArticleSettings = (input: TUpdateTopArticleSettingsInput, 
 /** Bài nổi bật của 1 cây theo thứ tự (bài đã unpublish vẫn nằm trong danh sách, `isPublished` false). 404 KNOWLEDGE_CROP_NOT_FOUND. */
 export const getCropTopArticles = (cropSlug: string, client: IHttpClient = http) =>
   client.get<TCropTopArticles>(`/admin/knowledge/crops/${encodeURIComponent(cropSlug)}/top-articles`);
+
+/** Thay danh sách bài nổi bật của 1 cây. 400 KNOWLEDGE_TOP_ARTICLES_INVALID (`details` = { reason, articles }). */
+export const setCropTopArticles = (cropSlug: string, input: TSetCropTopArticlesInput, client: IHttpClient = http) =>
+  client.put<TCropTopArticles>(`/admin/knowledge/crops/${encodeURIComponent(cropSlug)}/top-articles`, input);

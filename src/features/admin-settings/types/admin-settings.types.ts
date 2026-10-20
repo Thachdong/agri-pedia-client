@@ -11,3 +11,9 @@ export type TUpdateTopArticleSettingsInput = TApiSchema<"UpdateTopArticleSetting
 /** GET / PUT /admin/knowledge/crops/:cropSlug/top-articles — bài nổi bật của 1 cây theo thứ tự, kèm `limit`. */
 export type TCropTopArticles = TApiSchema<"CropTopArticlesResponse">;
 export type TCropTopArticle = TCropTopArticles["articles"][number];
+
+/**
+ * PUT body — swagger sinh `SetCropTopArticlesDto` rỗng (thiếu field), viết theo server `SetCropTopArticlesDto`:
+ * slug bài đã publish của cây, đầu = top, tối đa `limit`, rỗng = xoá danh sách. Sửa swagger rồi `npm run gen:api`.
+ */
+export type TSetCropTopArticlesInput = { articleSlugs: string[] };
