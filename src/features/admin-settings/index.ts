@@ -1,4 +1,5 @@
 // Public API của feature `admin-settings` (cài đặt nền tảng: chẩn đoán, bài viết nổi bật — ADMIN).
+export { DiagnosisSettingsForm, type TDiagnosisSettingsFormProps } from "./components/diagnosis-settings-form";
 export { adminDiagnosisSettingsQuery, cropTopArticlesQuery, topArticleSettingsQuery } from "./hooks/admin-settings.queries";
 export { useAdminDiagnosisSettings } from "./hooks/use-admin-diagnosis-settings";
 export { useCropTopArticles } from "./hooks/use-crop-top-articles";
