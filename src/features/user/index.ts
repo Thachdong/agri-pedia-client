@@ -1,5 +1,5 @@
 // Public API của feature `user` (hồ sơ người đang đăng nhập, menu tài khoản).
-export { AdminUserMenu } from "./components/admin-user-menu";
+export { AdminUserMenu, type TAdminUserMenuProps } from "./components/admin-user-menu";
 export { DistributorHomeRedirect } from "./components/distributor-home-redirect";
 export { EditProfileDialog, type TEditProfileDialogProps } from "./components/edit-profile-dialog";
 export { FarmerProfileInfo, type TFarmerProfileInfoProps } from "./components/farmer-profile-info";

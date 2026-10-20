@@ -1,6 +1,7 @@
 "use client";
 
-import { LogOutIcon, MailIcon, PhoneIcon, UserRoundIcon } from "lucide-react";
+import { LayoutDashboardIcon, LogOutIcon, MailIcon, PhoneIcon, UserRoundIcon } from "lucide-react";
+import Link from "next/link";
 import { useLogout } from "@/features/auth";
 import {
   Button,
@@ -11,10 +12,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/shared/components/atoms";
+import { ROUTES } from "@/shared/constants";
 import { useMe } from "../hooks/use-me";
 
-/** User icon ở header khu quản trị (admin-page.png (1)) — dropdown: email / số điện thoại đăng nhập + đăng xuất. */
-export function AdminUserMenu() {
+export type TAdminUserMenuProps = {
+  /** Thêm mục "Trang quản trị" — dùng ở trang public (trang chủ), khu quản trị không cần. */
+  showAdminLink?: boolean;
+};
+
+/**
+ * User icon của ADMIN (admin-page.png (1)) — dropdown: email / số điện thoại đăng nhập, (tuỳ chọn) link trang quản
+ * trị, đăng xuất.
+ */
+export function AdminUserMenu({ showAdminLink = false }: TAdminUserMenuProps) {
   const { data: me, isPending } = useMe();
   const logout = useLogout();
 
@@ -38,6 +48,14 @@ export function AdminUserMenu() {
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+        {showAdminLink && (
+          <DropdownMenuItem asChild>
+            <Link href={ROUTES.admin.root}>
+              <LayoutDashboardIcon aria-hidden />
+              Trang quản trị
+            </Link>
+          </DropdownMenuItem>
+        )}
         <DropdownMenuItem disabled={logout.isPending} onSelect={() => logout.mutate()}>
           <LogOutIcon aria-hidden />
           {logout.isPending ? "Đang đăng xuất…" : "Đăng xuất"}
