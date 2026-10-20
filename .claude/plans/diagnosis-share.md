@@ -25,7 +25,7 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
 - [x] 9. [atomic-component]     molecule  DistributorCard       (update, feature distributor) — thay SupplierOption: thêm `onChoose` → card thành nút chọn; export ra index
 - [x] 10. [atomic-component]    organism  FindSupplierDialog    (new, feature diagnosis-share) — 2 tab: Gần tôi (định vị) | Theo tỉnh thành (tỉnh + xã); danh sách nearby cuộn tải thêm; chọn → onSelect
 - [x] 11. [atomic-component]    organism  SendReportDialog      (new, feature diagnosis-share) — danh sách chat room → chọn → ConfirmDialog "Gửi report cho <tên>?" → gửi; nút "Tìm nhà cung cấp" → FindSupplierDialog → chọn → confirm → gửi bằng receiverId; gửi xong đóng dialog + mở ChatModal room đó
-- [ ] 12. [atomic-component]    organism  SendReportButton      (new, feature diagnosis-share) — chỉ FARMER + diagnosis COMPLETED; mở SendReportDialog
+- [x] 12. [atomic-component]    organism  SendReportButton      (new, feature diagnosis-share) — chỉ FARMER + diagnosis COMPLETED; mở SendReportDialog
 - [ ] 13. [page]                /diagnosis/[id] — gắn SendReportButton
 - [ ] 14. [arch-review]
 
