@@ -85,7 +85,7 @@ export function HomeDiagnosisPanel({ guest = false, className }: THomeDiagnosisP
         <>
           {crops.data && crops.data.length > 1 && (
             <Tabs value={crop.code} onValueChange={changeCrop}>
-              <TabsList aria-label="Cây trồng cần chẩn đoán" className="h-10! max-w-full overflow-x-auto">
+              <TabsList aria-label="Cây trồng cần chẩn đoán" className="h-10!">
                 {crops.data.map((item) => {
                   const Icon = cropIcon(item.code);
                   return (
