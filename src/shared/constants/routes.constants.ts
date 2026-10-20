@@ -42,5 +42,13 @@ export const ROUTES = {
       detail: (code: string) => `/admin/articles/${encodeURIComponent(code)}`,
       edit: (code: string) => `/admin/articles/${encodeURIComponent(code)}/edit`,
     },
+    /** Cài đặt nền tảng (Specs/19102026/admin.md) — bỏ menu / banner. */
+    settings: {
+      root: "/admin/settings",
+      diagnosis: "/admin/settings/diagnosis",
+      /** Bài nổi bật của 1 cây; không có `crop` → cây đầu tiên. */
+      topArticles: (crop?: string) =>
+        crop ? `/admin/settings/top-articles?crop=${encodeURIComponent(crop)}` : "/admin/settings/top-articles",
+    },
   },
 } as const;

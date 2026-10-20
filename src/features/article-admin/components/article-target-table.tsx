@@ -53,6 +53,8 @@ const errorMessage = (error: unknown, fallback: string) => (isAppError(error) ? 
 export type TArticleTargetTableProps = {
   /** Cây trong URL (`?crop=`); không có → cây đầu tiên. */
   cropSlug?: string;
+  /** Khối giữa tiêu đề và bảng (vd. thống kê theo cây). */
+  summary?: React.ReactNode;
   className?: string;
 };
 
@@ -60,7 +62,7 @@ export type TArticleTargetTableProps = {
  * Danh sách bài viết (admin-page.png (4)): chọn cây → bảng bệnh / variant của cây với cột
  * Tên bệnh · Kiểm duyệt · Cập nhật lần cuối · Actions; lọc nhanh bệnh chưa có bài.
  */
-export function ArticleTargetTable({ cropSlug, className }: TArticleTargetTableProps) {
+export function ArticleTargetTable({ cropSlug, summary, className }: TArticleTargetTableProps) {
   const router = useRouter();
   const crops = useAdminArticleCrops();
   const selectedCrop = cropSlug ?? crops.data?.crops[0]?.slug;
@@ -124,6 +126,8 @@ export function ArticleTargetTable({ cropSlug, className }: TArticleTargetTableP
           />
         )}
       </div>
+
+      {summary}
 
       <Tabs value={filter} onValueChange={(value) => setFilter(value as TTargetFilter)}>
         <TabsList>

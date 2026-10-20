@@ -13,7 +13,7 @@ import {
 import { NotificationMenu } from "@/features/notification";
 import { distributorProductsQuery } from "@/features/product";
 import { distributorReviewsQuery } from "@/features/review";
-import { meQuery, myAddressesQuery, type TUserProfile, UserMenu } from "@/features/user";
+import { AdminUserMenu, meQuery, myAddressesQuery, type TUserProfile, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
 import { ProfileLayout } from "@/shared/components/templates";
 import { BUSINESS_TYPE_LABELS } from "@/shared/constants";
@@ -69,7 +69,7 @@ export async function generateMetadata({ params }: PageProps<"/profile/[id]">): 
 
 /**
  * Public (ui-ux.md §7). Phần thông tin distributor + nút theo người xem:
- * guest → không nút; FARMER → Chat + Đánh giá; owner → Chỉnh sửa.
+ * guest / ADMIN → không nút; FARMER → Chat + Đánh giá; owner → Chỉnh sửa.
  * Tabs Sản phẩm | Đánh giá: mọi người xem; FARMER đánh giá sản phẩm; owner thêm / sửa / xoá sản phẩm.
  */
 export default async function ProfilePage({ params }: PageProps<"/profile/[id]">) {
@@ -83,6 +83,19 @@ export default async function ProfilePage({ params }: PageProps<"/profile/[id]">
           header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}
           info={<DistributorProfileInfo distributorId={id} />}
           tabs={<DistributorProfileTabs distributorId={id} />}
+        />
+      </HydrateQueries>
+    );
+  }
+
+  // ADMIN (Specs/19102026/admin.md): xem như khách đã đăng nhập — chỉ user menu, không chat / thông báo / nút nào.
+  if (viewer?.role === "ADMIN") {
+    return (
+      <HydrateQueries state={state}>
+        <ProfileLayout
+          header={<SiteHeader actions={<AdminUserMenu showAdminLink />} />}
+          info={<DistributorProfileInfo distributorId={id} />}
+          tabs={<DistributorProfileTabs distributorId={id} viewer={viewer} />}
         />
       </HydrateQueries>
     );

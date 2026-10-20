@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import {
   adminArticleCropsQuery,
   adminArticleTargetsQuery,
+  ArticleCropStats,
   ArticleTargetTable,
   type TAdminArticleCropsResponse,
 } from "@/features/article-admin";
@@ -13,7 +14,7 @@ export const metadata: Metadata = { title: "Bài viết" };
 const firstParam = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
 /**
- * Danh sách bài viết (admin-page.png (4)): bảng bệnh + bài của 1 cây (`?crop=`, mặc định cây đầu tiên).
+ * Danh sách bài viết (admin-page.png (4)): thống kê theo cây + bảng bệnh + bài của 1 cây (`?crop=`, mặc định cây đầu tiên).
  * Cây dùng chung cache với layout; bảng của cây được prefetch để không nháy skeleton. Lỗi → bảng tự hiện lỗi.
  */
 export default async function AdminArticlesPage({ searchParams }: PageProps<"/admin/articles">) {
@@ -28,7 +29,7 @@ export default async function AdminArticlesPage({ searchParams }: PageProps<"/ad
 
   return (
     <HydrateQueries state={state}>
-      <ArticleTargetTable cropSlug={crop} />
+      <ArticleTargetTable cropSlug={crop} summary={<ArticleCropStats cropSlug={crop} />} />
     </HydrateQueries>
   );
 }

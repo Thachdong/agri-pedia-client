@@ -2,7 +2,13 @@ import "server-only";
 import { cookies } from "next/headers";
 import { publicEnv } from "@/shared/config";
 import { serverEnv } from "@/shared/config/env.server";
-import { ACCESS_TOKEN_COOKIE, ACCESS_TOKEN_FALLBACK_MAX_AGE, REFRESH_TOKEN_COOKIE, ROLE_COOKIE } from "./auth.constants";
+import {
+  ACCESS_TOKEN_COOKIE,
+  ACCESS_TOKEN_FALLBACK_MAX_AGE,
+  ADMIN_ROLE,
+  REFRESH_TOKEN_COOKIE,
+  ROLE_COOKIE,
+} from "./auth.constants";
 
 export type TTokenPair = { accessToken: string; refreshToken: string };
 
@@ -60,4 +66,13 @@ export async function getRefreshToken(): Promise<string | undefined> {
 export async function hasSession(): Promise<boolean> {
   const store = await cookies();
   return store.has(ACCESS_TOKEN_COOKIE) || store.has(REFRESH_TOKEN_COOKIE);
+}
+
+/**
+ * Phiên của ADMIN — đọc cookie role (ghi lúc login). CHỈ để chọn giao diện (header trang ISR);
+ * không phải quyền: API admin vẫn do NestJS kiểm.
+ */
+export async function hasAdminSession(): Promise<boolean> {
+  const store = await cookies();
+  return (await hasSession()) && store.get(ROLE_COOKIE)?.value === ADMIN_ROLE;
 }

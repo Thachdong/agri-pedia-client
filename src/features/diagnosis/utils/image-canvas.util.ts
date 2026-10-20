@@ -6,6 +6,12 @@
 export const decodeImage = (file: Blob) => createImageBitmap(file, { imageOrientation: "from-image" });
 
 /** Kích thước sau khi thu nhỏ để cạnh dài ≤ `maxEdge` (không phóng to). */
+/** Thu nhỏ (không phóng to) để vừa khung `maxWidth` × `maxHeight`, giữ tỉ lệ. */
+export const fitWithinBox = (width: number, height: number, maxWidth: number, maxHeight: number) => {
+  const scale = Math.min(1, maxWidth / width, maxHeight / height);
+  return { width: Math.max(1, Math.floor(width * scale)), height: Math.max(1, Math.floor(height * scale)) };
+};
+
 export const fitWithin = (width: number, height: number, maxEdge: number) => {
   const scale = Math.min(1, maxEdge / Math.max(width, height));
   return { width: Math.max(1, Math.round(width * scale)), height: Math.max(1, Math.round(height * scale)) };

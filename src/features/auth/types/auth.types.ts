@@ -33,5 +33,8 @@ export type TAuthHandoffFlow = "register" | "reset-password" | "login";
  */
 export type TAuthHandoff = { loginType: TLoginType; identifier: string; at: number };
 
-/** GET /api/auth/session (BFF, không phải NestJS) — chỉ cho biết cookie phiên có tồn tại. */
-export type TSession = { signedIn: boolean };
+/**
+ * GET /api/auth/session (BFF, không phải NestJS) — cookie phiên có tồn tại không; `isAdmin` theo cookie role
+ * (chỉ để chọn giao diện).
+ */
+export type TSession = { signedIn: boolean; isAdmin: boolean };

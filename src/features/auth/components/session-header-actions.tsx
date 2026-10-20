@@ -7,6 +7,8 @@ export type TSessionHeaderActionsProps = {
   signedIn: React.ReactNode;
   /** Nhóm nút của guest (chẩn đoán → mời đăng nhập, Login / Register). */
   guest: React.ReactNode;
+  /** Nhóm nút của ADMIN (chỉ user menu, không chat / thông báo); bỏ trống → dùng `signedIn`. */
+  admin?: React.ReactNode;
 };
 
 /**
@@ -14,7 +16,7 @@ export type TSessionHeaderActionsProps = {
  * (`/api/auth/session`, không gọi NestJS). Đang tải → skeleton cùng chiều cao, gần cùng chiều rộng nhóm nút (tránh CLS).
  * Nhận slot thay vì tự import menu của feature khác (chat / notification đã phụ thuộc user / auth).
  */
-export function SessionHeaderActions({ signedIn, guest }: TSessionHeaderActionsProps) {
+export function SessionHeaderActions({ signedIn, guest, admin }: TSessionHeaderActionsProps) {
   const session = useSession();
 
   if (session.isPending) {
@@ -28,5 +30,6 @@ export function SessionHeaderActions({ signedIn, guest }: TSessionHeaderActionsP
   }
 
   // Lỗi đọc phiên (mạng) → coi như guest: trang vẫn đọc được, đăng nhập lại nếu cần.
-  return session.data?.signedIn ? signedIn : guest;
+  if (!session.data?.signedIn) return guest;
+  return session.data.isAdmin && admin !== undefined ? admin : signedIn;
 }

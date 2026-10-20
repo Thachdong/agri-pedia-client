@@ -102,11 +102,18 @@ export const DIAGNOSIS_NOTE_MAX = 1000;
 /** Định dạng nhận ở input file — HEIC/HEIF được nén sang JPEG ở client nếu trình duyệt decode được. */
 export const DIAGNOSIS_IMAGE_ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";
 
-/** Nén trước khi gửi: cạnh dài ≤ 2048px, JPEG 0.85; > 5 MB thì nén lại 0.7. */
+/**
+ * Nén trước khi gửi: cạnh dài ≤ 2048px (và ≤ maxImageWidth / maxImageHeight của settings), JPEG 0.85;
+ * vượt maxImageBytes thì nén lại 0.7, vẫn vượt thì thu nhỏ dần. Giới hạn mặc định khi chưa có settings = mặc định server.
+ */
 export const IMAGE_MAX_EDGE = 2048;
 export const IMAGE_JPEG_QUALITY = 0.85;
 export const IMAGE_JPEG_RETRY_QUALITY = 0.7;
 export const IMAGE_MAX_BYTES = 5 * 1024 * 1024;
+export const IMAGE_MAX_DIMENSION = 4096;
+/** Mỗi lần thu nhỏ thêm khi vẫn quá dung lượng; dừng sau IMAGE_SHRINK_MAX_STEPS lần. */
+export const IMAGE_SHRINK_FACTOR = 0.8;
+export const IMAGE_SHRINK_MAX_STEPS = 6;
 
 /** Kiểm tra mờ: phương sai Laplacian trên ảnh thu nhỏ cạnh dài 512px; dưới ngưỡng = có thể mờ (chỉ cảnh báo). */
 export const BLUR_SAMPLE_EDGE = 512;

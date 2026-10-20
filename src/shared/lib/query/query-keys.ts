@@ -109,4 +109,16 @@ export const queryKeys = {
     /** Nội dung đang lưu của 1 bài (theo code bệnh / variant). */
     detail: (code: string) => [...queryKeys.adminArticles.all, "detail", code] as const,
   },
+  /** Cài đặt nền tảng (ADMIN) — chẩn đoán, bài viết nổi bật. */
+  adminSettings: {
+    all: ["admin-settings"] as const,
+    /** GET /admin/diagnosis/settings. */
+    diagnosis: () => [...queryKeys.adminSettings.all, "diagnosis"] as const,
+    /** GET /admin/knowledge/settings — số bài nổi bật mỗi cây. */
+    topArticleLimit: () => [...queryKeys.adminSettings.all, "top-article-limit"] as const,
+    /** Prefix danh sách bài nổi bật của mọi cây (mỗi danh sách kèm `limit`). */
+    topArticleLists: () => [...queryKeys.adminSettings.all, "top-articles"] as const,
+    /** Bài nổi bật của 1 cây. */
+    topArticles: (cropSlug: string) => [...queryKeys.adminSettings.topArticleLists(), cropSlug] as const,
+  },
 } as const;
