@@ -1,5 +1,5 @@
 import { BLUR_SAMPLE_EDGE, BLUR_THRESHOLD } from "../constants/diagnosis.constants";
-import { decodeImage, drawToCanvas, fitWithin } from "./image-canvas.util";
+import { decodeImage, drawToCanvas, fitWithin } from "@/shared/lib/image";
 
 /** Phương sai của Laplacian (kernel 4-lân cận) trên ảnh xám — càng nhỏ càng mờ. */
 export function laplacianVariance({ data, width, height }: ImageData): number {

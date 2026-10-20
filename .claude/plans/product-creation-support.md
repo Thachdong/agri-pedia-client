@@ -10,7 +10,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - Ảnh không được lưu.
 
 ## Steps
-- [ ] 1. [shared-unit]       chuyển nén ảnh (decode EXIF → vừa khung → JPEG, giảm chất lượng / thu nhỏ tới khi ≤ giới hạn) từ feature diagnosis sang src/shared/utils, nhận giới hạn làm tham số; diagnosis gọi bản shared
+- [x] 1. [shared-unit]       chuyển nén ảnh (decode EXIF → vừa khung → JPEG, giảm chất lượng / thu nhỏ tới khi ≤ giới hạn) từ feature diagnosis sang src/shared/lib/image (browser-only nên không đặt ở shared/utils), nhận giới hạn làm tham số; diagnosis gọi bản shared
 - [ ] 2. [atomic-component]  molecule  AddImageTile         (move diagnosis → shared) — "Chụp ảnh" / "Chọn từ máy"; thêm prop accept, multiple
 - [ ] 3. [atomic-component]  organism  CameraCaptureDialog  (move diagnosis → shared) — thêm prop title, description (chẩn đoán giữ chữ cũ)
 - [ ] 4. [feature-api]       POST /products/suggestions → TProductSuggestion, suggestProduct (multipart), useSuggestProduct (không cache nào stale)
