@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ChatRoomsMenu } from "@/features/chat";
 import { cropsQuery, diagnosisQuery, DiagnosisResult, StartDiagnosisButton } from "@/features/diagnosis";
+import { SendReportButton } from "@/features/diagnosis-share";
 import { NotificationMenu } from "@/features/notification";
 import { meQuery, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 /**
  * Kết quả 1 lần chẩn đoán của tôi (cần đăng nhập). Chi tiết là query bắt buộc: 404 (của người khác / id lạ)
  * hoặc 400 (id sai dạng) → notFound(). Đang PROCESSING → client chờ realtime `diagnosis.completed` + poll.
+ * FARMER + COMPLETED → nút "Gửi báo cáo" cạnh tiêu đề (gửi report cho distributor qua chat).
  */
 export default async function DiagnosisDetailPage({ params }: PageProps<"/diagnosis/[id]">) {
   const { id } = await params;
@@ -52,7 +54,7 @@ export default async function DiagnosisDetailPage({ params }: PageProps<"/diagno
             />
           }
         >
-          <DiagnosisResult id={id} />
+          <DiagnosisResult id={id} actions={<SendReportButton diagnosisId={id} />} />
         </ContentLayout>
       </RealtimeProvider>
     </HydrateQueries>

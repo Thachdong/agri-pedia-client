@@ -9,13 +9,18 @@ import { useDiagnosisLive } from "../hooks/use-diagnosis-live";
 import { DiagnosisReportView } from "./diagnosis-report-view";
 import { DiagnosisStatusPanel } from "./diagnosis-status-panel";
 
-export type TDiagnosisResultProps = { id: string; className?: string };
+export type TDiagnosisResultProps = {
+  id: string;
+  /** Nút cạnh tiêu đề kết quả (vd. "Gửi báo cáo"). */
+  actions?: React.ReactNode;
+  className?: string;
+};
 
 /**
  * Trang kết quả chẩn đoán (cần RealtimeProvider): chờ kết quả (realtime + poll) → bảng tổng hợp → từng ảnh
  * → disclaimer. Tên bệnh ở 2 mục đầu mở dialog báo cáo bệnh.
  */
-export function DiagnosisResult({ id, className }: TDiagnosisResultProps) {
+export function DiagnosisResult({ id, actions, className }: TDiagnosisResultProps) {
   const query = useDiagnosisLive(id);
 
   if (query.isPending) return <ResultSkeleton />;
@@ -42,7 +47,7 @@ export function DiagnosisResult({ id, className }: TDiagnosisResultProps) {
   const diagnosis = query.data;
 
   return (
-    <DiagnosisReportView diagnosis={diagnosis} className={className}>
+    <DiagnosisReportView diagnosis={diagnosis} actions={actions} className={className}>
       <DiagnosisStatusPanel diagnosis={diagnosis} timedOut={query.timedOut} onReload={query.reload} />
     </DiagnosisReportView>
   );

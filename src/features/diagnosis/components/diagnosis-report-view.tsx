@@ -15,6 +15,8 @@ export type TDiagnosisReportViewProps = {
   diagnosis: TDiagnosis;
   /** Thẻ tiêu đề — trang: "h1"; trong dialog: DialogTitle. */
   titleAs?: React.ElementType;
+  /** Nút bên phải tiêu đề (vd. "Gửi báo cáo" ở trang kết quả). */
+  actions?: React.ReactNode;
   /** Thay phần kết quả khi chưa COMPLETED (vd. panel chờ / lỗi của trang kết quả). */
   children?: React.ReactNode;
   className?: string;
@@ -25,21 +27,30 @@ export type TDiagnosisReportViewProps = {
  * → disclaimer; chưa COMPLETED: `children`. Tên bệnh mở dialog báo cáo bệnh. Dùng ở trang kết quả và dialog report
  * trong chat.
  */
-export function DiagnosisReportView({ diagnosis, titleAs: Title = "h1", children, className }: TDiagnosisReportViewProps) {
+export function DiagnosisReportView({
+  diagnosis,
+  titleAs: Title = "h1",
+  actions,
+  children,
+  className,
+}: TDiagnosisReportViewProps) {
   const crops = useCrops();
   const cropName = crops.data?.find((crop) => crop.code === diagnosis.cropType)?.nameVi;
 
   return (
     <div className={cn("flex flex-col gap-6", className)}>
-      <header className="flex flex-col gap-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <Title className="text-2xl font-bold">Kết quả chẩn đoán{cropName && ` — ${cropName}`}</Title>
-          <DiagnosisStatusBadge status={diagnosis.status} />
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <Title className="text-2xl font-bold">Kết quả chẩn đoán{cropName && ` — ${cropName}`}</Title>
+            <DiagnosisStatusBadge status={diagnosis.status} />
+          </div>
+          <p className="text-sm text-muted-foreground">
+            <time dateTime={diagnosis.createdAt}>{DATE_FORMAT.format(new Date(diagnosis.createdAt))}</time>
+            {diagnosis.note && <> · Ghi chú: {diagnosis.note}</>}
+          </p>
         </div>
-        <p className="text-sm text-muted-foreground">
-          <time dateTime={diagnosis.createdAt}>{DATE_FORMAT.format(new Date(diagnosis.createdAt))}</time>
-          {diagnosis.note && <> · Ghi chú: {diagnosis.note}</>}
-        </p>
+        {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
       </header>
 
       {diagnosis.status === "COMPLETED" ? <CompletedResult diagnosis={diagnosis} /> : children}
