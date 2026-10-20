@@ -5,7 +5,7 @@ import { divIcon, type LeafletMouseEvent, type Marker as TLeafletMarker } from "
 import { useEffect, useMemo } from "react";
 import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
-import { VN_BOUNDS } from "@/shared/constants";
+import { MAP_ZOOM_SNAP, VN_BOUNDS } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
 import { InvalidateOnResize, LockToBounds } from "@/shared/lib/map";
 import { cn } from "@/shared/lib/utils";
@@ -53,6 +53,7 @@ export function MapPickerView({ value, onChange, focus, className, "aria-label":
     <div className={cn("h-80 w-full overflow-hidden rounded-lg border border-border", className)}>
       <MapContainer
         {...(initial ? { center: toLatLng(initial), zoom: SELECTED_ZOOM } : { bounds: VN_BOUNDS })}
+        zoomSnap={MAP_ZOOM_SNAP}
         maxBoundsViscosity={1}
         className="size-full"
         aria-label={ariaLabel}

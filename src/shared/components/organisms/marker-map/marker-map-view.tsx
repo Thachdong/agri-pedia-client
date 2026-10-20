@@ -5,7 +5,7 @@ import { divIcon, latLngBounds } from "leaflet";
 import { useEffect, useEffectEvent } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMap } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
-import { VN_BOUNDS } from "@/shared/constants";
+import { MAP_ZOOM_SNAP, VN_BOUNDS } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
 import { InvalidateOnResize, isWithinBounds, LockToBounds } from "@/shared/lib/map";
 import { cn } from "@/shared/lib/utils";
@@ -75,7 +75,13 @@ export function MarkerMapView({
 }: TMarkerMapProps) {
   return (
     <div className={cn("size-full overflow-hidden", className)}>
-      <MapContainer bounds={VN_BOUNDS} maxBoundsViscosity={1} className="size-full" aria-label={ariaLabel}>
+      <MapContainer
+        bounds={VN_BOUNDS}
+        zoomSnap={MAP_ZOOM_SNAP}
+        maxBoundsViscosity={1}
+        className="size-full"
+        aria-label={ariaLabel}
+      >
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
         <InvalidateOnResize />
         <LockToBounds bounds={VN_BOUNDS} />
