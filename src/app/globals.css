@@ -284,4 +284,14 @@
       border-radius: 9999px;
     }
   }
+
+  /* --- MAP --- */
+  /*
+   * Zoom lẻ (MAP_ZOOM_SNAP) làm hở mép giữa các tile (Leaflet #3575) — tile (mặc định 256px) phủ lấn 0.5px sang
+   * tile kế bên. `!important` vì Leaflet đặt width/height inline.
+   */
+  .leaflet-container img.leaflet-tile {
+    width: 256.5px !important;
+    height: 256.5px !important;
+  }
 }
