@@ -1,3 +1,4 @@
+import type { TDiagnosis } from "@/features/diagnosis";
 import type { TApiSchema } from "@/shared/lib/http";
 
 export type TChatRoom = TApiSchema<"ChatRoomResponse">;
@@ -44,3 +45,9 @@ export type TChatMessageReceivedEvent = {
   messageId: string;
   roomId: string;
 } & Omit<TChatMessage, "id">;
+
+/**
+ * GET /chat/rooms/:roomId/messages/:messageId/diagnosis — cùng body với GET /diagnoses/:id (swagger để enum là
+ * string) nên dùng chung TDiagnosis để render bằng component của feature diagnosis.
+ */
+export type TMessageDiagnosis = TDiagnosis;
