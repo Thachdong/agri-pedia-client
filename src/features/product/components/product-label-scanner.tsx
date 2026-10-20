@@ -1,6 +1,7 @@
 "use client";
 
 import { Loader2Icon, ScanTextIcon } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms";
 import { AddImageTile, Callout } from "@/shared/components/molecules";
@@ -92,10 +93,11 @@ export function ProductLabelScanner({ onFound, onUseName, disabled = false, clas
       </header>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element -- data URL xem trước, không qua next/image
-          <img src={preview} alt="Ảnh nhãn vừa quét" className="h-28 w-full rounded-md object-cover sm:w-28" />
-        ) : null}
+        {preview && (
+          <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-md bg-muted sm:w-28">
+            <Image src={preview} alt="Ảnh nhãn vừa quét" fill sizes="(min-width: 640px) 7rem, 100vw" unoptimized className="object-cover" />
+          </div>
+        )}
         <AddImageTile
           remaining={1}
           multiple={false}
