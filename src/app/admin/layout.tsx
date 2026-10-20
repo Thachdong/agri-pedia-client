@@ -1,4 +1,4 @@
-import { BotIcon, FileTextIcon } from "lucide-react";
+import { BotIcon, FileTextIcon, SettingsIcon } from "lucide-react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { adminArticleCropsQuery } from "@/features/article-admin";
@@ -24,6 +24,16 @@ const SIDEBAR_GROUPS: TSidebarNavGroup[] = [
     items: [
       { label: "List", href: ROUTES.admin.articles.list() },
       { label: "Create", href: ROUTES.admin.articles.new() },
+    ],
+  },
+  {
+    // Specs/19102026/admin.md — cài đặt nền tảng (bỏ menu / banner).
+    id: "settings",
+    label: "Cài đặt",
+    icon: <SettingsIcon aria-hidden />,
+    items: [
+      { label: "Chẩn đoán", href: ROUTES.admin.settings.diagnosis },
+      { label: "Bài viết nổi bật", href: ROUTES.admin.settings.topArticles() },
     ],
   },
   {
