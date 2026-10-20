@@ -1,70 +1,124 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { articleFetchOptions, getTopArticles, TopArticlesSection, type TTopArticlesGroup } from "@/features/article";
 import { ChatRoomsMenu } from "@/features/chat";
-import { StartDiagnosisButton } from "@/features/diagnosis";
-import { DistributorExplorerList, DistributorExplorerMap, DistributorExplorerProvider } from "@/features/distributor";
+import { cropsQuery, diagnosisSettingsQuery, HomeDiagnosisPanel } from "@/features/diagnosis";
+import {
+  DistributorExplorerList,
+  DistributorExplorerMap,
+  DistributorExplorerProvider,
+  type TDistributorExplorerProviderProps,
+} from "@/features/distributor";
 import { NotificationMenu } from "@/features/notification";
-import { DistributorHomeRedirect, meQuery, type TUserProfile, UserMenu } from "@/features/user";
+import { AdminUserMenu, meQuery, type TUserProfile, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
-import { MapListLayout } from "@/shared/components/templates";
-import { ROUTES } from "@/shared/constants";
+import { HomeLayout } from "@/shared/components/templates";
 import { hasSession } from "@/shared/lib/auth";
+import { publicServerHttp } from "@/shared/lib/http/public-server";
 import { serverHttp } from "@/shared/lib/http/server";
 import { RealtimeProvider } from "@/shared/lib/realtime";
 import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/server";
 
 export const metadata: Metadata = {
-  title: { absolute: "AgriPedia | Tìm nhà phân phối gần bạn" },
-  description: "Bản đồ và danh sách nhà phân phối vật tư, giống cây trồng, giống thuỷ sản gần bạn hoặc trên toàn quốc.",
+  title: { absolute: "AgriPedia | Chẩn đoán bệnh cây trồng & nhà phân phối gần bạn" },
+  description:
+    "Chẩn đoán bệnh cây trồng bằng ảnh, đọc bài viết bệnh nổi bật và tìm nhà phân phối vật tư, giống cây trồng gần bạn.",
 };
 
+/** Top articles lỗi không chặn trang chủ — ẩn khối. */
+const loadTopArticles = (): Promise<TTopArticlesGroup[]> =>
+  getTopArticles(publicServerHttp, articleFetchOptions.top())
+    .then(({ crops }) => crops)
+    .catch(() => []);
+
 /**
- * Public (ui-ux.md §6). Rẽ nhánh theo cookie phiên (guest không được gọi /users/me):
- * - Guest: không prefetch — danh sách phụ thuộc vị trí trình duyệt (xin định vị khi mount).
- * - Đã đăng nhập: prefetch /users/me. DISTRIBUTOR → profile của mình. FARMER → header đầy đủ + realtime,
- *   danh sách theo primary address (server tự lấy).
+ * Public (Specs/19102026): form chẩn đoán → bài viết nổi bật → map + distributor (map chỉ init khi cuộn tới).
+ * Rẽ nhánh theo cookie phiên (guest không được gọi /users/me):
+ * - Guest: form hiện với cây mặc định, thao tác → mời đăng nhập; hỏi vị trí khi tới khối map.
+ * - FARMER: header đầy đủ + realtime; danh sách theo primary address.
+ * - DISTRIBUTOR: như FARMER, shop của mình ghim đầu danh sách, shop khác không mở được.
+ * - ADMIN: chỉ user menu (kèm link trang quản trị); map hiện toàn bộ distributor, không hỏi vị trí.
+ * Không đọc được /users/me trên server (access token hết hạn — chỉ BFF refresh được) → hiển thị như FARMER.
  */
 export default async function HomePage() {
-  if (!(await hasSession())) {
+  const signedIn = await hasSession();
+  const me = meQuery(serverHttp);
+  const [state, topArticles] = await Promise.all([
+    prefetch([cropsQuery(serverHttp), diagnosisSettingsQuery(serverHttp), ...(signedIn ? [me] : [])]),
+    loadTopArticles(),
+  ]);
+
+  if (!signedIn) {
     return (
-      <DistributorExplorerProvider origin="geolocation">
-        <MapListLayout
-          header={<SiteHeader primaryAction={<StartDiagnosisButton compact signedIn={false} />} />}
-          map={<DistributorExplorerMap />}
-          list={<DistributorExplorerList />}
+      <HydrateQueries state={state}>
+        <HomeContent
+          header={<SiteHeader />}
+          explorer={{ origin: "geolocation" }}
+          guest
+          topArticles={topArticles}
         />
-      </DistributorExplorerProvider>
+      </HydrateQueries>
     );
   }
 
-  const me = meQuery(serverHttp);
-  const state = await prefetch([me]);
   const profile = getPrefetchedData<TUserProfile>(state, me.queryKey);
-  if (profile?.role === "DISTRIBUTOR") redirect(ROUTES.profile(profile.id));
+
+  if (profile?.role === "ADMIN") {
+    return (
+      <HydrateQueries state={state}>
+        <HomeContent
+          header={<SiteHeader actions={<AdminUserMenu showAdminLink />} />}
+          explorer={{ origin: "all" }}
+          topArticles={topArticles}
+        />
+      </HydrateQueries>
+    );
+  }
 
   return (
     <HydrateQueries state={state}>
       <RealtimeProvider>
-        <DistributorHomeRedirect />
-        <DistributorExplorerProvider origin="profile">
-          <MapListLayout
-            header={
-              <SiteHeader
-                actions={
-                  <>
-                    <StartDiagnosisButton compact />
-                    <NotificationMenu />
-                    <ChatRoomsMenu />
-                    <UserMenu />
-                  </>
-                }
-              />
-            }
-            map={<DistributorExplorerMap />}
-            list={<DistributorExplorerList />}
-          />
-        </DistributorExplorerProvider>
+        <HomeContent
+          header={
+            <SiteHeader
+              actions={
+                <>
+                  <NotificationMenu />
+                  <ChatRoomsMenu />
+                  <UserMenu />
+                </>
+              }
+            />
+          }
+          explorer={{
+            origin: "profile",
+            ownShopId: profile?.role === "DISTRIBUTOR" ? profile.id : undefined,
+          }}
+          topArticles={topArticles}
+        />
       </RealtimeProvider>
     </HydrateQueries>
+  );
+}
+
+type THomeContentProps = {
+  header: React.ReactNode;
+  explorer: Omit<TDistributorExplorerProviderProps, "children">;
+  guest?: boolean;
+  topArticles: TTopArticlesGroup[];
+};
+
+function HomeContent({ header, explorer, guest = false, topArticles }: THomeContentProps) {
+  return (
+    <DistributorExplorerProvider {...explorer}>
+      <HomeLayout
+        header={header}
+        mapTitle="Nhà phân phối"
+        map={<DistributorExplorerMap />}
+        list={<DistributorExplorerList />}
+      >
+        <HomeDiagnosisPanel guest={guest} />
+        <TopArticlesSection groups={topArticles} />
+      </HomeLayout>
+    </DistributorExplorerProvider>
   );
 }
