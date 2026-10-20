@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  ChevronDownIcon,
-  Loader2Icon,
-  RefreshCwIcon,
-  ScanSearchIcon,
-  SproutIcon,
-  TreeDeciduousIcon,
-  WheatIcon,
-  type LucideIcon,
-} from "lucide-react";
+import { ChevronDownIcon, Loader2Icon, RefreshCwIcon, ScanSearchIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import {
@@ -25,13 +16,8 @@ import {
 import { LoginRequiredDialog } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { cn } from "@/shared/lib/utils";
+import { cropIcon } from "../constants/crop-icons.constants";
 import { useCrops } from "../hooks/use-crops";
-
-/** Icon theo cây — cây mới chưa có icon riêng dùng mầm cây. */
-const CROP_ICONS: Record<string, LucideIcon> = {
-  RICE: WheatIcon,
-  DURIAN: TreeDeciduousIcon,
-};
 
 export type TStartDiagnosisButtonProps = Omit<TButtonProps, "onClick" | "loading" | "children" | "asChild"> & {
   /** Mặc định "Chẩn đoán bệnh". */
@@ -110,7 +96,7 @@ function CropMenuButton(props: Omit<TStartDiagnosisButtonProps, "signedIn">) {
           <DropdownMenuItem disabled>Chưa có cây trồng được hỗ trợ</DropdownMenuItem>
         ) : (
           crops.data.map((crop) => {
-            const Icon = CROP_ICONS[crop.code] ?? SproutIcon;
+            const Icon = cropIcon(crop.code);
             return (
               <DropdownMenuItem key={crop.code} asChild>
                 <Link href={ROUTES.diagnosis.new(crop.code)}>
