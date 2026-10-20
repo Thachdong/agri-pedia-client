@@ -13,7 +13,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - [x] 1. [shared-unit]       chuyển nén ảnh (decode EXIF → vừa khung → JPEG, giảm chất lượng / thu nhỏ tới khi ≤ giới hạn) từ feature diagnosis sang src/shared/lib/image (browser-only nên không đặt ở shared/utils), nhận giới hạn làm tham số; diagnosis gọi bản shared
 - [x] 2. [atomic-component]  molecule  AddImageTile         (move diagnosis → shared) — "Chụp ảnh" / "Chọn từ máy"; thêm prop accept, multiple
 - [x] 3. [atomic-component]  organism  CameraCaptureDialog  (move diagnosis → shared) — thêm prop title, description (chẩn đoán giữ chữ cũ)
-- [ ] 4. [feature-api]       POST /products/suggestions → TProductSuggestion, suggestProduct (multipart), useSuggestProduct (không cache nào stale)
+- [x] 4. [feature-api]       POST /products/suggestions → TProductSuggestion, suggestProduct (multipart), useSuggestProduct (không cache nào stale)
 - [ ] 5. [atomic-component]  organism  ProductLabelScanner  (new, product) — chụp (camera trong trang) / chọn ảnh nhãn → nén ≤ 5 MB → gửi; trạng thái: đang đọc / FOUND / NOT_FOUND / UNREADABLE / ảnh lỗi / hết lượt; "Còn N lượt"
 - [ ] 6. [atomic-component]  organism  ProductFormDialog    (update, product) — chỉ khi tạo mới: scanner ở đầu form; FOUND → điền tên + mô tả (ô đã có nội dung → ConfirmDialog trước khi ghi đè); NOT_FOUND → nút "Dùng tên này" (cùng quy tắc xác nhận)
 - [ ] 7. [arch-review]

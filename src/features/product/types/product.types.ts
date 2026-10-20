@@ -39,3 +39,10 @@ export type TProductFormValues = {
   images: TMediaUpload<"IMAGE">[];
   removeMediaIds: string[];
 };
+
+/**
+ * POST /products/suggestions — FOUND: `suggestion` (tên + mô tả trong danh mục); NOT_FOUND: `detectedName` đọc được
+ * nhưng chưa có trong danh mục; UNREADABLE: không đọc được tên. `remaining` = lượt gợi ý còn lại (trọn đời).
+ */
+export type TProductSuggestion = TApiSchema<"SuggestProductResponse">;
+export type TProductSuggestionStatus = TProductSuggestion["status"];

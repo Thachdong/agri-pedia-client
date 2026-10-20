@@ -5,6 +5,7 @@ import type {
   TCreateProductResponse,
   TDistributorProductsPage,
   TProductDetail,
+  TProductSuggestion,
   TUpdateProductInput,
 } from "../types/product.types";
 
@@ -36,3 +37,14 @@ export const updateProduct = (productId: string, input: TUpdateProductInput, cli
 /** Soft delete — chỉ seller (403 PRODUCT_SELLER_NOT_ALLOWED / PRODUCT_NOT_OWNER); đã xoá → 404 PRODUCT_NOT_FOUND. Body rỗng. */
 export const deleteProduct = (productId: string, client: IHttpClient = http) =>
   client.delete<void>(`/products/${encodeURIComponent(productId)}`);
+
+/**
+ * Gợi ý tên + mô tả từ ảnh nhãn (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 MB; ảnh không được lưu). Chỉ DISTRIBUTOR
+ * ACTIVE (403 PRODUCT_SELLER_NOT_ALLOWED). 400 PRODUCT_SUGGESTION_INVALID_IMAGE, 413 quá 5 MB,
+ * 422 PRODUCT_SUGGESTION_QUOTA_EXCEEDED (hết lượt trọn đời). Không tự set content-type để browser thêm boundary.
+ */
+export const suggestProduct = (image: Blob, client: IHttpClient = http) => {
+  const form = new FormData();
+  form.append("image", image, "label.jpg");
+  return client.post<TProductSuggestion>("/products/suggestions", form);
+};
