@@ -37,7 +37,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - [x] 17. [atomic-component]  organism  TopArticlesEditor      (new) — chọn cây; danh sách có thứ tự (lên / xuống / bỏ); thêm từ bài đã publish của cây; tối đa `limit`; lưu
 - [x] 18. [page]              /admin/settings → /admin/settings/diagnosis; /admin/settings/top-articles; ROUTES.admin.settings; sidebar nhóm "Cài đặt"
 ### E. Kết thúc
-- [ ] 19. [arch-review]       + checklist kiểm luồng ADMIN (T28)
+- [x] 19. [arch-review]       + checklist kiểm luồng ADMIN (T28)
 
 ## Components (in order)
   [atom]      Button, Input, Select, Badge     reuse  shared
@@ -62,3 +62,18 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 ## Thêm (đã duyệt) — form chẩn đoán đang hardcode giới hạn ảnh; làm sau step 14
 - [x] 14a. [shared-unit]       compressImage nhận giới hạn từ GET /diagnoses/settings (cạnh ≤ min(2048, maxImageWidth/Height), ≤ maxImageBytes) thay hằng số 2048px / 5 MB
 - [x] 14b. [atomic-component]  organism DiagnosisForm (update) — số ảnh tối đa + schema theo settings.maxImages thay DIAGNOSIS_MAX_IMAGES = 5
+
+## Arch review (step 19)
+- LOW 16: admin-settings/types/admin-settings.types.ts `TSetCropTopArticlesInput` viết tay — swagger sinh SetCropTopArticlesDto rỗng; sửa swagger server rồi `npm run gen:api`.
+- LOW 13: `toNumberOrNull` lặp ở diagnosis-settings-form, top-article-limit-form (và product-form-dialog) — có thể chuyển vào src/shared/utils.
+
+## Checklist kiểm tay luồng ADMIN (T28)
+- [ ] Login ADMIN → /admin/articles; vào / (map hiện toàn bộ distributor, không hỏi vị trí; header chỉ user menu có "Trang quản trị").
+- [ ] Home → bấm bài nổi bật → /benh-cay-trong/... mở được, header chỉ user menu.
+- [ ] Home → bấm distributor → /profile/<id>: thông tin + sản phẩm + đánh giá, không nút Chat / Đánh giá / Chỉnh sửa, không chat / thông báo.
+- [ ] Gửi chẩn đoán ở home → /diagnosis/<id> mở được, kết quả về; không có nút "Gửi báo cáo".
+- [ ] /diagnosis mở được (gõ URL); /profile/me → về /admin/articles.
+- [ ] /admin/articles: thẻ thống kê theo cây, bấm thẻ đổi bảng.
+- [ ] /admin/settings/diagnosis: lưu thử (vd. maxImages 3) → form chẩn đoán FARMER chỉ cho 3 ảnh; nhập ngoài khoảng → báo lỗi.
+- [ ] /admin/settings/top-articles: đổi limit, sắp xếp / thêm / bỏ bài, lưu → trang chủ cập nhật (theo revalidate).
+- [ ] Guest / FARMER / DISTRIBUTOR: điều hướng như cũ (đã so bảng proxy path × role trước / sau — chỉ dòng ADMIN đổi).
