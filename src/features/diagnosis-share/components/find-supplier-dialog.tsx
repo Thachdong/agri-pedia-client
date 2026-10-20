@@ -1,7 +1,7 @@
 "use client";
 
 import { LocateFixedIcon, MapIcon, RefreshCwIcon } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   DistributorCard,
   type TNearbyDistributor,
@@ -26,7 +26,7 @@ import {
   TabsTrigger,
 } from "@/shared/components/atoms";
 import { Callout, FormField } from "@/shared/components/molecules";
-import { useGeolocation, useInfiniteSentinel } from "@/shared/hooks";
+import { useGeolocation, useGeolocationPermission, useInfiniteSentinel } from "@/shared/hooks";
 
 type TSearchMode = "nearby" | "area";
 
@@ -69,7 +69,12 @@ export function FindSupplierDialog({ open, onOpenChange, onChoose }: TFindSuppli
         </Tabs>
 
         {/* Mount theo tab → đổi tab không giữ request định vị / lựa chọn tỉnh cũ chạy ngầm. */}
-        {open && (mode === "nearby" ? <NearbySearch onChoose={onChoose} /> : <AreaSearch onChoose={onChoose} />)}
+        {open &&
+          (mode === "nearby" ? (
+            <NearbySearch onChoose={onChoose} onSearchByArea={() => setMode("area")} />
+          ) : (
+            <AreaSearch onChoose={onChoose} />
+          ))}
       </DialogContent>
     </Dialog>
   );
@@ -77,13 +82,51 @@ export function FindSupplierDialog({ open, onOpenChange, onChoose }: TFindSuppli
 
 type TSearchProps = { onChoose: (distributor: TNearbyDistributor) => void };
 
-function NearbySearch({ onChoose }: TSearchProps) {
+function NearbySearch({ onChoose, onSearchByArea }: TSearchProps & { onSearchByArea: () => void }) {
   const { status, coords, error, request } = useGeolocation();
+  const permission = useGeolocationPermission();
+  const previousPermission = useRef(permission);
 
   // Xin vị trí ngay khi mở tab.
   useEffect(() => {
     void request();
   }, [request]);
+
+  // Người dùng bật lại quyền trong cài đặt trình duyệt (dialog vẫn mở) → tự lấy vị trí, không cần bấm thử lại.
+  useEffect(() => {
+    if (previousPermission.current === "denied" && permission !== "denied") void request();
+    previousPermission.current = permission;
+  }, [permission, request]);
+
+  const searchByArea = (
+    <Button size="sm" variant="outline" onClick={onSearchByArea}>
+      <MapIcon aria-hidden />
+      Tìm theo tỉnh thành
+    </Button>
+  );
+
+  // Đã chặn quyền: trình duyệt không hỏi lại → hướng dẫn mở lại trong cài đặt trang.
+  if (permission === "denied") {
+    return (
+      <Callout
+        tone="warning"
+        role="alert"
+        title="Bạn đã chặn quyền truy cập vị trí"
+        action={
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="outline" onClick={() => void request()}>
+              <RefreshCwIcon aria-hidden />
+              Thử lại
+            </Button>
+            {searchByArea}
+          </div>
+        }
+      >
+        Trình duyệt sẽ không hỏi lại. Để bật lại: bấm biểu tượng cài đặt trang (ổ khoá) cạnh thanh địa chỉ → Vị trí →
+        Cho phép. Danh sách sẽ tự cập nhật sau khi bạn cho phép.
+      </Callout>
+    );
+  }
 
   if (status === "error") {
     return (
@@ -92,13 +135,16 @@ function NearbySearch({ onChoose }: TSearchProps) {
         role="alert"
         title="Không lấy được vị trí"
         action={
-          <Button size="sm" variant="outline" onClick={() => void request()}>
-            <RefreshCwIcon aria-hidden />
-            Thử lại
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" variant="outline" onClick={() => void request()}>
+              <RefreshCwIcon aria-hidden />
+              Thử lại
+            </Button>
+            {searchByArea}
+          </div>
         }
       >
-        {error} Bạn có thể tìm theo tỉnh thành.
+        {error}. Bạn có thể thử lại hoặc tìm theo tỉnh thành.
       </Callout>
     );
   }
