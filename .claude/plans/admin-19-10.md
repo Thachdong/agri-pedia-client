@@ -31,7 +31,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - [x] 11. [feature-api]       PUT /admin/knowledge/settings → useUpdateTopArticleLimit; invalidates topArticleLimit + topArticles
 - [x] 12. [feature-api]       GET /admin/knowledge/crops/{cropSlug}/top-articles → cropTopArticlesQuery; key adminSettings.topArticles(cropSlug)
 - [x] 13. [feature-api]       PUT /admin/knowledge/crops/{cropSlug}/top-articles → useSetCropTopArticles; invalidates topArticles(cropSlug)
-- [ ] 14. [validation-schema] diagnosisSettingsSchema — số nguyên, khớp DIAGNOSIS_SETTINGS_BOUNDS của server: dailyFreeLimit 1..1000, maxImages 1..10, maxImageBytes 100 KB..20 MB, maxImageWidth / maxImageHeight 256..8192 (độc lập, không ràng buộc chéo), defaultCropType null hoặc cây bật chẩn đoán; topArticleLimitSchema 1..50
+- [x] 14. [validation-schema] diagnosisSettingsSchema — số nguyên, khớp DIAGNOSIS_SETTINGS_BOUNDS của server: dailyFreeLimit 1..1000, maxImages 1..10, maxImageBytes 100 KB..20 MB, maxImageWidth / maxImageHeight 256..8192 (độc lập, không ràng buộc chéo), defaultCropType null hoặc cây bật chẩn đoán; topArticleLimitSchema 1..50
 - [ ] 15. [atomic-component]  organism  DiagnosisSettingsForm  (new) — free request/ngày, cây mặc định, số ảnh tối đa, dung lượng (MB), kích thước (px)
 - [ ] 16. [atomic-component]  organism  TopArticleLimitForm    (new) — số bài nổi bật mỗi cây
 - [ ] 17. [atomic-component]  organism  TopArticlesEditor      (new) — chọn cây; danh sách có thứ tự (lên / xuống / bỏ); thêm từ bài đã publish của cây; tối đa `limit`; lưu

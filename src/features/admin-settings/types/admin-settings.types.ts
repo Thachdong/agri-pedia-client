@@ -17,3 +17,16 @@ export type TCropTopArticle = TCropTopArticles["articles"][number];
  * slug bài đã publish của cây, đầu = top, tối đa `limit`, rỗng = xoá danh sách. Sửa swagger rồi `npm run gen:api`.
  */
 export type TSetCropTopArticlesInput = { articleSlugs: string[] };
+
+/** Giá trị form cài đặt chẩn đoán — dung lượng theo MB; số chưa nhập = null (form báo lỗi). */
+export type TDiagnosisSettingsFormValues = {
+  dailyFreeLimit: number | null;
+  /** NO_DEFAULT_CROP = không chọn. */
+  defaultCropType: string;
+  maxImages: number | null;
+  maxImageMb: number | null;
+  maxImageWidth: number | null;
+  maxImageHeight: number | null;
+};
+
+export type TTopArticleLimitFormValues = { limit: number | null };
