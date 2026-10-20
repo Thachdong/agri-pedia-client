@@ -20,7 +20,7 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
 - [x] 4. [shared-unit]          util formatReportMessage(cropName, diagnosedAt) + CHAT_REPORT_LABEL — đặt ở feature chat (bubble/preview dùng chung label), diagnosis-share import qua index
 - [x] 5. [atomic-component]     organism  DiagnosisReportView   (new, feature diagnosis) — tách header + tổng hợp + từng ảnh + disclaimer khỏi DiagnosisResult, nhận data; DiagnosisResult dùng lại
 - [x] 6. [atomic-component]     organism  ChatReportDialog      (new, feature chat) — useMessageDiagnosis + DiagnosisReportView, loading / lỗi / thử lại
-- [ ] 7. [atomic-component]     molecule  ChatReportBubble      (new, feature chat) — bong bóng DIAGNOSIS_REPORT: icon + tên cây + thời gian, click → ChatReportDialog; ChatModal render theo `type`
+- [x] 7. [atomic-component]     molecule  ChatReportBubble      (new, feature chat) — bong bóng DIAGNOSIS_REPORT: icon + tên cây + thời gian, click → ChatReportDialog; ChatModal render theo `type`
 - [ ] 8. [atomic-component]     molecule  ChatRoomItem          (update, feature chat) — preview tin cuối là report: icon + "Báo cáo chẩn đoán"; export ChatRoomItem
 - [ ] 9. [atomic-component]     molecule  SupplierOption        (new, feature diagnosis-share) — 1 distributor chọn được: avatar, tên, loại hình, địa chỉ, khoảng cách
 - [ ] 10. [atomic-component]    organism  FindSupplierDialog    (new, feature diagnosis-share) — 2 tab: Gần tôi (định vị) | Theo tỉnh thành (tỉnh + xã); danh sách nearby cuộn tải thêm; chọn → onSelect
