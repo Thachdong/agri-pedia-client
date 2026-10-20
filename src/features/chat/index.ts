@@ -6,6 +6,7 @@ export { useChatRooms } from "./hooks/use-chat-rooms";
 export { useMessageDiagnosis } from "./hooks/use-message-diagnosis";
 export { useRoomMessages } from "./hooks/use-room-messages";
 export { useSendMessage } from "./hooks/use-send-message";
+export { formatReportMessage } from "./utils/report-message.util";
 export type {
   TChatMessage,
   TChatMessageType,

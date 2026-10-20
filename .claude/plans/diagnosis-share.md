@@ -14,10 +14,10 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
 - diagnosis-share (mới) → chat, diagnosis, distributor, location, user
 
 ## Steps
-- [x] 1. [feature-scaffold]     feature `diagnosis-share` — layers: components, utils, constants, index
+- [x] 1. [feature-scaffold]     feature `diagnosis-share` — layers: components (+ index)
 - [x] 2. [feature-api]          socket chat.message.send DIAGNOSIS_REPORT — TSendMessageInput thêm type + diagnosisId; useSendMessage ghi đúng type/diagnosisId vào cache
 - [x] 3. [feature-api]          GET /chat/rooms/{roomId}/messages/{messageId}/diagnosis → getMessageDiagnosis (chuẩn hoá về TDiagnosis), key chat.messageDiagnosis, useMessageDiagnosis
-- [ ] 4. [shared-unit]          util formatReportMessage(cropName, diagnosedAt) → "Báo cáo chẩn đoán · Lúa · 20/10/2026 14:30" (Q4 option A)
+- [x] 4. [shared-unit]          util formatReportMessage(cropName, diagnosedAt) + CHAT_REPORT_LABEL — đặt ở feature chat (bubble/preview dùng chung label), diagnosis-share import qua index
 - [ ] 5. [atomic-component]     organism  DiagnosisReportView   (new, feature diagnosis) — tách header + tổng hợp + từng ảnh + disclaimer khỏi DiagnosisResult, nhận data; DiagnosisResult dùng lại
 - [ ] 6. [atomic-component]     organism  ChatReportDialog      (new, feature chat) — useMessageDiagnosis + DiagnosisReportView, loading / lỗi / thử lại
 - [ ] 7. [atomic-component]     molecule  ChatReportBubble      (new, feature chat) — bong bóng DIAGNOSIS_REPORT: icon + tên cây + thời gian, click → ChatReportDialog; ChatModal render theo `type`
