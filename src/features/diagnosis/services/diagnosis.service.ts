@@ -5,6 +5,7 @@ import type {
   TCreateDiagnosisResponse,
   TDiagnosis,
   TDiagnosisListPage,
+  TDiagnosisSettings,
 } from "../types/diagnosis.types";
 
 /**
@@ -29,3 +30,5 @@ export const getMyDiagnoses = (
   client: IHttpClient = http,
 ) => client.get<TDiagnosisListPage>("/diagnoses", { query: { cursor, limit } });
 
+/** Public (token tuỳ chọn) — thông số form chẩn đoán do admin cấu hình + lượt còn lại hôm nay của người gọi. */
+export const getDiagnosisSettings = (client: IHttpClient = http) => client.get<TDiagnosisSettings>("/diagnoses/settings");

@@ -1006,8 +1006,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * List the top articles of a crop (public)
-         * @description In the order an admin chose (PUT /admin/knowledge/crops/:cropSlug/top-articles), published only, at most the admin's `limit`; empty when none were chosen. Sent with `Cache-Control: public, max-age=60`.
+         * List the top articles of every crop (public)
+         * @description One entry per crop, by crop sortOrder; each crop's articles in the order an admin chose (PUT /admin/knowledge/crops/:cropSlug/top-articles), published only, at most the admin's `limit`. Crops without a published top article are left out; `crops` is empty when none were chosen. Sent with `Cache-Control: public, max-age=60`.
          */
         get: operations["ArticleController_top"];
         put?: never;
@@ -2067,9 +2067,12 @@ export interface components {
             disease: components["schemas"]["ArticleDiseaseSummaryResponse"] | null;
             variant: components["schemas"]["ArticleVariantSummaryResponse"] | null;
         };
-        ListTopArticlesResponse: {
+        TopArticlesGroupResponse: {
             crop: components["schemas"]["ArticleCropResponse"];
             articles: components["schemas"]["ArticleListItemResponse"][];
+        };
+        ListTopArticlesResponse: {
+            crops: components["schemas"]["TopArticlesGroupResponse"][];
         };
         ListArticlesResponse: {
             crop: components["schemas"]["ArticleCropResponse"];
@@ -4973,9 +4976,7 @@ export interface operations {
     };
     ArticleController_top: {
         parameters: {
-            query: {
-                crop: string;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
@@ -4988,24 +4989,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListTopArticlesResponse"];
-                };
-            };
-            /** @description Request validation failed */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ValidationErrorResponse"];
-                };
-            };
-            /** @description KNOWLEDGE_CROP_NOT_FOUND */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["DomainErrorResponse"];
                 };
             };
         };

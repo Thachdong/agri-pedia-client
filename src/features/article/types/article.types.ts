@@ -22,6 +22,13 @@ export type TArticleListParams = {
 export type TArticleListFilters = Pick<TArticleListParams, "crop" | "category">;
 
 /**
+ * GET /knowledge/articles/top — top articles admin chọn cho mỗi cây, theo thứ tự cây; cây không có bài top
+ * đã publish bị bỏ, `crops` rỗng khi chưa chọn gì.
+ */
+export type TTopArticlesResponse = TApiSchema<"ListTopArticlesResponse">;
+export type TTopArticlesGroup = TApiSchema<"TopArticlesGroupResponse">;
+
+/**
  * GET /knowledge/articles/:cropSlug/:slug — `markdown` đã resolve URL ảnh public và link `/diseases/<CODE>`;
  * directive `:::warning`, `:::tip`, `::disease-card{code}`, `::cta-diagnosis` để client render.
  */

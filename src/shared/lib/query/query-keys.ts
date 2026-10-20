@@ -78,6 +78,8 @@ export const queryKeys = {
     /** Lịch sử chẩn đoán của tôi (infinite, cursor). */
     lists: () => [...queryKeys.diagnoses.all, "list"] as const,
     detail: (id: string) => [...queryKeys.diagnoses.all, "detail", id] as const,
+    /** Thông số form chẩn đoán (public) — `remainingToday` theo người gọi, gửi chẩn đoán mới làm stale. */
+    settings: () => [...queryKeys.diagnoses.all, "settings"] as const,
   },
   knowledge: {
     all: ["knowledge"] as const,

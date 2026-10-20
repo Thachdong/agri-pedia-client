@@ -10,11 +10,13 @@ export type TArticleCardProps = {
   article: TArticleListItem;
   /** Ảnh của vài thẻ đầu (trong màn hình đầu) tải ưu tiên — tránh LCP chậm. */
   priority?: boolean;
+  /** Cấp heading của tiêu đề — sâu hơn khi thẻ nằm dưới heading nhóm (vd. tên cây ở trang chủ). Mặc định h2. */
+  titleAs?: "h2" | "h3" | "h4";
   className?: string;
 };
 
 /** Thẻ bài trong lưới danh sách: ảnh cover (hoặc placeholder theo nhóm), tiêu đề, tên khoa học, tóm tắt 2 dòng. */
-export function ArticleCard({ article, priority = false, className }: TArticleCardProps) {
+export function ArticleCard({ article, priority = false, titleAs: Title = "h2", className }: TArticleCardProps) {
   const category = article.disease?.category ?? null;
   return (
     <Link
@@ -45,7 +47,7 @@ export function ArticleCard({ article, priority = false, className }: TArticleCa
             <Badge>{CATEGORY_LABELS[category]}</Badge>
           </div>
         )}
-        <h2 className="font-semibold text-foreground group-hover:text-primary">{article.title}</h2>
+        <Title className="font-semibold text-foreground group-hover:text-primary">{article.title}</Title>
         {article.disease?.scientificName && (
           <p className="text-sm text-muted-foreground italic">{article.disease.scientificName}</p>
         )}

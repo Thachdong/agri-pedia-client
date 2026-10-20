@@ -4,7 +4,7 @@ import { SendIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Textarea } from "@/shared/components/atoms";
-import { Callout, FormField } from "@/shared/components/molecules";
+import { Callout, FormField, LoginRequiredDialog } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
 import { APP_ERROR_CODE, isAppError, type AppError } from "@/shared/lib/http";
@@ -58,15 +58,45 @@ export type TDiagnosisFormProps = {
   cropType: string;
   /** Bộ phận chọn được của cây (GET /knowledge/crops `plantParts`). */
   plantParts: TCropPlantPart[];
+  /** `page`: thanh "Gửi" dính cuối màn hình (/diagnosis/new). `inline`: thanh nằm cuối form (khối trên trang chủ). */
+  layout?: "page" | "inline";
+  /** Guest: form hiện đủ nhưng mọi thao tác (thêm ảnh, ghi chú, gửi) → dialog mời đăng nhập. */
+  guest?: boolean;
   className?: string;
+};
+
+/** Phím không làm đổi form — guest vẫn tab qua / thoát được. */
+const PASSIVE_KEYS = new Set(["Tab", "Shift", "Escape", "Alt", "Control", "Meta"]);
+
+/**
+ * Guest: chặn ở pha capture của <form> — pointerdown không cho focus, click không tới nút / input file, phím
+ * (trừ PASSIVE_KEYS) không gõ được → `onBlocked`. Bỏ qua sự kiện từ portal (dialog) — React vẫn cho nó nổi qua form.
+ */
+const guestGuard = (onBlocked: () => void) => {
+  const block = (event: React.SyntheticEvent<HTMLFormElement>) => {
+    if (!event.currentTarget.contains(event.target as Node)) return false;
+    event.preventDefault();
+    event.stopPropagation();
+    return true;
+  };
+  return {
+    onPointerDownCapture: (event: React.PointerEvent<HTMLFormElement>) => {
+      if (event.currentTarget.contains(event.target as Node)) event.preventDefault();
+    },
+    onClickCapture: (event: React.MouseEvent<HTMLFormElement>) => block(event) && onBlocked(),
+    onKeyDownCapture: (event: React.KeyboardEvent<HTMLFormElement>) =>
+      !PASSIVE_KEYS.has(event.key) && block(event) && onBlocked(),
+    onPasteCapture: (event: React.ClipboardEvent<HTMLFormElement>) => block(event) && onBlocked(),
+    onDropCapture: (event: React.DragEvent<HTMLFormElement>) => block(event) && onBlocked(),
+  };
 };
 
 /**
  * Form chẩn đoán (mobile trước): mẹo chụp → lưới ô ảnh (chụp / chọn 1–5 ảnh, mỗi ảnh có thể chọn bộ phận) → ghi chú
- * → thanh "Gửi" dính cuối màn hình. Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi.
+ * → thanh "Gửi" (dính cuối màn hình với `layout="page"`). Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi.
  * Thành công → thay trang bằng trang kết quả (back không quay lại form).
  */
-export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFormProps) {
+export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = false, className }: TDiagnosisFormProps) {
   const router = useRouter();
   const createDiagnosis = useCreateDiagnosis();
   const form = useAppForm<TDiagnosisFormValues>({ schema: diagnosisFormSchema, defaultValues: DEFAULT_VALUES });
@@ -74,6 +104,7 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
   const [cameraOpen, setCameraOpen] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
   const [compressing, setCompressing] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
 
   const { errors, isSubmitted, isSubmitting } = form.formState;
   const images = form.watch("images");
@@ -183,7 +214,14 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
         : "Sẵn sàng gửi";
 
   return (
-    <form id={FORM_ID} onSubmit={onSubmit} noValidate className={cn("flex flex-col gap-6", className)} aria-busy={busy}>
+    <form
+      id={FORM_ID}
+      onSubmit={onSubmit}
+      noValidate
+      className={cn("flex flex-col gap-6", className)}
+      aria-busy={busy}
+      {...(guest && guestGuard(() => setLoginOpen(true)))}
+    >
       <Callout tone="info" title="Mẹo chụp để có kết quả tốt">
         <ul className="list-disc space-y-0.5 pl-4">
           <li>Chụp gần, rõ vết bệnh, đủ sáng; mỗi ảnh một bộ phận.</li>
@@ -257,11 +295,17 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
         </Callout>
       )}
 
-      <div className="sticky bottom-0 z-10 -mx-4 flex items-center justify-between gap-3 border-t border-border-subtle bg-background/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur">
+      <div
+        className={cn(
+          "flex items-center justify-between gap-3 border-t border-border-subtle pt-3",
+          layout === "page" &&
+            "sticky bottom-0 z-10 -mx-4 bg-background/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur",
+        )}
+      >
         <p className="min-w-0 text-xs text-muted-foreground" aria-live="polite">
           {status}
         </p>
-        <Button type="submit" variant="highlight" loading={busy} disabled={!canSubmit} className="shrink-0">
+        <Button type="submit" variant="highlight" loading={busy} disabled={!guest && !canSubmit} className="shrink-0">
           {!busy && <SendIcon aria-hidden />}
           Gửi chẩn đoán
         </Button>
@@ -273,6 +317,13 @@ export function DiagnosisForm({ cropType, plantParts, className }: TDiagnosisFor
         remaining={remaining}
         onCapture={(file) => addFiles([file])}
       />
+      {guest && (
+        <LoginRequiredDialog
+          open={loginOpen}
+          onOpenChange={setLoginOpen}
+          description="Bạn cần đăng nhập để gửi ảnh chẩn đoán bệnh"
+        />
+      )}
     </form>
   );
 }

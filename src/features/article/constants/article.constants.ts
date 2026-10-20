@@ -28,12 +28,20 @@ export const ARTICLE_CACHE_TAG_MAX_LENGTH = 256;
  */
 export const ARTICLE_REVALIDATE_SECONDS = 3600;
 
+/** Top articles ở trang chủ — khớp `max-age` server gửi cho GET /knowledge/articles/top. */
+export const TOP_ARTICLES_REVALIDATE_SECONDS = 60;
+
 /**
  * `options.next` cho service khi gọi từ route ISR — cache theo tag, hết hạn sau ARTICLE_REVALIDATE_SECONDS.
  * Mỗi request chỉ gắn tag hẹp nhất: server gửi `articles` kèm MỌI lần đổi bài, gắn nó vào bài sẽ xoá cache mọi bài.
  */
 export const articleFetchOptions = {
   crops: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
+  /**
+   * Admin chọn lại top articles không chắc kèm webhook → hết hạn theo `Cache-Control: max-age=60` của server;
+   * publish / unpublish bài vẫn xoá ngay qua tag `articles`.
+   */
+  top: () => ({ next: { revalidate: TOP_ARTICLES_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
   sitemap: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
   list: (cropSlug: string) => ({
     next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.crop(cropSlug)] },

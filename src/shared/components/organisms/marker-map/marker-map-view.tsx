@@ -5,12 +5,13 @@ import { divIcon, latLngBounds } from "leaflet";
 import { useEffect, useEffectEvent } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMap } from "react-leaflet";
 import { publicEnv } from "@/shared/config";
-import { VN_BOUNDS } from "@/shared/constants";
+import { MAP_ZOOM_SNAP, VN_BOUNDS } from "@/shared/constants";
 import type { TCoordinates } from "@/shared/hooks";
 import { InvalidateOnResize, isWithinBounds, LockToBounds } from "@/shared/lib/map";
 import { cn } from "@/shared/lib/utils";
 import {
   DEFAULT_USER_LABEL,
+  DEFAULT_ZOOM_IN,
   FIT_MAX_ZOOM,
   FIT_NEAREST_COUNT,
   type TMapMarker,
@@ -44,6 +45,16 @@ const USER_ICON = divIcon({
 
 const toLatLng = ({ lat, long }: TCoordinates): [number, number] => [lat, long];
 
+/** Khung mặc định: giữa VN_BOUNDS, zoom thêm DEFAULT_ZOOM_IN so với vừa khít (chạy 1 lần khi mount). */
+function InitialView() {
+  const map = useMap();
+  useEffect(() => {
+    const bounds = latLngBounds(VN_BOUNDS);
+    map.setView(bounds.getCenter(), map.getBoundsZoom(bounds) + DEFAULT_ZOOM_IN, { animate: false });
+  }, [map]);
+  return null;
+}
+
 /**
  * Fit khung nhìn quanh người xem + các marker gần nhất.
  * Chỉ chạy lại khi vị trí người xem hoặc marker đầu đổi (kết quả mới) — tải thêm trang không làm map nhảy.
@@ -75,10 +86,17 @@ export function MarkerMapView({
 }: TMarkerMapProps) {
   return (
     <div className={cn("size-full overflow-hidden", className)}>
-      <MapContainer bounds={VN_BOUNDS} maxBoundsViscosity={1} className="size-full" aria-label={ariaLabel}>
+      <MapContainer
+        bounds={VN_BOUNDS}
+        zoomSnap={MAP_ZOOM_SNAP}
+        maxBoundsViscosity={1}
+        className="size-full"
+        aria-label={ariaLabel}
+      >
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
         <InvalidateOnResize />
         <LockToBounds bounds={VN_BOUNDS} />
+        <InitialView />
         <FitToUser userLocation={userLocation} markers={markers} />
         {userLocation && (
           <Marker position={toLatLng(userLocation)} icon={USER_ICON} interactive={false} zIndexOffset={-100} title={userLabel}>

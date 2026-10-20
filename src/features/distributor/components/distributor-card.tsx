@@ -14,10 +14,15 @@ const cardVariants = cva(
     variants: {
       selected: {
         true: "card-highlight",
-        false: "card-normal hover:border-highlight/50",
+        false: "card-normal",
+      },
+      disabled: {
+        true: "cursor-default",
+        false: "",
       },
     },
-    defaultVariants: { selected: false },
+    compoundVariants: [{ selected: false, disabled: false, className: "hover:border-highlight/50" }],
+    defaultVariants: { selected: false, disabled: false },
   },
 );
 
@@ -27,19 +32,24 @@ export type TDistributorCardProps = Omit<React.ComponentProps<typeof Link>, "hre
   provinceName?: string;
   /** Đang được chọn (vd: click marker trên map). */
   selected?: boolean;
+  /** Vẫn hiện nhưng không mở profile (DISTRIBUTOR xem shop khác ở trang chủ). */
+  disabled?: boolean;
 };
 
-/** Card distributor (ui-ux.md §6 (7)) — click mở /profile/<userId>. */
-export function DistributorCard({ distributor, provinceName, selected = false, className, ...props }: TDistributorCardProps) {
+/** Card distributor (ui-ux.md §6 (7)) — click mở /profile/<userId>; `disabled` → khối tĩnh, không link. */
+export function DistributorCard({
+  distributor,
+  provinceName,
+  selected = false,
+  disabled = false,
+  className,
+  ...props
+}: TDistributorCardProps) {
   const { userId, username, avatar, bussinessType, address, distanceMeters } = distributor;
+  const classes = cn(cardVariants({ selected, disabled }), className);
 
-  return (
-    <Link
-      href={ROUTES.profile(userId)}
-      aria-current={selected || undefined}
-      className={cn(cardVariants({ selected }), className)}
-      {...props}
-    >
+  const content = (
+    <>
       <Avatar src={avatar} name={username} size="lg" />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="truncate font-medium">{username}</span>
@@ -59,6 +69,20 @@ export function DistributorCard({ distributor, provinceName, selected = false, c
           )}
         </span>
       </div>
+    </>
+  );
+
+  if (disabled) {
+    return (
+      <div aria-disabled aria-current={selected || undefined} className={classes}>
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link href={ROUTES.profile(userId)} aria-current={selected || undefined} className={classes} {...props}>
+      {content}
     </Link>
   );
 }

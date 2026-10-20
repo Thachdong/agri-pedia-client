@@ -16,8 +16,10 @@ export const ACCESS_TOKEN_FALLBACK_MAX_AGE = 15 * 60;
 
 export const LOGIN_PATH = ROUTES.auth.login;
 export const HOME_PATH = ROUTES.home;
-/** Khu vực chỉ dành cho ADMIN; ADMIN không vào được trang nào ngoài khu này. */
+/** Khu vực chỉ dành cho ADMIN; ADMIN không vào được trang nào ngoài khu này, trừ ADMIN_FRONT_PATHS. */
 export const ADMIN_PATH = ROUTES.admin.root;
+/** Trang front ADMIN vẫn vào được (khớp đúng path, không gồm trang con) — trang chủ (Specs/19102026/admin.md). */
+export const ADMIN_FRONT_PATHS: readonly string[] = [ROUTES.home];
 export const ADMIN_HOME_PATH = ROUTES.admin.articles.list();
 export const LOGIN_NEXT_PARAM = "next";
 /**

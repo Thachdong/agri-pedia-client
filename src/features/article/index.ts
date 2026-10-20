@@ -20,9 +20,10 @@ export {
   type TArticleMarkdownSource,
 } from "./components/article-markdown";
 export { ArticleOriginBadge, type TArticleOriginBadgeProps } from "./components/article-origin-badge";
+export { TopArticlesSection, type TTopArticlesSectionProps } from "./components/top-articles-section";
 export { articleListQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
-export { getArticle, getArticleSitemap, listArticleCrops, listArticles } from "./services/article.service";
+export { getArticle, getArticleSitemap, getTopArticles, listArticleCrops, listArticles } from "./services/article.service";
 export type {
   TArticleAffectedPart,
   TArticleCategory,
@@ -42,5 +43,7 @@ export type {
   TArticleStatus,
   TArticleVerification,
   TRelatedDisease,
+  TTopArticlesGroup,
+  TTopArticlesResponse,
 } from "./types/article.types";
 export { ARTICLES_INDEX_LABEL, articleJsonLd } from "./utils/article-json-ld.util";
