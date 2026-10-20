@@ -12,6 +12,7 @@ export type {
   TAdminArticleTarget,
   TAdminArticleTargetsResponse,
 } from "./types/article-admin.types";
+export { ArticleCropStats, type TArticleCropStatsProps } from "./components/article-crop-stats";
 export { ArticleTargetTable, type TArticleTargetTableProps } from "./components/article-target-table";
 export { ArticleForm, type TArticleFormProps } from "./components/article-form";
 export { AdminArticlePreview, type TAdminArticlePreviewProps } from "./components/admin-article-preview";

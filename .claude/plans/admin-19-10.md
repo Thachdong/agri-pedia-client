@@ -22,7 +22,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 ### B. Map ADMIN hiện toàn bộ (T26)
 - [x] 5. [atomic-component]   organism  DistributorExplorer   (update, distributor) — origin `all` tự tải hết các trang để map đủ marker
 ### C. Thống kê article (T25)
-- [ ] 6. [atomic-component]   organism  ArticleCropStats      (new, article-admin) — mỗi cây: số bệnh, có bài, đã publish, còn thiếu; click → chọn cây; gắn đầu /admin/articles
+- [x] 6. [atomic-component]   organism  ArticleCropStats      (new, article-admin) — mỗi cây: số bệnh, có bài, đã publish, còn thiếu; click → chọn cây; gắn qua slot `summary` mới của ArticleTargetTable (giữa tiêu đề và bảng)
 ### D. /admin/settings (T18–T21)
 - [ ] 7. [feature-scaffold]   feature `admin-settings` — components, hooks, services, schemas, types
 - [ ] 8. [feature-api]        GET /admin/diagnosis/settings → adminDiagnosisSettingsQuery; key adminSettings.diagnosis
