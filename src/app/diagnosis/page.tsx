@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { ChatRoomsMenu } from "@/features/chat";
 import { cropsQuery, DiagnosisHistoryList, diagnosisHistoryQuery, StartDiagnosisButton } from "@/features/diagnosis";
 import { NotificationMenu } from "@/features/notification";
-import { meQuery, UserMenu } from "@/features/user";
+import { AdminUserMenu, meQuery, type TUserProfile, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
 import { ContentLayout } from "@/shared/components/templates";
 import { serverHttp } from "@/shared/lib/http/server";
-import { HydrateQueries, prefetch } from "@/shared/lib/query/server";
+import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/server";
 import { RealtimeProvider } from "@/shared/lib/realtime";
 
 export const metadata: Metadata = {
@@ -15,11 +15,13 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-/** Lịch sử chẩn đoán của tôi (cần đăng nhập) — trang đầu prefetch, cuộn để tải thêm. */
+/** Lịch sử chẩn đoán của tôi (cần đăng nhập) — trang đầu prefetch, cuộn để tải thêm. ADMIN: header chỉ user menu. */
 export default async function DiagnosisHistoryPage() {
-  const state = await prefetch([meQuery(serverHttp), cropsQuery(serverHttp)], {
+  const me = meQuery(serverHttp);
+  const state = await prefetch([me, cropsQuery(serverHttp)], {
     infinite: [diagnosisHistoryQuery(serverHttp)],
   });
+  const isAdmin = getPrefetchedData<TUserProfile>(state, me.queryKey)?.role === "ADMIN";
 
   return (
     <HydrateQueries state={state}>
@@ -28,12 +30,16 @@ export default async function DiagnosisHistoryPage() {
           header={
             <SiteHeader
               actions={
-                <>
-                  <StartDiagnosisButton compact />
-                  <NotificationMenu />
-                  <ChatRoomsMenu />
-                  <UserMenu />
-                </>
+                isAdmin ? (
+                  <AdminUserMenu showAdminLink />
+                ) : (
+                  <>
+                    <StartDiagnosisButton compact />
+                    <NotificationMenu />
+                    <ChatRoomsMenu />
+                    <UserMenu />
+                  </>
+                )
               }
             />
           }
