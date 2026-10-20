@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Textarea } from "@/shared/components/atoms";
 import { AddImageTile, Callout, FormField, LoginRequiredDialog } from "@/shared/components/molecules";
+import { CameraCaptureDialog } from "@/shared/components/organisms";
 import { ROUTES } from "@/shared/constants";
 import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
 import { APP_ERROR_CODE, isAppError, type AppError } from "@/shared/lib/http";
@@ -25,7 +26,6 @@ import type { TCropPlantPart } from "../types/knowledge.types";
 import { analyzeImage } from "../utils/blur-score.util";
 import { ImageDecodeError } from "@/shared/lib/image";
 import { compressDiagnosisImage } from "../utils/compress-image.util";
-import { CameraCaptureDialog } from "./camera-capture-dialog";
 import { DiagnosisImageSlot } from "./diagnosis-image-slot";
 
 const FORM_ID = "diagnosis-form";
@@ -325,6 +325,8 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
       <CameraCaptureDialog
         open={cameraOpen}
         onOpenChange={setCameraOpen}
+        title="Chụp ảnh vết bệnh"
+        description="Di chuyển vết bệnh vào giữa khung hình"
         remaining={remaining}
         onCapture={(file) => addFiles([file])}
       />

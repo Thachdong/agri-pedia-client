@@ -1,3 +1,4 @@
+export { CameraCaptureDialog, type TCameraCaptureDialogProps } from "./camera-capture-dialog";
 export { MapPicker, type TMapPickerProps } from "./map-picker";
 export { MarkerMap, type TMapMarker, type TMarkerMapProps } from "./marker-map";
 export {
