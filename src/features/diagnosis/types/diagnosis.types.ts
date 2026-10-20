@@ -65,3 +65,6 @@ export type TDiagnosisFormValues = {
   images: TDiagnosisFormImage[];
   note: string;
 };
+
+/** GET /diagnoses/settings — cây mặc định (null = không chọn sẵn), số ảnh, giới hạn ảnh; `remainingToday` null khi guest. */
+export type TDiagnosisSettings = TApiSchema<"DiagnosisFormSettingsResponse">;

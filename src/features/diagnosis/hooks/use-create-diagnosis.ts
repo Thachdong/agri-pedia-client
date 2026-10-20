@@ -6,6 +6,6 @@ import type { TCreateDiagnosisInput } from "../types/diagnosis.types";
 export const useCreateDiagnosis = () =>
   useAppMutation({
     mutationFn: (input: TCreateDiagnosisInput) => createDiagnosis(input),
-    invalidates: () => [queryKeys.diagnoses.lists()],
+    invalidates: () => [queryKeys.diagnoses.lists(), queryKeys.diagnoses.settings()],
     meta: { silent: true },
   });

@@ -10,11 +10,12 @@ export {
   DIAGNOSIS_ERROR_CODE,
   PLANT_PART_LABELS,
 } from "./constants/diagnosis.constants";
-export { diagnosisHistoryQuery, diagnosisQuery } from "./hooks/diagnosis.queries";
+export { diagnosisHistoryQuery, diagnosisQuery, diagnosisSettingsQuery } from "./hooks/diagnosis.queries";
 export { cropsQuery } from "./hooks/knowledge.queries";
 export { useCreateDiagnosis } from "./hooks/use-create-diagnosis";
 export { useCrops } from "./hooks/use-crops";
 export { useDiagnosis } from "./hooks/use-diagnosis";
 export { useDiagnosisHistory } from "./hooks/use-diagnosis-history";
-export type { TDiagnosis, TDiagnosisListItem, TDiagnosisStatus, TPlantPart } from "./types/diagnosis.types";
+export { useDiagnosisSettings } from "./hooks/use-diagnosis-settings";
+export type { TDiagnosis, TDiagnosisListItem, TDiagnosisSettings, TDiagnosisStatus, TPlantPart } from "./types/diagnosis.types";
 export type { TCrop, TCropsResponse, TDisease } from "./types/knowledge.types";
