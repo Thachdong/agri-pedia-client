@@ -17,7 +17,8 @@ import {
   DIAGNOSIS_NOTE_MAX,
 } from "../constants/diagnosis.constants";
 import { useCreateDiagnosis } from "../hooks/use-create-diagnosis";
-import { diagnosisFormSchema } from "../schemas/diagnosis.schema";
+import { useDiagnosisSettings } from "../hooks/use-diagnosis-settings";
+import { diagnosisFormSchema, type TDiagnosisFormContext } from "../schemas/diagnosis.schema";
 import type { TDiagnosisFormImage, TDiagnosisFormValues, TPlantPart } from "../types/diagnosis.types";
 import type { TCropPlantPart } from "../types/knowledge.types";
 import { analyzeImage } from "../utils/blur-score.util";
@@ -92,14 +93,22 @@ const guestGuard = (onBlocked: () => void) => {
 };
 
 /**
- * Form chẩn đoán (mobile trước): mẹo chụp → lưới ô ảnh (chụp / chọn 1–5 ảnh, mỗi ảnh có thể chọn bộ phận) → ghi chú
- * → thanh "Gửi" (dính cuối màn hình với `layout="page"`). Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi.
+ * Form chẩn đoán (mobile trước): mẹo chụp → lưới ô ảnh (chụp / chọn 1–`maxImages` ảnh, mỗi ảnh có thể chọn bộ phận)
+ * → ghi chú → thanh "Gửi" (dính cuối màn hình với `layout="page"`). Ảnh được kiểm tra mờ khi thêm, nén JPEG khi gửi
+ * theo giới hạn dung lượng / kích thước của GET /diagnoses/settings.
  * Thành công → thay trang bằng trang kết quả (back không quay lại form).
  */
 export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = false, className }: TDiagnosisFormProps) {
   const router = useRouter();
   const createDiagnosis = useCreateDiagnosis();
-  const form = useAppForm<TDiagnosisFormValues>({ schema: diagnosisFormSchema, defaultValues: DEFAULT_VALUES });
+  // Giới hạn ảnh admin cấu hình; chưa tải được → mặc định của server.
+  const { data: settings } = useDiagnosisSettings();
+  const maxImages = settings?.maxImages ?? DIAGNOSIS_MAX_IMAGES;
+  const form = useAppForm<TDiagnosisFormValues, TDiagnosisFormContext>({
+    schema: diagnosisFormSchema,
+    defaultValues: DEFAULT_VALUES,
+    context: { maxImages },
+  });
   const [checks, setChecks] = useState<Record<string, TImageCheck>>({});
   const [cameraOpen, setCameraOpen] = useState(false);
   const [limitReached, setLimitReached] = useState(false);
@@ -114,7 +123,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
   const fallbackPart = plantParts.some((part) => part.code === DEFAULT_PLANT_PART)
     ? DEFAULT_PLANT_PART
     : (plantParts[0]?.code ?? DEFAULT_PLANT_PART);
-  const remaining = Math.max(DIAGNOSIS_MAX_IMAGES - images.length, 0);
+  const remaining = Math.max(maxImages - images.length, 0);
   const brokenCount = images.filter((image) => checks[image.id]?.error).length;
   const canSubmit = images.length > 0 && brokenCount === 0 && !busy && !limitReached;
 
@@ -125,7 +134,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
     form.setValue("images", next, { shouldDirty: true, shouldValidate: isSubmitted });
 
   const addFiles = (files: File[]) => {
-    const added = files.slice(0, DIAGNOSIS_MAX_IMAGES - form.getValues("images").length).map(newImage);
+    const added = files.slice(0, Math.max(maxImages - form.getValues("images").length, 0)).map(newImage);
     if (added.length === 0) return;
     setImages([...form.getValues("images"), ...added]);
     added.forEach(({ id, file }) => {
@@ -177,7 +186,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
 
   const onSubmit = form.handleSubmit(async (values) => {
     setCompressing(true);
-    const results = await Promise.allSettled(values.images.map(({ file }) => compressImage(file)));
+    const results = await Promise.allSettled(values.images.map(({ file }) => compressImage(file, settings)));
     setCompressing(false);
 
     const failed = results.flatMap((result, index) => (result.status === "rejected" ? [values.images[index]] : []));
@@ -225,7 +234,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
       <Callout tone="info" title="Mẹo chụp để có kết quả tốt">
         <ul className="list-disc space-y-0.5 pl-4">
           <li>Chụp gần, rõ vết bệnh, đủ sáng; mỗi ảnh một bộ phận.</li>
-          <li>Đưa vết bệnh vào giữa khung hình; có thể chụp nhiều góc (tối đa {DIAGNOSIS_MAX_IMAGES} ảnh).</li>
+          <li>Đưa vết bệnh vào giữa khung hình; có thể chụp nhiều góc (tối đa {maxImages} ảnh).</li>
         </ul>
       </Callout>
 

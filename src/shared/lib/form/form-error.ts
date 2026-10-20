@@ -17,7 +17,7 @@ function hasPath(values: unknown, path: string): boolean {
  * Gắn lỗi từ API vào form: lỗi validation của NestJS ("<field> must be ...") → lỗi của field,
  * còn lại (domain error) → `errors.root.server`. Trả về false nếu `error` không phải AppError.
  */
-export function applyServerErrors<T extends FieldValues>(form: TAppForm<T>, error: unknown): boolean {
+export function applyServerErrors<T extends FieldValues, TContext = unknown>(form: TAppForm<T, TContext>, error: unknown): boolean {
   if (!isAppError(error)) return false;
 
   if (error.code === APP_ERROR_CODE.VALIDATION_ERROR && Array.isArray(error.details)) {
