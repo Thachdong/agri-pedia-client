@@ -21,7 +21,7 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
 - [x] 5. [atomic-component]     organism  DiagnosisReportView   (new, feature diagnosis) — tách header + tổng hợp + từng ảnh + disclaimer khỏi DiagnosisResult, nhận data; DiagnosisResult dùng lại
 - [x] 6. [atomic-component]     organism  ChatReportDialog      (new, feature chat) — useMessageDiagnosis + DiagnosisReportView, loading / lỗi / thử lại
 - [x] 7. [atomic-component]     molecule  ChatReportBubble      (new, feature chat) — bong bóng DIAGNOSIS_REPORT: icon + tên cây + thời gian, click → ChatReportDialog; ChatModal render theo `type`
-- [ ] 8. [atomic-component]     molecule  ChatRoomItem          (update, feature chat) — preview tin cuối là report: icon + "Báo cáo chẩn đoán"; export ChatRoomItem
+- [x] 8. [atomic-component]     molecule  ChatRoomItem          (update, feature chat) — preview tin cuối là report: icon + "Báo cáo chẩn đoán"; export ChatRoomItem
 - [ ] 9. [atomic-component]     molecule  SupplierOption        (new, feature diagnosis-share) — 1 distributor chọn được: avatar, tên, loại hình, địa chỉ, khoảng cách
 - [ ] 10. [atomic-component]    organism  FindSupplierDialog    (new, feature diagnosis-share) — 2 tab: Gần tôi (định vị) | Theo tỉnh thành (tỉnh + xã); danh sách nearby cuộn tải thêm; chọn → onSelect
 - [ ] 11. [atomic-component]    organism  SendReportDialog      (new, feature diagnosis-share) — danh sách chat room → chọn → ConfirmDialog "Gửi report cho <tên>?" → gửi; nút "Tìm nhà cung cấp" → FindSupplierDialog → chọn → confirm → gửi bằng receiverId; gửi xong đóng dialog + mở ChatModal room đó

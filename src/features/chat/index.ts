@@ -1,5 +1,6 @@
 // Public API của feature `chat` (danh sách room, tin nhắn, chat modal, realtime).
 export { ChatModal, type TChatModalProps, type TChatTarget } from "./components/chat-modal";
+export { ChatRoomItem, type TChatRoomItemProps } from "./components/chat-room-item";
 export { ChatRoomsMenu } from "./components/chat-rooms-menu";
 export { chatRoomsQuery, messageDiagnosisQuery, roomMessagesQuery } from "./hooks/chat.queries";
 export { useChatRooms } from "./hooks/use-chat-rooms";
