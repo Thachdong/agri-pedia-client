@@ -16,7 +16,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 ## Steps
 ### A. ADMIN vào trang front (T1–T5)
 - [x] 1. [bff-auth]           proxy: ADMIN vào được mọi trang front trừ /profile/me (thay allowlist chỉ có "/"); /api/auth/session trả thêm `isAdmin` (từ cookie role) cho header trang ISR. Chỉ đổi nhánh ADMIN — guest / FARMER / DISTRIBUTOR giữ nguyên (kiểm bằng bảng path × role trước / sau)
-- [ ] 2. [feature-api]        auth: TSession thêm `isAdmin`
+- [x] 2. [feature-api]        auth: TSession thêm `isAdmin`
 - [ ] 3. [atomic-component]   organism  SessionHeaderActions  (update, auth) — thêm slot `admin`
 - [ ] 4. [page]               header ADMIN (chỉ AdminUserMenu có link trang quản trị, không chat / notification / nút chẩn đoán): /benh-cay-trong layout, /profile/[id], /diagnosis, /diagnosis/[id]
 ### B. Map ADMIN hiện toàn bộ (T26)
