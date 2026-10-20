@@ -16,11 +16,13 @@ export type TDistributorListProps = {
   locating?: boolean;
   /** userId đang chọn (click marker) → highlight + cuộn tới. */
   selectedId?: string | null;
+  /** DISTRIBUTOR đang xem: shop của mình ghim đầu danh sách, card shop khác không mở được. */
+  ownShopId?: string;
   className?: string;
 };
 
 /** Danh sách distributor (ui-ux.md §6 (7)) — infinite scroll theo page. */
-export function DistributorList({ query, locating = false, selectedId, className }: TDistributorListProps) {
+export function DistributorList({ query, locating = false, selectedId, ownShopId, className }: TDistributorListProps) {
   // Không destructure theo discriminated union: lỗi trang kế cũng làm `status = "error"` nhưng vẫn giữ `data`.
   const { data, refetch, hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage } = query;
   const { data: provinces } = useProvinces();
@@ -29,7 +31,13 @@ export function DistributorList({ query, locating = false, selectedId, className
     [provinces],
   );
 
-  const itemRefs = useRef(new Map<string, HTMLAnchorElement>());
+  const items = useMemo(() => {
+    const all = data?.items ?? [];
+    const own = ownShopId ? all.find((item) => item.userId === ownShopId) : undefined;
+    return own ? [own, ...all.filter((item) => item !== own)] : all;
+  }, [data?.items, ownShopId]);
+
+  const itemRefs = useRef(new Map<string, HTMLLIElement>());
   useEffect(() => {
     if (selectedId) itemRefs.current.get(selectedId)?.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }, [selectedId]);
@@ -84,23 +92,26 @@ export function DistributorList({ query, locating = false, selectedId, className
   return (
     <ListFrame className={className} title={`${NEARBY_SCOPE_TITLES[data.scope]} (${data.total})`}>
       {note && <p className="mb-2 rounded-md bg-highlight-subtle px-3 py-2 text-xs text-foreground">{note}</p>}
-      {data.items.length === 0 ? (
+      {items.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">
           <StoreIcon className="size-8" aria-hidden />
           Chưa có distributor nào.
         </div>
       ) : (
         <ul className="flex flex-col gap-2">
-          {data.items.map((distributor) => (
-            <li key={distributor.userId}>
+          {items.map((distributor) => (
+            <li
+              key={distributor.userId}
+              ref={(node) => {
+                if (node) itemRefs.current.set(distributor.userId, node);
+                else itemRefs.current.delete(distributor.userId);
+              }}
+            >
               <DistributorCard
-                ref={(node) => {
-                  if (node) itemRefs.current.set(distributor.userId, node);
-                  else itemRefs.current.delete(distributor.userId);
-                }}
                 distributor={distributor}
                 provinceName={provinceNames.get(distributor.address.province)}
                 selected={distributor.userId === selectedId}
+                disabled={Boolean(ownShopId) && distributor.userId !== ownShopId}
               />
             </li>
           ))}
