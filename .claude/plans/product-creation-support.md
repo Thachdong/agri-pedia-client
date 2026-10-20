@@ -15,7 +15,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - [x] 3. [atomic-component]  organism  CameraCaptureDialog  (move diagnosis → shared) — thêm prop title, description (chẩn đoán giữ chữ cũ)
 - [x] 4. [feature-api]       POST /products/suggestions → TProductSuggestion, suggestProduct (multipart), useSuggestProduct (không cache nào stale)
 - [x] 5. [atomic-component]  organism  ProductLabelScanner  (new, product) — chụp (camera trong trang) / chọn ảnh nhãn → nén ≤ 5 MB → gửi; trạng thái: đang đọc / FOUND / NOT_FOUND / UNREADABLE / ảnh lỗi / hết lượt; "Còn N lượt"
-- [ ] 6. [atomic-component]  organism  ProductFormDialog    (update, product) — chỉ khi tạo mới: scanner ở đầu form; FOUND → điền tên + mô tả (ô đã có nội dung → ConfirmDialog trước khi ghi đè); NOT_FOUND → nút "Dùng tên này" (cùng quy tắc xác nhận)
+- [x] 6. [atomic-component]  organism  ProductFormDialog    (update, product) — chỉ khi tạo mới: scanner ở đầu form; FOUND → điền tên + mô tả (ô đã có nội dung → ConfirmDialog trước khi ghi đè); NOT_FOUND → nút "Dùng tên này" (cùng quy tắc xác nhận)
 - [ ] 7. [arch-review]
 
 ## Components (in order)
