@@ -27,7 +27,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - [x] 7. [feature-scaffold]   feature `admin-settings` — components, hooks, services, schemas, types
 - [x] 8. [feature-api]        GET /admin/diagnosis/settings → adminDiagnosisSettingsQuery; key adminSettings.diagnosis
 - [x] 9. [feature-api]        PUT /admin/diagnosis/settings → useUpdateDiagnosisSettings; invalidates adminSettings.diagnosis + diagnoses.settings
-- [ ] 10. [feature-api]       GET /admin/knowledge/settings → topArticleSettingsQuery; key adminSettings.topArticleLimit
+- [x] 10. [feature-api]       GET /admin/knowledge/settings → topArticleSettingsQuery; key adminSettings.topArticleLimit
 - [ ] 11. [feature-api]       PUT /admin/knowledge/settings → useUpdateTopArticleLimit; invalidates topArticleLimit + topArticles
 - [ ] 12. [feature-api]       GET /admin/knowledge/crops/{cropSlug}/top-articles → cropTopArticlesQuery; key adminSettings.topArticles(cropSlug)
 - [ ] 13. [feature-api]       PUT /admin/knowledge/crops/{cropSlug}/top-articles → useSetCropTopArticles; invalidates topArticles(cropSlug)
