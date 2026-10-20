@@ -4,7 +4,6 @@ import { ArrowRightIcon, ExternalLinkIcon } from "lucide-react";
 import Link from "next/link";
 import { Badge, Button } from "@/shared/components/atoms";
 import { Callout, InfoTable } from "@/shared/components/molecules";
-import { ROUTES } from "@/shared/constants";
 import { cn } from "@/shared/lib/utils";
 import {
   AGENT_TYPE_LABELS,
@@ -108,13 +107,18 @@ export function DiseaseArticle({ disease, cropType, titleAs: Title = "h1", class
           <ul className="flex flex-col divide-y divide-border-subtle rounded-lg border border-border-subtle">
             {disease.similarDiseases.map((similar) => (
               <li key={similar.code} className="flex flex-col gap-1 px-4 py-3">
-                <Link
-                  href={ROUTES.disease(similar.code)}
-                  className="inline-flex items-center gap-1 self-start rounded-sm font-medium text-highlight underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {similar.name}
-                  <ArrowRightIcon className="size-4" aria-hidden />
-                </Link>
+                {similar.article ? (
+                  <Link
+                    href={similar.article.path}
+                    className="inline-flex items-center gap-1 self-start rounded-sm font-medium text-highlight underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    {similar.name}
+                    <ArrowRightIcon className="size-4" aria-hidden />
+                  </Link>
+                ) : (
+                  // Bệnh chưa có bài (hoặc bài đã ẩn) — chỉ hiện tên.
+                  <span className="font-medium">{similar.name}</span>
+                )}
                 {similar.distinguishingFeature && (
                   <p className="text-sm text-muted-foreground">Phân biệt: {similar.distinguishingFeature}</p>
                 )}

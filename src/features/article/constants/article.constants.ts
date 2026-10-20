@@ -8,10 +8,12 @@ export const ARTICLE_CACHE_TAGS = {
   all: "articles",
   crop: (cropSlug: string) => `articles:${cropSlug}`,
   article: (cropSlug: string, slug: string) => `article:${cropSlug}:${slug}`,
-  disease: (diseaseCode: string) => `article-disease:${diseaseCode}`,
 } as const;
 
-/** Tag hợp lệ cho webhook POST /api/revalidate — đúng 4 dạng của ARTICLE_CACHE_TAGS. */
+/**
+ * Tag hợp lệ cho webhook POST /api/revalidate — 3 dạng của ARTICLE_CACHE_TAGS + `article-disease:<CODE>`: server vẫn
+ * gửi tag này (client không còn route nào gắn nó) — bỏ khỏi pattern thì cả request webhook bị 400.
+ */
 export const ARTICLE_CACHE_TAG_PATTERN =
   /^(articles|articles:[a-z0-9-]+|article:[a-z0-9-]+:[a-z0-9-]+|article-disease:[A-Z0-9_]+)$/;
 
@@ -32,9 +34,6 @@ export const ARTICLE_REVALIDATE_SECONDS = 3600;
  */
 export const articleFetchOptions = {
   crops: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
-  diseaseLink: (diseaseCode: string) => ({
-    next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.disease(diseaseCode)] },
-  }),
   sitemap: () => ({ next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.all] } }),
   list: (cropSlug: string) => ({
     next: { revalidate: ARTICLE_REVALIDATE_SECONDS, tags: [ARTICLE_CACHE_TAGS.crop(cropSlug)] },

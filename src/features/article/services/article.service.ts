@@ -5,8 +5,6 @@ import type {
   TArticleListParams,
   TArticleListResponse,
   TArticleSitemap,
-  TDiseaseArticleLink,
-  TDiseaseArticleSource,
 } from "../types/article.types";
 
 /*
@@ -32,19 +30,3 @@ export const getArticle = (cropSlug: string, slug: string, client: IHttpClient =
 /** Bài được index (REVIEWED) + ngày cập nhật mới nhất theo cây — cho `app/sitemap.ts`. */
 export const getArticleSitemap = (client: IHttpClient = http, options?: TRequestOptions) =>
   client.get<TArticleSitemap>("/knowledge/articles/sitemap", options);
-
-/**
- * Bài viết của 1 bệnh (field `article` của GET /knowledge/diseases/:code) — cho redirect `/diseases/[code]`.
- * Mã lạ → 404 KNOWLEDGE_DISEASE_NOT_FOUND; null = bệnh chưa có bài.
- */
-export const getDiseaseArticleLink = async (
-  diseaseCode: string,
-  client: IHttpClient = http,
-  options?: TRequestOptions,
-): Promise<TDiseaseArticleLink | null> => {
-  const disease = await client.get<TDiseaseArticleSource>(
-    `/knowledge/diseases/${encodeURIComponent(diseaseCode)}`,
-    options,
-  );
-  return disease.article;
-};
