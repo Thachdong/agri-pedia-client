@@ -15,8 +15,7 @@ export type THomeLayoutProps = {
 
 /**
  * Trang chủ (Specs/19102026): header + các khối cuộn dọc, cuối trang là khối bản đồ + danh sách cao cố định.
- * Khung map dọc như map-size.png để Việt Nam lấp đầy khung (desktop: map trái tỉ lệ 548:781 / list phải ~70vh;
- * mobile: map trên 60vh, list dưới tự cuộn).
+ * Desktop: map trái chiếm phần lớn / list phải hẹp (20rem), cao ~70vh; mobile: map trên 60vh, list dưới tự cuộn.
  */
 export function HomeLayout({ header, children, mapTitle, map, list, className }: THomeLayoutProps) {
   return (
@@ -29,8 +28,8 @@ export function HomeLayout({ header, children, mapTitle, map, list, className }:
             {mapTitle}
           </h2>
           <div className="card-normal flex flex-col overflow-hidden rounded-xl md:h-[70vh] md:flex-row">
-            <div className="relative isolate h-[60vh] shrink-0 md:aspect-[548/781] md:h-full">{map}</div>
-            <div className="scrollbar-thin max-h-[60vh] min-h-0 overflow-y-auto border-t border-border-subtle p-4 md:max-h-none md:flex-1 md:border-t-0 md:border-l">
+            <div className="relative isolate h-[60vh] shrink-0 md:h-auto md:flex-1">{map}</div>
+            <div className="scrollbar-thin max-h-[60vh] min-h-0 overflow-y-auto border-t border-border-subtle p-4 md:max-h-none md:w-80 md:shrink-0 md:border-t-0 md:border-l">
               {list}
             </div>
           </div>
