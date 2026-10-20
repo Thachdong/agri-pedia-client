@@ -1,6 +1,7 @@
 import { ArrowRightIcon } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/shared/components/atoms";
+import { ScrollCarousel } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { cn } from "@/shared/lib/utils";
 import type { TTopArticlesGroup } from "../types/article.types";
@@ -13,8 +14,7 @@ export type TTopArticlesSectionProps = {
 };
 
 /**
- * Bài viết nổi bật ở trang chủ: mỗi cây một khối — tên cây + "Xem thêm" (danh sách bài của cây) + hàng thẻ bài
- * cuộn ngang. Không có cây nào → không render.
+ * Bài viết nổi bật ở trang chủ: mỗi cây một khối — tên cây + "Xem thêm" (danh sách bài của cây) + slide thẻ bài. Không có cây nào → không render.
  */
 export function TopArticlesSection({ groups, className }: TTopArticlesSectionProps) {
   if (groups.length === 0) return null;
@@ -39,13 +39,11 @@ export function TopArticlesSection({ groups, className }: TTopArticlesSectionPro
                 </Link>
               </Button>
             </header>
-            <ul className="scrollbar-thin flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
+            <ScrollCarousel aria-label={`Bài viết nổi bật về ${crop.nameVi}`} itemClassName="w-72">
               {articles.map((article) => (
-                <li key={article.path} className="w-72 shrink-0 snap-start">
-                  <ArticleCard article={article} titleAs="h4" className="h-full" />
-                </li>
+                <ArticleCard key={article.path} article={article} titleAs="h4" className="h-full" />
               ))}
-            </ul>
+            </ScrollCarousel>
           </section>
         );
       })}
