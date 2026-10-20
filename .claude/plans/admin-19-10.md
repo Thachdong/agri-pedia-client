@@ -24,7 +24,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 ### C. Thống kê article (T25)
 - [x] 6. [atomic-component]   organism  ArticleCropStats      (new, article-admin) — mỗi cây: số bệnh, có bài, đã publish, còn thiếu; click → chọn cây; gắn qua slot `summary` mới của ArticleTargetTable (giữa tiêu đề và bảng)
 ### D. /admin/settings (T18–T21)
-- [ ] 7. [feature-scaffold]   feature `admin-settings` — components, hooks, services, schemas, types
+- [x] 7. [feature-scaffold]   feature `admin-settings` — components, hooks, services, schemas, types
 - [ ] 8. [feature-api]        GET /admin/diagnosis/settings → adminDiagnosisSettingsQuery; key adminSettings.diagnosis
 - [ ] 9. [feature-api]        PUT /admin/diagnosis/settings → useUpdateDiagnosisSettings; invalidates adminSettings.diagnosis + diagnoses.settings
 - [ ] 10. [feature-api]       GET /admin/knowledge/settings → topArticleSettingsQuery; key adminSettings.topArticleLimit
