@@ -14,10 +14,9 @@ export function useChatRealtime() {
   const client = useAppQueryClient();
   const hasConnected = useRef(false);
 
-  useRealtimeEvent<TChatMessageReceivedEvent>(CHAT_EVENTS.received, ({ messageId, roomId, senderId, message, createdAt }) => {
+  useRealtimeEvent<TChatMessageReceivedEvent>(CHAT_EVENTS.received, ({ messageId, roomId, ...message }) => {
     client.setQueryData<TChatMessagesCache>(queryKeys.chat.messages(roomId), (cache) =>
-      // Event socket không kèm username / avatar người gửi — modal hiển thị theo `otherUsername`.
-      prependMessage(cache, { id: messageId, senderId, senderUsername: null, senderAvatar: null, message, createdAt }),
+      prependMessage(cache, { id: messageId, ...message }),
     );
     void client.invalidateQueries({ queryKey: queryKeys.chat.rooms() });
   });
