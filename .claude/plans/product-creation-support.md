@@ -16,7 +16,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - [x] 4. [feature-api]       POST /products/suggestions → TProductSuggestion, suggestProduct (multipart), useSuggestProduct (không cache nào stale)
 - [x] 5. [atomic-component]  organism  ProductLabelScanner  (new, product) — chụp (camera trong trang) / chọn ảnh nhãn → nén ≤ 5 MB → gửi; trạng thái: đang đọc / FOUND / NOT_FOUND / UNREADABLE / ảnh lỗi / hết lượt; "Còn N lượt"
 - [x] 6. [atomic-component]  organism  ProductFormDialog    (update, product) — chỉ khi tạo mới: scanner ở đầu form; FOUND → điền tên + mô tả (ô đã có nội dung → ConfirmDialog trước khi ghi đè); NOT_FOUND → nút "Dùng tên này" (cùng quy tắc xác nhận)
-- [ ] 7. [arch-review]
+- [x] 7. [arch-review]       — không có vi phạm
 
 ## Components (in order)
   [atom]      Button, Input, Textarea            reuse  shared
@@ -31,3 +31,11 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - Ghi đè tên / mô tả đã có nội dung → hỏi xác nhận trước.
 - Không dùng ảnh nhãn làm ảnh sản phẩm.
 - Chụp / chọn ảnh giống form chẩn đoán (camera trong trang + chọn từ máy).
+
+## Checklist kiểm tay
+- [ ] DISTRIBUTOR → /profile/<id của mình> → "Thêm sản phẩm": khối "Điền nhanh từ ảnh nhãn" ở đầu form (sửa sản phẩm không có).
+- [ ] Chụp ảnh (camera trong trang; chặn quyền camera → nút mở camera của máy) và "Chọn từ máy" đều quét được.
+- [ ] Tìm thấy → điền tên + mô tả; form đã có tên / mô tả khác → hỏi "Thay nội dung đã nhập?" trước.
+- [ ] Đọc được tên nhưng chưa có trong danh mục → "Dùng tên này" điền tên.
+- [ ] Không đọc được → nhắc chụp lại; ảnh lỗi → báo lỗi; hết lượt → khoá ô chụp + báo hết lượt; "Còn N lượt" sau mỗi lần quét.
+- [ ] Form chẩn đoán vẫn chụp / chọn / nén ảnh như trước (AddImageTile, CameraCaptureDialog, nén đã chuyển sang shared).
