@@ -20,3 +20,7 @@ export const updateDiagnosisSettings = (input: TUpdateDiagnosisSettingsInput, cl
 /** Số bài nổi bật tối đa mỗi cây (mặc định 10). 403 KNOWLEDGE_ADMIN_REQUIRED. */
 export const getTopArticleSettings = (client: IHttpClient = http) =>
   client.get<TTopArticleSettings>("/admin/knowledge/settings");
+
+/** Đổi số bài nổi bật mỗi cây (1..50). Danh sách đang dài hơn giữ nguyên; trang public chỉ hiện `limit` bài đầu. */
+export const updateTopArticleSettings = (input: TUpdateTopArticleSettingsInput, client: IHttpClient = http) =>
+  client.put<TTopArticleSettings>("/admin/knowledge/settings", input);
