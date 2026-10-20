@@ -11,6 +11,7 @@ import { InvalidateOnResize, isWithinBounds, LockToBounds } from "@/shared/lib/m
 import { cn } from "@/shared/lib/utils";
 import {
   DEFAULT_USER_LABEL,
+  DEFAULT_ZOOM_IN,
   FIT_MAX_ZOOM,
   FIT_NEAREST_COUNT,
   type TMapMarker,
@@ -43,6 +44,16 @@ const USER_ICON = divIcon({
 });
 
 const toLatLng = ({ lat, long }: TCoordinates): [number, number] => [lat, long];
+
+/** Khung mặc định: giữa VN_BOUNDS, zoom thêm DEFAULT_ZOOM_IN so với vừa khít (chạy 1 lần khi mount). */
+function InitialView() {
+  const map = useMap();
+  useEffect(() => {
+    const bounds = latLngBounds(VN_BOUNDS);
+    map.setView(bounds.getCenter(), map.getBoundsZoom(bounds) + DEFAULT_ZOOM_IN, { animate: false });
+  }, [map]);
+  return null;
+}
 
 /**
  * Fit khung nhìn quanh người xem + các marker gần nhất.
@@ -85,6 +96,7 @@ export function MarkerMapView({
         <TileLayer url={publicEnv.mapTileUrl} attribution={publicEnv.mapTileAttribution} />
         <InvalidateOnResize />
         <LockToBounds bounds={VN_BOUNDS} />
+        <InitialView />
         <FitToUser userLocation={userLocation} markers={markers} />
         {userLocation && (
           <Marker position={toLatLng(userLocation)} icon={USER_ICON} interactive={false} zIndexOffset={-100} title={userLabel}>

@@ -27,3 +27,8 @@ export const FIT_NEAREST_COUNT = 5;
 export const FIT_MAX_ZOOM = 14;
 /** Có vị trí người xem nhưng chưa có marker nào. */
 export const USER_ONLY_ZOOM = 12;
+/**
+ * Khung mặc định (chưa có vị trí người xem) zoom thêm bấy nhiêu mức so với vừa khít VN_BOUNDS, giữa khung —
+ * Việt Nam to hơn, 2 đầu Bắc / Nam lấn mép một chút (kéo hoặc zoom ra để xem trọn).
+ */
+export const DEFAULT_ZOOM_IN = 0.25;
