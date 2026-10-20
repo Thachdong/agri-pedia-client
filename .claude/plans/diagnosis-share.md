@@ -22,7 +22,7 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
 - [x] 6. [atomic-component]     organism  ChatReportDialog      (new, feature chat) — useMessageDiagnosis + DiagnosisReportView, loading / lỗi / thử lại
 - [x] 7. [atomic-component]     molecule  ChatReportBubble      (new, feature chat) — bong bóng DIAGNOSIS_REPORT: icon + tên cây + thời gian, click → ChatReportDialog; ChatModal render theo `type`
 - [x] 8. [atomic-component]     molecule  ChatRoomItem          (update, feature chat) — preview tin cuối là report: icon + "Báo cáo chẩn đoán"; export ChatRoomItem
-- [ ] 9. [atomic-component]     molecule  SupplierOption        (new, feature diagnosis-share) — 1 distributor chọn được: avatar, tên, loại hình, địa chỉ, khoảng cách
+- [x] 9. [atomic-component]     molecule  DistributorCard       (update, feature distributor) — thay SupplierOption: thêm `onChoose` → card thành nút chọn; export ra index
 - [ ] 10. [atomic-component]    organism  FindSupplierDialog    (new, feature diagnosis-share) — 2 tab: Gần tôi (định vị) | Theo tỉnh thành (tỉnh + xã); danh sách nearby cuộn tải thêm; chọn → onSelect
 - [ ] 11. [atomic-component]    organism  SendReportDialog      (new, feature diagnosis-share) — danh sách chat room → chọn → ConfirmDialog "Gửi report cho <tên>?" → gửi; nút "Tìm nhà cung cấp" → FindSupplierDialog → chọn → confirm → gửi bằng receiverId; gửi xong đóng dialog + mở ChatModal room đó
 - [ ] 12. [atomic-component]    organism  SendReportButton      (new, feature diagnosis-share) — chỉ FARMER + diagnosis COMPLETED; mở SendReportDialog
@@ -35,7 +35,7 @@ Phụ thuộc feature (tránh vòng: distributor → chat đã có):
   [molecule]  ChatMessageBubble          reuse  feature chat
   [molecule]  ChatReportBubble           new    feature chat
   [molecule]  ChatRoomItem               update feature chat
-  [molecule]  SupplierOption             new    feature diagnosis-share
+  [molecule]  DistributorCard            update feature distributor (thay SupplierOption)
   [organism]  DiagnosisSummary, DiagnosisResultImage  reuse  feature diagnosis
   [organism]  DiagnosisReportView        new    feature diagnosis
   [organism]  DiagnosisResult            update feature diagnosis
