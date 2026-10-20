@@ -1,6 +1,6 @@
 import type { IHttpClient } from "@/shared/lib/http";
-import { appInfiniteQueryOptions, queryKeys } from "@/shared/lib/query";
-import { getChatRooms, getRoomMessages } from "../services/chat.service";
+import { appInfiniteQueryOptions, appQueryOptions, queryKeys } from "@/shared/lib/query";
+import { getChatRooms, getMessageDiagnosis, getRoomMessages } from "../services/chat.service";
 
 /** Room có tin mới nhất trước, phân trang cursor (`nextCursor` null = hết). */
 export const chatRoomsQuery = (client?: IHttpClient) =>
@@ -18,4 +18,11 @@ export const roomMessagesQuery = (roomId: string, client?: IHttpClient) =>
     queryFn: ({ pageParam }) => getRoomMessages(roomId, pageParam, client),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
+  });
+
+/** Report của 1 tin DIAGNOSIS_REPORT. */
+export const messageDiagnosisQuery = (roomId: string, messageId: string, client?: IHttpClient) =>
+  appQueryOptions({
+    queryKey: queryKeys.chat.messageDiagnosis(roomId, messageId),
+    queryFn: () => getMessageDiagnosis(roomId, messageId, client),
   });

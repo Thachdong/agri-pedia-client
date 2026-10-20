@@ -1,3 +1,4 @@
+import { ClipboardListIcon } from "lucide-react";
 import { Avatar, CountBadge } from "@/shared/components/atoms";
 import { cn } from "@/shared/lib/utils";
 import { formatRelativeTime } from "@/shared/utils";
@@ -11,7 +12,7 @@ export type TChatRoomItemProps = Omit<React.ComponentProps<"button">, "children"
   onSelect?: (room: TChatRoom) => void;
 };
 
-/** Một room trong danh sách chat: avatar, tên, tin cuối, thời gian, số chưa đọc. */
+/** Một room trong danh sách chat: avatar, tên, tin cuối (report có icon), thời gian, số chưa đọc. */
 export function ChatRoomItem({ room, currentUserId, onSelect, className, ...props }: TChatRoomItemProps) {
   const { otherUsername, otherUserAvatar, lastMessage, lastMessageAt, unreadCount } = room;
   const name = otherUsername ?? CHAT_UNKNOWN_USER_NAME;
@@ -40,7 +41,17 @@ export function ChatRoomItem({ room, currentUserId, onSelect, className, ...prop
           </time>
         </span>
         <span className="flex items-center justify-between gap-2">
-          <span className={cn("truncate text-xs", unread ? "text-foreground" : "text-muted-foreground")}>{preview}</span>
+          <span
+            className={cn(
+              "flex min-w-0 items-center gap-1 text-xs",
+              unread ? "text-foreground" : "text-muted-foreground",
+            )}
+          >
+            {lastMessage?.type === "DIAGNOSIS_REPORT" && (
+              <ClipboardListIcon className="size-3.5 shrink-0" aria-label="Báo cáo chẩn đoán" />
+            )}
+            <span className="truncate">{preview}</span>
+          </span>
           <CountBadge count={unreadCount} className="shrink-0 ring-0" />
         </span>
       </span>

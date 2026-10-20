@@ -34,14 +34,20 @@ export type TDistributorCardProps = Omit<React.ComponentProps<typeof Link>, "hre
   selected?: boolean;
   /** Vẫn hiện nhưng không mở profile (DISTRIBUTOR xem shop khác ở trang chủ). */
   disabled?: boolean;
+  /** Có → card là nút chọn distributor (vd. chọn nhà cung cấp để gửi report) thay vì link profile. */
+  onChoose?: (distributor: TNearbyDistributor) => void;
 };
 
-/** Card distributor (ui-ux.md §6 (7)) — click mở /profile/<userId>; `disabled` → khối tĩnh, không link. */
+/**
+ * Card distributor (ui-ux.md §6 (7)) — click mở /profile/<userId>; `disabled` → khối tĩnh, không link;
+ * `onChoose` → nút chọn.
+ */
 export function DistributorCard({
   distributor,
   provinceName,
   selected = false,
   disabled = false,
+  onChoose,
   className,
   ...props
 }: TDistributorCardProps) {
@@ -77,6 +83,19 @@ export function DistributorCard({
       <div aria-disabled aria-current={selected || undefined} className={classes}>
         {content}
       </div>
+    );
+  }
+
+  if (onChoose) {
+    return (
+      <button
+        type="button"
+        onClick={() => onChoose(distributor)}
+        aria-pressed={selected}
+        className={cn(classes, "w-full text-left")}
+      >
+        {content}
+      </button>
     );
   }
 

@@ -1,4 +1,5 @@
 // Public API của feature `distributor` (danh sách + map ở trang "/", profile public ở /profile/<id>).
+export { DistributorCard, type TDistributorCardProps } from "./components/distributor-card";
 export {
   DistributorExplorerList,
   DistributorExplorerMap,

@@ -2,6 +2,7 @@
 export { CropNotSupportedRedirect } from "./components/crop-not-supported-redirect";
 export { DiagnosisForm, type TDiagnosisFormProps } from "./components/diagnosis-form";
 export { DiagnosisHistoryList, type TDiagnosisHistoryListProps } from "./components/diagnosis-history-list";
+export { DiagnosisReportView, type TDiagnosisReportViewProps } from "./components/diagnosis-report-view";
 export { DiagnosisResult, type TDiagnosisResultProps } from "./components/diagnosis-result";
 export { HomeDiagnosisPanel, type THomeDiagnosisPanelProps } from "./components/home-diagnosis-panel";
 export { StartDiagnosisButton, type TStartDiagnosisButtonProps } from "./components/start-diagnosis-button";

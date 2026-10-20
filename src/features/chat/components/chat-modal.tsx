@@ -21,6 +21,8 @@ import { useSendMessage } from "../hooks/use-send-message";
 import { chatMessageSchema } from "../schemas/chat-message.schema";
 import type { TChatMessageFormValues } from "../types/chat.types";
 import { ChatMessageBubble } from "./chat-message-bubble";
+import { ChatReportBubble } from "./chat-report-bubble";
+import { ChatReportDialog } from "./chat-report-dialog";
 
 /** Room đã có → `roomId`; chat lần đầu với ai đó (vd. từ trang profile) → `receiverId`. */
 export type TChatTarget = { roomId: string; receiverId?: never } | { roomId?: never; receiverId: string };
@@ -125,6 +127,8 @@ function MessageList({ roomId, messages, currentUserId }: TMessageListProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const topSentinelRef = useRef<HTMLLIElement>(null);
   const layout = useRef({ firstId: undefined as string | undefined, lastId: undefined as string | undefined, height: 0 });
+  // Tin report đang mở trong dialog.
+  const [reportId, setReportId] = useState<string | null>(null);
 
   // Giữ vị trí khi chèn tin cũ lên đầu; tự cuộn xuống khi có tin mới (của mình, hoặc đang ở gần cuối).
   useLayoutEffect(() => {
@@ -193,10 +197,20 @@ function MessageList({ roomId, messages, currentUserId }: TMessageListProps) {
             </Button>
           )}
         </li>
-        {data.map((message) => (
-          <ChatMessageBubble key={message.id} message={message} mine={message.senderId === currentUserId} />
-        ))}
+        {data.map((message) =>
+          message.type === "DIAGNOSIS_REPORT" ? (
+            <ChatReportBubble
+              key={message.id}
+              message={message}
+              mine={message.senderId === currentUserId}
+              onOpen={setReportId}
+            />
+          ) : (
+            <ChatMessageBubble key={message.id} message={message} mine={message.senderId === currentUserId} />
+          ),
+        )}
       </ul>
+      <ChatReportDialog roomId={roomId} messageId={reportId} onClose={() => setReportId(null)} />
     </div>
   );
 }

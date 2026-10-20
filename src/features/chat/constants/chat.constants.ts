@@ -8,3 +8,6 @@ export const CHAT_EVENTS = {
 
 /** Tên hiển thị khi room không có `otherUsername`. */
 export const CHAT_UNKNOWN_USER_NAME = "Người dùng";
+
+/** Nhãn tin DIAGNOSIS_REPORT — đầu text tin, bong bóng và preview tin cuối. */
+export const CHAT_REPORT_LABEL = "Báo cáo chẩn đoán";

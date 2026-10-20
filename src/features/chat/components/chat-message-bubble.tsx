@@ -2,14 +2,15 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/shared/lib/utils";
 import type { TChatMessage } from "../types/chat.types";
 
-const TIME_FORMAT = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit" });
-const FULL_FORMAT = new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium", timeStyle: "short" });
+export const CHAT_TIME_FORMAT = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit" });
+export const CHAT_FULL_TIME_FORMAT = new Intl.DateTimeFormat("vi-VN", { dateStyle: "medium", timeStyle: "short" });
 
-const rowVariants = cva("flex w-full", {
+/** Hàng tin: của mình bên phải. Dùng chung với ChatReportBubble. */
+export const chatRowVariants = cva("flex w-full", {
   variants: { mine: { true: "justify-end", false: "justify-start" } },
 });
 
-const bubbleVariants = cva(
+export const chatBubbleVariants = cva(
   "flex max-w-[80%] flex-col gap-0.5 rounded-2xl px-3 py-2 text-sm break-words whitespace-pre-wrap",
   {
     variants: {
@@ -32,16 +33,16 @@ export function ChatMessageBubble({ message, mine, className, ...props }: TChatM
   const sentAt = new Date(message.createdAt);
 
   return (
-    <li className={cn(rowVariants({ mine }), className)} {...props}>
-      <div className={bubbleVariants({ mine })}>
+    <li className={cn(chatRowVariants({ mine }), className)} {...props}>
+      <div className={chatBubbleVariants({ mine })}>
         <span className="sr-only">{mine ? "Bạn:" : "Họ:"}</span>
         <p>{message.message}</p>
         <time
           dateTime={message.createdAt}
-          title={FULL_FORMAT.format(sentAt)}
+          title={CHAT_FULL_TIME_FORMAT.format(sentAt)}
           className={cn("self-end text-[0.625rem]", mine ? "text-primary-foreground/70" : "text-muted-foreground")}
         >
-          {TIME_FORMAT.format(sentAt)}
+          {CHAT_TIME_FORMAT.format(sentAt)}
         </time>
       </div>
     </li>

@@ -42,6 +42,9 @@ export const queryKeys = {
     all: ["chat"] as const,
     rooms: () => [...queryKeys.chat.all, "rooms"] as const,
     messages: (roomId: string) => [...queryKeys.chat.all, "messages", roomId] as const,
+    /** Chẩn đoán được chia sẻ bởi 1 tin DIAGNOSIS_REPORT. */
+    messageDiagnosis: (roomId: string, messageId: string) =>
+      [...queryKeys.chat.all, "message-diagnosis", roomId, messageId] as const,
   },
   distributors: {
     all: ["distributors"] as const,

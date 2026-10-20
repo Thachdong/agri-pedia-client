@@ -1,5 +1,5 @@
 import { http, type IHttpClient } from "@/shared/lib/http";
-import type { TChatMessagesPage, TChatRoomsPage } from "../types/chat.types";
+import type { TChatMessagesPage, TChatRoomsPage, TMessageDiagnosis } from "../types/chat.types";
 
 export const CHAT_ROOMS_PAGE_SIZE = 20;
 
@@ -13,3 +13,12 @@ export const getRoomMessages = (roomId: string, cursor: string | undefined, clie
   client.get<TChatMessagesPage>(`/chat/rooms/${encodeURIComponent(roomId)}/messages`, {
     query: { cursor, limit: CHAT_MESSAGES_PAGE_SIZE },
   });
+
+/**
+ * Chẩn đoán được chia sẻ bởi tin DIAGNOSIS_REPORT — 2 thành viên room đều đọc được; trạng thái hiện tại (không phải
+ * lúc gửi), URL ảnh ký sẵn có hạn. Tin không phải report → 404 CHAT_MESSAGE_NOT_DIAGNOSIS_REPORT.
+ */
+export const getMessageDiagnosis = (roomId: string, messageId: string, client: IHttpClient = http) =>
+  client.get<TMessageDiagnosis>(
+    `/chat/rooms/${encodeURIComponent(roomId)}/messages/${encodeURIComponent(messageId)}/diagnosis`,
+  );

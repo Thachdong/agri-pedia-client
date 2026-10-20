@@ -1,3 +1,4 @@
+import type { TDiagnosis } from "@/features/diagnosis";
 import type { TApiSchema } from "@/shared/lib/http";
 
 export type TChatRoom = TApiSchema<"ChatRoomResponse">;
@@ -19,11 +20,17 @@ export type TChatMessagesPage = TApiSchema<"ListRoomMessagesResponse">;
 /** Cache infinite query tin nhắn: trang 0 = mới nhất, mỗi trang mới nhất trước. */
 export type TChatMessagesCache = { pages: TChatMessagesPage[]; pageParams: unknown[] };
 
+export type TChatMessageType = TChatMessage["type"];
+
 /**
  * Socket `chat.message.send` — không có trong openapi (socket), viết theo server
  * `SendChatMessageDto` / `SendChatMessageResponse`. `roomId` ưu tiên hơn `receiverId`.
+ * DIAGNOSIS_REPORT (chỉ FARMER): chia sẻ 1 chẩn đoán COMPLETED của mình — `message` là text hiện kèm report.
  */
-export type TSendMessageInput = { roomId?: string; receiverId?: string; message: string };
+export type TSendMessageInput = { roomId?: string; receiverId?: string; message: string } & (
+  | { type?: "TEXT"; diagnosisId?: never }
+  | { type: "DIAGNOSIS_REPORT"; diagnosisId: string }
+);
 /** Ack thành công; `createdAt` là ISO string (qua JSON). */
 export type TSendMessageAck = { messageId: string; roomId: string; createdAt: string };
 
@@ -38,3 +45,9 @@ export type TChatMessageReceivedEvent = {
   messageId: string;
   roomId: string;
 } & Omit<TChatMessage, "id">;
+
+/**
+ * GET /chat/rooms/:roomId/messages/:messageId/diagnosis — cùng body với GET /diagnoses/:id (swagger để enum là
+ * string) nên dùng chung TDiagnosis để render bằng component của feature diagnosis.
+ */
+export type TMessageDiagnosis = TDiagnosis;
