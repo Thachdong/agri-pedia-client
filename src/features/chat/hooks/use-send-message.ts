@@ -26,6 +26,9 @@ export const useSendMessage = (senderId: string) => {
           senderUsername: null,
           senderAvatar: null,
           message: input.message.trim(),
+          // Client chưa gửi báo cáo chẩn đoán — tin nào cũng là TEXT.
+          type: "TEXT",
+          diagnosisId: null,
           createdAt: ack.createdAt,
         }),
       );

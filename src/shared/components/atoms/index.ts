@@ -7,6 +7,7 @@ export { StarRating, type TStarRatingProps } from "./star-rating";
 export { StarRatingInput, type TStarRatingInputProps } from "./star-rating-input";
 
 // Primitive shadcn dùng nguyên bản — import qua atoms, không import thẳng `ui/`.
+export { Collapsible, CollapsibleContent, CollapsibleTrigger } from "../ui/collapsible";
 export {
   Dialog,
   DialogClose,
@@ -31,7 +32,26 @@ export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/
 export { Label } from "../ui/label";
 export { Popover, PopoverContent, PopoverHeader, PopoverTitle, PopoverTrigger } from "../ui/popover";
 export { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 export { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+export {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 export { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 export { Textarea } from "../ui/textarea";
 export { Toaster } from "../ui/sonner";

@@ -7,6 +7,8 @@ export type TRequestOptions = {
   headers?: HeadersInit;
   signal?: AbortSignal;
   cache?: RequestCache;
+  /** Data cache của Next (chỉ có tác dụng ở server): thời gian revalidate (giây) + tag cho `revalidateTag`. */
+  next?: { revalidate?: number | false; tags?: string[] };
 };
 
 /** Client HTTP của project — services nhận client này làm tham số (mặc định: browser `http`). */

@@ -7,6 +7,7 @@ import type {
   TRegisterInput,
   TRequestPasswordResetInput,
   TResendCodeInput,
+  TSession,
 } from "../types/auth.types";
 
 /** 201, body rỗng. */
@@ -35,3 +36,6 @@ export const confirmPasswordReset = (input: TConfirmPasswordResetInput, client: 
 
 /** Gọi BFF route `/api/auth/logout` (không phải catch-all): thu hồi phiên ở NestJS (best effort) + xoá cookie. Luôn 204. */
 export const logout = (client: IHttpClient = http) => client.post<void>("/auth/logout");
+
+/** BFF route `/api/auth/session`: có cookie phiên hay không — không gọi NestJS, không bao giờ 401. */
+export const getSession = (client: IHttpClient = http) => client.get<TSession>("/auth/session");

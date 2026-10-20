@@ -29,9 +29,28 @@ export const getSafeNextPath = (value: unknown, fallback: string = ROUTES.home):
   return `${pathname}${url.search}${url.hash}`;
 };
 
+const isUnder = (path: string, prefix: string) => path === prefix || path.startsWith(`${prefix}/`) || path.startsWith(`${prefix}?`);
+const isAdminPath = (path: string) => isUnder(path, ROUTES.admin.root);
 /**
- * Đích sau khi đăng nhập: `?next=` an toàn được ưu tiên (quay lại trang đang mở trước khi bị đẩy về login);
- * không có / không hợp lệ → theo role: DISTRIBUTOR → profile của mình, FARMER → trang chủ.
+ * Khu quản trị đang có trang thật — `next` của ADMIN chỉ được nhận nếu thuộc 1 khu này. `/admin` trần hay path lạ
+ * (vd. `next` / redirect còn sót của app khác từng chạy cùng origin) → về trang đầu khu quản trị.
  */
-export const getPostLoginPath = (user: Pick<TLoginUser, "id" | "role">, next?: unknown): string =>
-  getSafeNextPath(next, user.role === "DISTRIBUTOR" ? ROUTES.profile(user.id) : ROUTES.home);
+const ADMIN_NEXT_PREFIXES = [ROUTES.admin.articles.list()] as const;
+
+const roleHomePath = ({ id, role }: Pick<TLoginUser, "id" | "role">): string => {
+  if (role === "ADMIN") return ROUTES.admin.articles.list();
+  if (role === "DISTRIBUTOR") return ROUTES.profile(id);
+  return ROUTES.home;
+};
+
+/**
+ * Đích sau khi đăng nhập: `?next=` an toàn được ưu tiên (quay lại trang đang mở trước khi bị đẩy về login)
+ * nếu hợp với role (ADMIN chỉ các khu quản trị đang có, role khác chỉ ngoài `/admin`);
+ * không có / không hợp lệ → theo role: ADMIN → quản lý bài viết, DISTRIBUTOR → profile của mình, FARMER → trang chủ.
+ */
+export const getPostLoginPath = (user: Pick<TLoginUser, "id" | "role">, next?: unknown): string => {
+  const fallback = roleHomePath(user);
+  const path = getSafeNextPath(next, fallback);
+  if (user.role === "ADMIN") return ADMIN_NEXT_PREFIXES.some((prefix) => isUnder(path, prefix)) ? path : fallback;
+  return isAdminPath(path) ? fallback : path;
+};

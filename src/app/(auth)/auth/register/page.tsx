@@ -6,7 +6,7 @@ import { serverHttp } from "@/shared/lib/http/server";
 import { HydrateQueries, prefetch } from "@/shared/lib/query/server";
 
 export const metadata: Metadata = {
-  title: "Đăng ký tài khoản | AgriPedia",
+  title: "Đăng ký tài khoản",
   description: "Tạo tài khoản AgriPedia cho nông dân hoặc nhà phân phối.",
 };
 

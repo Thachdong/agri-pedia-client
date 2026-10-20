@@ -12,7 +12,7 @@ import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/
 import { RealtimeProvider } from "@/shared/lib/realtime";
 
 export const metadata: Metadata = {
-  title: "Hồ sơ của tôi | AgriPedia",
+  title: "Hồ sơ của tôi",
   description: "Xem và cập nhật thông tin cá nhân, địa chỉ mặc định trên AgriPedia.",
   robots: { index: false },
 };

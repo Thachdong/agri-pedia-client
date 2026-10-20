@@ -1,3 +1,4 @@
+import type { TArticleListFilters } from "@/features/article";
 import type { TNearbyDistributorsParams } from "@/features/distributor";
 import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features/review";
 
@@ -17,6 +18,11 @@ import type { TDistributorReviewsParams, TReviewSummaryParams } from "@/features
 export const queryKeys = {
   /** Prefix của MỌI query — chỉ dùng khi đổi phiên (login/logout) làm cả cache stale. */
   all: [] as const,
+  auth: {
+    all: ["auth"] as const,
+    /** Có cookie phiên hay không (BFF) — trang public ISR dùng thay cho /users/me để không bị đẩy về /login. */
+    session: () => [...queryKeys.auth.all, "session"] as const,
+  },
   location: {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
@@ -79,5 +85,23 @@ export const queryKeys = {
     crops: () => [...queryKeys.knowledge.all, "crops"] as const,
     /** Bài viết 1 bệnh theo diseaseCode (public). */
     disease: (code: string) => [...queryKeys.knowledge.all, "disease", code] as const,
+  },
+  articles: {
+    all: ["articles"] as const,
+    lists: () => [...queryKeys.articles.all, "list"] as const,
+    /** Bài của 1 cây theo tab category (infinite, cursor) — "Xem thêm" ở /benh-cay-trong/[crop]. */
+    list: (filters: TArticleListFilters) => [...queryKeys.articles.lists(), filters] as const,
+  },
+  /** Khu quản trị bài viết (ADMIN) — tách khỏi `articles` public (khác endpoint, gồm cả bài unpublished). */
+  adminArticles: {
+    all: ["admin-articles"] as const,
+    /** Mọi cây kèm số bài / số bệnh. */
+    crops: () => [...queryKeys.adminArticles.all, "crops"] as const,
+    /** Prefix bảng bệnh + bài của mọi cây. */
+    targetLists: () => [...queryKeys.adminArticles.all, "targets"] as const,
+    /** Bệnh + variant của 1 cây kèm bài. */
+    targets: (cropSlug: string) => [...queryKeys.adminArticles.targetLists(), cropSlug] as const,
+    /** Nội dung đang lưu của 1 bài (theo code bệnh / variant). */
+    detail: (code: string) => [...queryKeys.adminArticles.all, "detail", code] as const,
   },
 } as const;

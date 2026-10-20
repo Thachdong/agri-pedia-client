@@ -10,7 +10,7 @@ import { getPrefetchedData, HydrateQueries, prefetch } from "@/shared/lib/query/
 import { RealtimeProvider } from "@/shared/lib/realtime";
 
 export const metadata: Metadata = {
-  title: "Chẩn đoán bệnh | AgriPedia",
+  title: "Chẩn đoán bệnh",
   description: "Chụp hoặc chọn ảnh cây trồng để AI nhận diện bệnh, sâu hại.",
   robots: { index: false },
 };

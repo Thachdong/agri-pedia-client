@@ -10,7 +10,7 @@ import type { TApiSchema } from "@/shared/lib/http";
 
 type TLoginBffResponse = { user: TApiSchema<"LoginUserResponse">["user"] };
 
-/** Đăng nhập: NestJS trả token → ghi cookie httpOnly; browser chỉ nhận profile, không nhận token. */
+/** Đăng nhập: NestJS trả token → ghi cookie httpOnly (+ role cho proxy); browser chỉ nhận profile, không nhận token. */
 export async function POST(request: NextRequest) {
   if (!isSameOrigin(request)) return forbiddenOriginResponse();
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       "/auth/login",
       body,
     );
-    await setAuthCookies({ accessToken, refreshToken });
+    await setAuthCookies({ accessToken, refreshToken }, user.role);
     return NextResponse.json<TLoginBffResponse>({ user });
   } catch (error) {
     return toErrorResponse(error);

@@ -30,11 +30,11 @@ export type TSendMessageAck = { messageId: string; roomId: string; createdAt: st
 /** Giá trị form gửi tin trong Chat modal (room / receiver do modal quyết định). */
 export type TChatMessageFormValues = Pick<TSendMessageInput, "message">;
 
-/** Socket `chat.message.received` (server → người còn lại trong room); `createdAt` ISO string. */
+/**
+ * Socket `chat.message.received` (server → người còn lại trong room) — viết theo server
+ * `TChatMessageReceivedRealtimePayload`; `createdAt` ISO string.
+ */
 export type TChatMessageReceivedEvent = {
   messageId: string;
   roomId: string;
-  senderId: string;
-  message: string;
-  createdAt: string;
-};
+} & Omit<TChatMessage, "id">;

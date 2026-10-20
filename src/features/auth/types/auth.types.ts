@@ -32,3 +32,6 @@ export type TAuthHandoffFlow = "register" | "reset-password" | "login";
  * login → /auth/login (sau đăng ký FARMER / kích hoạt thành công): chỉ để điền sẵn, `at` không dùng.
  */
 export type TAuthHandoff = { loginType: TLoginType; identifier: string; at: number };
+
+/** GET /api/auth/session (BFF, không phải NestJS) — chỉ cho biết cookie phiên có tồn tại. */
+export type TSession = { signedIn: boolean };

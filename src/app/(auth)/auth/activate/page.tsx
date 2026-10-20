@@ -3,7 +3,7 @@ import { ActivateForm, AuthFooterLinks, AuthHeader } from "@/features/auth";
 import { AuthLayout } from "@/shared/components/templates";
 
 export const metadata: Metadata = {
-  title: "Kích hoạt tài khoản | AgriPedia",
+  title: "Kích hoạt tài khoản",
   description: "Nhập mã kích hoạt đã gửi tới email/số điện thoại để kích hoạt tài khoản nhà phân phối.",
 };
 

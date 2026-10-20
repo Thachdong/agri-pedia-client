@@ -20,6 +20,27 @@ export const ROUTES = {
     new: (crop: string) => `/diagnosis/new?crop=${encodeURIComponent(crop)}`,
     detail: (id: string) => `/diagnosis/${encodeURIComponent(id)}`,
   },
-  /** Bài viết chi tiết 1 bệnh (public) — `code` là diseaseCode. */
-  disease: (code: string) => `/diseases/${encodeURIComponent(code)}`,
+  /** Bài viết bệnh cây trồng (public, ISR, SEO) — slug lấy từ API (`crop.slug`, `article.slug`). */
+  articles: {
+    index: "/benh-cay-trong",
+    crop: (cropSlug: string) => `/benh-cay-trong/${encodeURIComponent(cropSlug)}`,
+    detail: (cropSlug: string, slug: string) =>
+      `/benh-cay-trong/${encodeURIComponent(cropSlug)}/${encodeURIComponent(slug)}`,
+  },
+  /** Khu quản trị — chỉ ADMIN (proxy điều hướng theo cookie role, layout `/admin` kiểm role thật). */
+  admin: {
+    root: "/admin",
+    articles: {
+      /** Bảng bệnh + bài viết của 1 cây; không có `crop` → cây đầu tiên. */
+      list: (crop?: string) => (crop ? `/admin/articles?crop=${encodeURIComponent(crop)}` : "/admin/articles"),
+      /** Viết bài cho 1 bệnh / variant chưa có bài; không có `code` → chọn bệnh (của `crop`) trước. */
+      new: (target?: { crop: string; code?: string }) => {
+        if (!target) return "/admin/articles/new";
+        const params = new URLSearchParams({ crop: target.crop, ...(target.code && { code: target.code }) });
+        return `/admin/articles/new?${params}`;
+      },
+      detail: (code: string) => `/admin/articles/${encodeURIComponent(code)}`,
+      edit: (code: string) => `/admin/articles/${encodeURIComponent(code)}/edit`,
+    },
+  },
 } as const;

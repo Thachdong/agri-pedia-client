@@ -12,4 +12,6 @@ export const publicEnv = {
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   /** socket.io server (NestJS, cùng port HTTP) — browser kết nối thẳng bằng realtime ticket, không mang token. */
   realtimeUrl: process.env.NEXT_PUBLIC_REALTIME_URL || "http://localhost:3000",
+  /** URL gốc của site (không có `/` cuối) — metadataBase, canonical, sitemap, robots. */
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3001").replace(/\/+$/, ""),
 } as const;
