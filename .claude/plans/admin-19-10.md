@@ -29,7 +29,7 @@ Server: ADMIN tạo chẩn đoán được (create-diagnosis chỉ kiểm user A
 - [x] 9. [feature-api]        PUT /admin/diagnosis/settings → useUpdateDiagnosisSettings; invalidates adminSettings.diagnosis + diagnoses.settings
 - [x] 10. [feature-api]       GET /admin/knowledge/settings → topArticleSettingsQuery; key adminSettings.topArticleLimit
 - [x] 11. [feature-api]       PUT /admin/knowledge/settings → useUpdateTopArticleLimit; invalidates topArticleLimit + topArticles
-- [ ] 12. [feature-api]       GET /admin/knowledge/crops/{cropSlug}/top-articles → cropTopArticlesQuery; key adminSettings.topArticles(cropSlug)
+- [x] 12. [feature-api]       GET /admin/knowledge/crops/{cropSlug}/top-articles → cropTopArticlesQuery; key adminSettings.topArticles(cropSlug)
 - [ ] 13. [feature-api]       PUT /admin/knowledge/crops/{cropSlug}/top-articles → useSetCropTopArticles; invalidates topArticles(cropSlug)
 - [ ] 14. [validation-schema] diagnosisSettingsSchema — số nguyên, khớp DIAGNOSIS_SETTINGS_BOUNDS của server: dailyFreeLimit 1..1000, maxImages 1..10, maxImageBytes 100 KB..20 MB, maxImageWidth / maxImageHeight 256..8192 (độc lập, không ràng buộc chéo), defaultCropType null hoặc cây bật chẩn đoán; topArticleLimitSchema 1..50
 - [ ] 15. [atomic-component]  organism  DiagnosisSettingsForm  (new) — free request/ngày, cây mặc định, số ảnh tối đa, dung lượng (MB), kích thước (px)

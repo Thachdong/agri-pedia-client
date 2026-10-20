@@ -7,3 +7,7 @@ export type TUpdateDiagnosisSettingsInput = TApiSchema<"UpdateDiagnosisSettingsD
 /** GET / PUT /admin/knowledge/settings — số bài nổi bật mỗi cây (1..50, mặc định 10). */
 export type TTopArticleSettings = TApiSchema<"TopArticleSettingsResponse">;
 export type TUpdateTopArticleSettingsInput = TApiSchema<"UpdateTopArticleSettingsDto">;
+
+/** GET / PUT /admin/knowledge/crops/:cropSlug/top-articles — bài nổi bật của 1 cây theo thứ tự, kèm `limit`. */
+export type TCropTopArticles = TApiSchema<"CropTopArticlesResponse">;
+export type TCropTopArticle = TCropTopArticles["articles"][number];
