@@ -59,3 +59,9 @@ export const PRODUCT_ERROR_MESSAGES: Record<string, string> = {
   [PRODUCT_ERROR_CODE.SUGGESTION_INVALID_IMAGE]: "Ảnh không hợp lệ hoặc không đọc được, hãy chụp lại.",
   [PRODUCT_ERROR_CODE.SUGGESTION_QUOTA_EXCEEDED]: "Bạn đã dùng hết lượt gợi ý từ ảnh nhãn.",
 };
+
+/** Ảnh nhãn gửi gợi ý (POST /products/suggestions): JPEG nén ở client, ≤ 5 MB, cạnh ≤ 2048px (đủ đọc chữ). */
+export const SUGGESTION_PHOTO_MAX_BYTES = 5 * 1024 * 1024;
+export const SUGGESTION_PHOTO_MAX_EDGE = 2048;
+/** Định dạng nhận ở input file — HEIC/HEIF được nén sang JPEG nếu trình duyệt decode được. */
+export const SUGGESTION_PHOTO_ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";
