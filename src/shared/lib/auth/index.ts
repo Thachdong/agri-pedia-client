@@ -4,6 +4,7 @@ export {
   clearAuthCookies,
   getAccessToken,
   getRefreshToken,
+  hasAdminSession,
   hasSession,
   setAuthCookies,
   type TTokenPair,

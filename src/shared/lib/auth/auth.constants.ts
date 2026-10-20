@@ -16,10 +16,13 @@ export const ACCESS_TOKEN_FALLBACK_MAX_AGE = 15 * 60;
 
 export const LOGIN_PATH = ROUTES.auth.login;
 export const HOME_PATH = ROUTES.home;
-/** Khu vực chỉ dành cho ADMIN; ADMIN không vào được trang nào ngoài khu này, trừ ADMIN_FRONT_PATHS. */
+/** Khu vực chỉ dành cho ADMIN (user khác vào → trang chủ). */
 export const ADMIN_PATH = ROUTES.admin.root;
-/** Trang front ADMIN vẫn vào được (khớp đúng path, không gồm trang con) — trang chủ (Specs/19102026/admin.md). */
-export const ADMIN_FRONT_PATHS: readonly string[] = [ROUTES.home];
+/**
+ * Trang front ADMIN KHÔNG vào được (kèm trang con) → về ADMIN_HOME_PATH; các trang front khác ADMIN vào được
+ * (Specs/19102026/admin.md: trang chủ, bài viết, profile distributor, chẩn đoán). /profile/me là hồ sơ FARMER.
+ */
+export const ADMIN_BLOCKED_FRONT_PATHS: readonly string[] = [ROUTES.myProfile];
 export const ADMIN_HOME_PATH = ROUTES.admin.articles.list();
 export const LOGIN_NEXT_PARAM = "next";
 /**

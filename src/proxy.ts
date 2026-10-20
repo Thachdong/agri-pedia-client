@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import {
   ACCESS_TOKEN_COOKIE,
-  ADMIN_FRONT_PATHS,
+  ADMIN_BLOCKED_FRONT_PATHS,
   ADMIN_HOME_PATH,
   ADMIN_PATH,
   ADMIN_ROLE,
@@ -38,8 +38,11 @@ export function proxy(request: NextRequest) {
   const isAdmin = request.cookies.get(ROLE_COOKIE)?.value === ADMIN_ROLE;
   const inAdminArea = matchesPath(pathname, [ADMIN_PATH]);
 
-  // ADMIN chỉ dùng khu quản trị (+ ADMIN_FRONT_PATHS); user thường không vào khu quản trị.
-  if (isAdmin && !inAdminArea && !ADMIN_FRONT_PATHS.includes(pathname)) return NextResponse.redirect(new URL(ADMIN_HOME_PATH, request.url));
+  // ADMIN vào được trang front trừ ADMIN_BLOCKED_FRONT_PATHS; trang guest-only (login...) → khu quản trị như trước.
+  // User thường không vào khu quản trị.
+  if (isAdmin && matchesPath(pathname, [...ADMIN_BLOCKED_FRONT_PATHS, ...GUEST_ONLY_PATHS])) {
+    return NextResponse.redirect(new URL(ADMIN_HOME_PATH, request.url));
+  }
   if (!isAdmin && inAdminArea) return NextResponse.redirect(new URL(HOME_PATH, request.url));
 
   // Khu quản trị render ở server bằng access token: hết hạn (cookie đã mất, còn refresh) → làm mới trước khi render,
