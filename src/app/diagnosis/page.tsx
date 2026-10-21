@@ -24,7 +24,7 @@ const loadTopArticles = (): Promise<TTopArticlesGroup[]> =>
     .catch(() => []);
 
 /** Lịch sử chẩn đoán của tôi (cần đăng nhập) — trang đầu prefetch, cuộn để tải thêm. ADMIN: header chỉ user menu.
- * Trên lịch sử: bài viết liên quan tới bệnh đã phát hiện, chưa có thì bài nổi bật (Specs/19102026). */
+ * Dưới lịch sử: bài viết liên quan tới bệnh đã phát hiện, chưa có thì bài nổi bật (Specs/19102026). */
 export default async function DiagnosisHistoryPage() {
   const me = meQuery(serverHttp);
   const [state, topArticles] = await Promise.all([
@@ -56,9 +56,9 @@ export default async function DiagnosisHistoryPage() {
           title="Lịch sử chẩn đoán"
           actions={<StartDiagnosisButton label="Chẩn đoán mới" variant="outline" />}
         >
-          {/* Trên lịch sử: danh sách tự tải thêm khi cuộn tới cuối nên khối bên dưới sẽ bị đẩy mãi. */}
-          <DiagnosisRelatedArticles topArticles={topArticles} />
           <DiagnosisHistoryList />
+          {/* Sau danh sách lịch sử — hiện hết khi danh sách đã tải tới trang cuối. */}
+          <DiagnosisRelatedArticles topArticles={topArticles} className="mt-4" />
         </ContentLayout>
       </RealtimeProvider>
     </HydrateQueries>
