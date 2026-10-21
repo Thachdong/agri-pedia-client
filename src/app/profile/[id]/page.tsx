@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import { ChatRoomsMenu } from "@/features/chat";
 import { StartDiagnosisButton } from "@/features/diagnosis";
@@ -16,7 +16,7 @@ import { distributorReviewsQuery } from "@/features/review";
 import { AdminUserMenu, meQuery, myAddressesQuery, type TUserProfile, UserMenu } from "@/features/user";
 import { SiteHeader } from "@/shared/components/organisms";
 import { ProfileLayout } from "@/shared/components/templates";
-import { BUSINESS_TYPE_LABELS } from "@/shared/constants";
+import { BUSINESS_TYPE_LABELS, ROUTES } from "@/shared/constants";
 import { hasSession } from "@/shared/lib/auth";
 import { isAppError } from "@/shared/lib/http";
 import { serverHttp } from "@/shared/lib/http/server";
@@ -48,6 +48,8 @@ const loadProfilePage = cache(async (id: string) => {
   if (!profile) notFound();
   const viewer = signedIn ? getPrefetchedData<TUserProfile>(state, me.queryKey) : undefined;
   const isOwner = viewer?.id === id;
+  // Specs/19102026/distributor.md: DISTRIBUTOR chỉ vào được shop của mình (URL shop khác → shop của mình).
+  if (viewer?.role === "DISTRIBUTOR" && !isOwner) redirect(ROUTES.profile(viewer.id));
   // Owner: danh sách address đầy đủ (cần biết owner trước → vòng prefetch thứ 2).
   const ownerState = isOwner ? await prefetch([myAddressesQuery(serverHttp)]) : null;
 

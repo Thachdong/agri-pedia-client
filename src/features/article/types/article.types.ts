@@ -15,6 +15,8 @@ export type TArticleCategory = NonNullable<TArticleListItem["disease"]>["categor
 export type TArticleListParams = {
   crop: string;
   category?: TArticleCategory;
+  /** Chỉ bài về các bệnh này (1..50 mã) — kèm cả bài variant của bệnh. */
+  diseaseCodes?: string[];
   cursor?: string;
   limit?: number;
 };

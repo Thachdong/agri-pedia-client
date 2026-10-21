@@ -1030,7 +1030,7 @@ export interface paths {
         };
         /**
          * List article summaries of a crop, by title (public)
-         * @description Vietnamese title order, keyset-paginated (`nextCursor`). Unpublished articles are left out; DRAFT ones are included: render them noindex. `category` filters by the category of the article's disease. Variant articles are listed too (`variant` set). Sent with `Cache-Control: public, max-age=60`.
+         * @description Vietnamese title order, keyset-paginated (`nextCursor`). Unpublished articles are left out; DRAFT ones are included: render them noindex. `category` filters by the category of the article's disease. `diseaseCodes` keeps the articles about any of the given diseases (`?diseaseCodes=RICE_BLAST&diseaseCodes=RICE_BPH` or `?diseaseCodes=RICE_BLAST,RICE_BPH`, 1..50 codes); with `category`, both must match. Variant articles are listed too (`variant` set). Sent with `Cache-Control: public, max-age=60`.
          */
         get: operations["ArticleController_list"];
         put?: never;
@@ -5022,6 +5022,7 @@ export interface operations {
             query: {
                 crop: string;
                 category?: "DISEASE" | "PEST" | "DISORDER";
+                diseaseCodes?: string[];
                 cursor?: string;
                 limit?: number;
             };

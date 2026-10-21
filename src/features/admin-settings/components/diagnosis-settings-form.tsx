@@ -17,6 +17,7 @@ import { applyServerErrors, useAppForm } from "@/shared/lib/form";
 import { isAppError } from "@/shared/lib/http";
 import { toast } from "@/shared/lib/toast";
 import { cn } from "@/shared/lib/utils";
+import { toNumberOrNull } from "@/shared/utils";
 import {
   DIAGNOSIS_SETTINGS_BOUNDS,
   MAX_IMAGE_MB_BOUNDS,
@@ -35,7 +36,6 @@ import {
 const INVALID_SETTINGS = "DIAGNOSIS_INVALID_SETTINGS";
 const CROP_NOT_SUPPORTED = "DIAGNOSIS_CROP_NOT_SUPPORTED";
 
-const toNumberOrNull = (value: unknown) => (value === "" || value === null ? null : Number(value));
 
 const range = ({ min, max }: { min: number; max: number }, unit = "") => `Từ ${min}${unit} đến ${max}${unit}`;
 

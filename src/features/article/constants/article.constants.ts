@@ -80,3 +80,10 @@ export const ARTICLE_ORIGIN_LABELS: Record<TArticleOrigin, string> = {
   ADMIN: "Nội dung được kiểm duyệt bởi Admin",
   AI_REVIEWED: "Nội dung được kiểm duyệt bởi Admin",
 };
+
+/** GET /knowledge/articles `diseaseCodes`: tối đa 50 mã mỗi lần; 1 trang tối đa 100 bài (đủ cho bài chính + variant). */
+export const ARTICLE_DISEASE_CODES_MAX = 50;
+export const DISEASE_ARTICLES_PAGE_SIZE = 100;
+/** Bài liên quan ở /diagnosis: số bài tối đa mỗi cây, số cây tối đa (theo lần chẩn đoán gần nhất). */
+export const RELATED_ARTICLES_PER_CROP = 8;
+export const RELATED_ARTICLES_MAX_CROPS = 3;

@@ -1,5 +1,6 @@
 import {
   useInfiniteQuery,
+  useQueries,
   useQuery,
   useSuspenseQuery,
   type DefaultError,
@@ -31,3 +32,9 @@ export function useAppInfiniteQuery<
 >(options: UseInfiniteQueryOptions<TQueryFnData, DefaultError, TData, TQueryKey, TPageParam>) {
   return useInfiniteQuery(options);
 }
+
+/**
+ * Số lượng query thay đổi theo dữ liệu (vd. 1 query mỗi cây trong lịch sử) — cùng kiểu `queries` / `combine` của
+ * react-query `useQueries`.
+ */
+export const useAppQueries: typeof useQueries = (options, queryClient) => useQueries(options, queryClient);

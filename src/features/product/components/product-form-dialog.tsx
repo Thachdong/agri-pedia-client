@@ -21,6 +21,7 @@ import {
 import { ConfirmDialog, FormField, MultiImageInput } from "@/shared/components/molecules";
 import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
 import { isAppError } from "@/shared/lib/http";
+import { toNumberOrNull } from "@/shared/utils";
 import {
   PRODUCT_DESCRIPTION_MAX,
   PRODUCT_ERROR_CODE,
@@ -68,9 +69,6 @@ const FIELD_ERRORS: Partial<Record<string, "price" | "quantity" | "categoryId">>
   [PRODUCT_ERROR_CODE.INVALID_QUANTITY]: "quantity",
   [PRODUCT_ERROR_CODE.CATEGORY_NOT_FOUND]: "categoryId",
 };
-
-/** Ô số rỗng → null (schema báo "Vui lòng nhập…") thay vì NaN / 0. */
-const toNumberOrNull = (value: unknown) => (value === "" || value === null ? null : Number(value));
 
 /**
  * M8 / M9 — tạo / sửa sản phẩm của chính mình (ui-ux.md §7, owner).

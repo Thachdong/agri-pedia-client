@@ -6,7 +6,9 @@ import { useProvinces } from "@/features/location";
 import { Button } from "@/shared/components/atoms";
 import { cn } from "@/shared/lib/utils";
 import { LIST_SKELETON_COUNT, NEARBY_SCOPE_NOTES, NEARBY_SCOPE_TITLES } from "../constants/distributor.constants";
+import { useDistributorProfile } from "../hooks/use-distributor-profile";
 import type { useNearbyDistributors } from "../hooks/use-nearby-distributors";
+import type { TDistributorProfile, TNearbyDistributor } from "../types/distributor.types";
 import { DistributorCard } from "./distributor-card";
 
 export type TDistributorListProps = {
@@ -18,11 +20,24 @@ export type TDistributorListProps = {
   selectedId?: string | null;
   /** DISTRIBUTOR đang xem: shop của mình ghim đầu danh sách, card shop khác không mở được. */
   ownShopId?: string;
+  /** Khối ghi chú đầu danh sách (vd. hướng dẫn bật lại quyền vị trí). */
+  notice?: React.ReactNode;
   className?: string;
 };
 
+/** Profile → item danh sách (không có khoảng cách); chưa có địa chỉ chính → null (không ghim được). */
+const toNearbyItem = ({ id, username, avatar, bussinessType, address }: TDistributorProfile): TNearbyDistributor | null =>
+  address ? { userId: id, username, avatar, bussinessType, address, distanceMeters: null } : null;
+
 /** Danh sách distributor (ui-ux.md §6 (7)) — infinite scroll theo page. */
-export function DistributorList({ query, locating = false, selectedId, ownShopId, className }: TDistributorListProps) {
+export function DistributorList({
+  query,
+  locating = false,
+  selectedId,
+  ownShopId,
+  notice,
+  className,
+}: TDistributorListProps) {
   // Không destructure theo discriminated union: lỗi trang kế cũng làm `status = "error"` nhưng vẫn giữ `data`.
   const { data, refetch, hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage } = query;
   const { data: provinces } = useProvinces();
@@ -31,11 +46,15 @@ export function DistributorList({ query, locating = false, selectedId, ownShopId
     [provinces],
   );
 
+  const loadedOwn = ownShopId ? data?.items.find((item) => item.userId === ownShopId) : undefined;
+  // Shop của mình chưa nằm trong các trang đã tải (xa / trang sau) → lấy từ profile để vẫn ghim đầu danh sách.
+  const ownProfile = useDistributorProfile(ownShopId ?? "", { enabled: Boolean(ownShopId) && Boolean(data) && !loadedOwn });
+
   const items = useMemo(() => {
     const all = data?.items ?? [];
-    const own = ownShopId ? all.find((item) => item.userId === ownShopId) : undefined;
-    return own ? [own, ...all.filter((item) => item !== own)] : all;
-  }, [data?.items, ownShopId]);
+    const own = loadedOwn ?? (ownProfile.data ? toNearbyItem(ownProfile.data) : null);
+    return own ? [own, ...all.filter((item) => item.userId !== own.userId)] : all;
+  }, [data?.items, loadedOwn, ownProfile.data]);
 
   const itemRefs = useRef(new Map<string, HTMLLIElement>());
   useEffect(() => {
@@ -91,6 +110,7 @@ export function DistributorList({ query, locating = false, selectedId, ownShopId
 
   return (
     <ListFrame className={className} title={`${NEARBY_SCOPE_TITLES[data.scope]} (${data.total})`}>
+      {notice}
       {note && <p className="mb-2 rounded-md bg-highlight-subtle px-3 py-2 text-xs text-foreground">{note}</p>}
       {items.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">

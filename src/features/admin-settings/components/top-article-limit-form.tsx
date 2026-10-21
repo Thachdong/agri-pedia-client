@@ -7,13 +7,13 @@ import { Callout, FormField } from "@/shared/components/molecules";
 import { applyServerErrors, useAppForm } from "@/shared/lib/form";
 import { toast } from "@/shared/lib/toast";
 import { cn } from "@/shared/lib/utils";
+import { toNumberOrNull } from "@/shared/utils";
 import { TOP_ARTICLE_LIMIT_BOUNDS } from "../constants/admin-settings.constants";
 import { useTopArticleSettings } from "../hooks/use-top-article-settings";
 import { useUpdateTopArticleLimit } from "../hooks/use-update-top-article-limit";
 import { topArticleLimitSchema } from "../schemas/admin-settings.schema";
 import type { TTopArticleLimitFormValues } from "../types/admin-settings.types";
 
-const toNumberOrNull = (value: unknown) => (value === "" || value === null ? null : Number(value));
 
 export type TTopArticleLimitFormProps = { className?: string };
 
