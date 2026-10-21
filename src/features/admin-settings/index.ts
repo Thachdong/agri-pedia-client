@@ -14,6 +14,7 @@ export { useCropTopArticles } from "./hooks/use-crop-top-articles";
 export { useSetCropTopArticles } from "./hooks/use-set-crop-top-articles";
 export { useTopArticleSettings } from "./hooks/use-top-article-settings";
 export { useUpdateTopArticleLimit } from "./hooks/use-update-top-article-limit";
+export { useUpdateDiagnosisAiModels } from "./hooks/use-update-diagnosis-ai-models";
 export { useUpdateDiagnosisSettings } from "./hooks/use-update-diagnosis-settings";
 export type {
   TCropTopArticle,
@@ -22,6 +23,7 @@ export type {
   TDiagnosisSettingsAdmin,
   TSetCropTopArticlesInput,
   TTopArticleSettings,
+  TUpdateDiagnosisAiModelsInput,
   TUpdateDiagnosisSettingsInput,
   TUpdateTopArticleSettingsInput,
 } from "./types/admin-settings.types";
