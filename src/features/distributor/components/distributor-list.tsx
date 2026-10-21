@@ -6,7 +6,9 @@ import { useProvinces } from "@/features/location";
 import { Button } from "@/shared/components/atoms";
 import { cn } from "@/shared/lib/utils";
 import { LIST_SKELETON_COUNT, NEARBY_SCOPE_NOTES, NEARBY_SCOPE_TITLES } from "../constants/distributor.constants";
+import { useDistributorProfile } from "../hooks/use-distributor-profile";
 import type { useNearbyDistributors } from "../hooks/use-nearby-distributors";
+import type { TDistributorProfile, TNearbyDistributor } from "../types/distributor.types";
 import { DistributorCard } from "./distributor-card";
 
 export type TDistributorListProps = {
@@ -22,6 +24,10 @@ export type TDistributorListProps = {
   notice?: React.ReactNode;
   className?: string;
 };
+
+/** Profile → item danh sách (không có khoảng cách); chưa có địa chỉ chính → null (không ghim được). */
+const toNearbyItem = ({ id, username, avatar, bussinessType, address }: TDistributorProfile): TNearbyDistributor | null =>
+  address ? { userId: id, username, avatar, bussinessType, address, distanceMeters: null } : null;
 
 /** Danh sách distributor (ui-ux.md §6 (7)) — infinite scroll theo page. */
 export function DistributorList({
@@ -40,11 +46,15 @@ export function DistributorList({
     [provinces],
   );
 
+  const loadedOwn = ownShopId ? data?.items.find((item) => item.userId === ownShopId) : undefined;
+  // Shop của mình chưa nằm trong các trang đã tải (xa / trang sau) → lấy từ profile để vẫn ghim đầu danh sách.
+  const ownProfile = useDistributorProfile(ownShopId ?? "", { enabled: Boolean(ownShopId) && Boolean(data) && !loadedOwn });
+
   const items = useMemo(() => {
     const all = data?.items ?? [];
-    const own = ownShopId ? all.find((item) => item.userId === ownShopId) : undefined;
-    return own ? [own, ...all.filter((item) => item !== own)] : all;
-  }, [data?.items, ownShopId]);
+    const own = loadedOwn ?? (ownProfile.data ? toNearbyItem(ownProfile.data) : null);
+    return own ? [own, ...all.filter((item) => item.userId !== own.userId)] : all;
+  }, [data?.items, loadedOwn, ownProfile.data]);
 
   const itemRefs = useRef(new Map<string, HTMLLIElement>());
   useEffect(() => {
