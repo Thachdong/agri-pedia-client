@@ -37,12 +37,14 @@ const SIDEBAR_GROUPS: TSidebarNavGroup[] = [
     ],
   },
   {
-    // admin-page.png (3) — tạm mock.
+    // admin-page.png (3) — AI model của từng tính năng.
     id: "ai-provider",
     label: "AI Provider",
     icon: <BotIcon aria-hidden />,
-    defaultOpen: false,
-    items: [{ label: "Sắp ra mắt", href: `${ROUTES.admin.root}/ai-provider`, disabled: true }],
+    items: [
+      { label: "Chẩn đoán bệnh", href: ROUTES.admin.aiProvider.diagnosis },
+      { label: "Tạo sản phẩm", href: ROUTES.admin.aiProvider.productSuggestion },
+    ],
   },
 ];
 
