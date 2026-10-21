@@ -6,10 +6,12 @@ export {
   adminDiagnosisAiModelsQuery,
   adminDiagnosisSettingsQuery,
   cropTopArticlesQuery,
+  productSuggestionAiModelQuery,
   topArticleSettingsQuery,
 } from "./hooks/admin-settings.queries";
 export { useAdminDiagnosisAiModels } from "./hooks/use-admin-diagnosis-ai-models";
 export { useAdminDiagnosisSettings } from "./hooks/use-admin-diagnosis-settings";
+export { useProductSuggestionAiModel } from "./hooks/use-product-suggestion-ai-model";
 export { useCropTopArticles } from "./hooks/use-crop-top-articles";
 export { useSetCropTopArticles } from "./hooks/use-set-crop-top-articles";
 export { useTopArticleSettings } from "./hooks/use-top-article-settings";
@@ -21,6 +23,7 @@ export type {
   TCropTopArticles,
   TDiagnosisAiModels,
   TDiagnosisSettingsAdmin,
+  TProductSuggestionAiModel,
   TSetCropTopArticlesInput,
   TTopArticleSettings,
   TUpdateDiagnosisAiModelsInput,

@@ -3,6 +3,7 @@ import type {
   TCropTopArticles,
   TDiagnosisAiModels,
   TDiagnosisSettingsAdmin,
+  TProductSuggestionAiModel,
   TSetCropTopArticlesInput,
   TTopArticleSettings,
   TUpdateDiagnosisAiModelsInput,
@@ -31,6 +32,10 @@ export const getDiagnosisAiModels = (client: IHttpClient = http) =>
  */
 export const updateDiagnosisAiModels = (input: TUpdateDiagnosisAiModelsInput, client: IHttpClient = http) =>
   client.put<TDiagnosisAiModels>("/admin/diagnosis/ai-models", input);
+
+/** AI model đọc tên sản phẩm từ ảnh (null = model env `defaults.model`). 403 PRODUCT_ADMIN_REQUIRED. */
+export const getProductSuggestionAiModel = (client: IHttpClient = http) =>
+  client.get<TProductSuggestionAiModel>("/admin/product-suggestion/ai-model");
 
 /** Số bài nổi bật tối đa mỗi cây (mặc định 10). 403 KNOWLEDGE_ADMIN_REQUIRED. */
 export const getTopArticleSettings = (client: IHttpClient = http) =>

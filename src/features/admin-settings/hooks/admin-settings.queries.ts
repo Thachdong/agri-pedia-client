@@ -4,6 +4,7 @@ import {
   getCropTopArticles,
   getDiagnosisAiModels,
   getDiagnosisSettingsAdmin,
+  getProductSuggestionAiModel,
   getTopArticleSettings,
 } from "../services/admin-settings.service";
 
@@ -12,6 +13,12 @@ export const adminDiagnosisSettingsQuery = (client?: IHttpClient) =>
 
 export const adminDiagnosisAiModelsQuery = (client?: IHttpClient) =>
   appQueryOptions({ queryKey: queryKeys.adminSettings.diagnosisAiModels(), queryFn: () => getDiagnosisAiModels(client) });
+
+export const productSuggestionAiModelQuery = (client?: IHttpClient) =>
+  appQueryOptions({
+    queryKey: queryKeys.adminSettings.productSuggestionAiModel(),
+    queryFn: () => getProductSuggestionAiModel(client),
+  });
 
 export const topArticleSettingsQuery = (client?: IHttpClient) =>
   appQueryOptions({ queryKey: queryKeys.adminSettings.topArticleLimit(), queryFn: () => getTopArticleSettings(client) });

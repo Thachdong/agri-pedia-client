@@ -10,7 +10,7 @@ API:
 ## Steps
 - [x] 1. [feature-api]        `npm run gen:api` (openapi.d.ts chưa có schema AI model) + GET /admin/diagnosis/ai-models → TDiagnosisAiModels, adminDiagnosisAiModelsQuery; key adminSettings.diagnosisAiModels
 - [x] 2. [feature-api]        PUT /admin/diagnosis/ai-models → useUpdateDiagnosisAiModels; invalidates adminSettings.diagnosisAiModels
-- [ ] 3. [feature-api]        GET /admin/product-suggestion/ai-model → TProductSuggestionAiModel, productSuggestionAiModelQuery; key adminSettings.productSuggestionAiModel
+- [x] 3. [feature-api]        GET /admin/product-suggestion/ai-model → TProductSuggestionAiModel, productSuggestionAiModelQuery; key adminSettings.productSuggestionAiModel
 - [ ] 4. [feature-api]        PUT /admin/product-suggestion/ai-model → useUpdateProductSuggestionAiModel; invalidates adminSettings.productSuggestionAiModel
 - [ ] 5. [validation-schema]  diagnosisAiModelsSchema, productSuggestionAiModelSchema — rule model id chung (regex + ≤ 100), rỗng = null (dùng mặc định)
 - [ ] 6. [atomic-component]   molecule  AiModelField                (new, feature) — label + input model id; badge "Mặc định" / "Tuỳ chỉnh"; mô tả "Để trống = <default env>"; nút "Dùng mặc định" xoá input

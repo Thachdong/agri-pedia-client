@@ -123,6 +123,8 @@ export const queryKeys = {
     diagnosis: () => [...queryKeys.adminSettings.all, "diagnosis"] as const,
     /** GET /admin/diagnosis/ai-models. */
     diagnosisAiModels: () => [...queryKeys.adminSettings.all, "diagnosis-ai-models"] as const,
+    /** GET /admin/product-suggestion/ai-model. */
+    productSuggestionAiModel: () => [...queryKeys.adminSettings.all, "product-suggestion-ai-model"] as const,
     /** GET /admin/knowledge/settings — số bài nổi bật mỗi cây. */
     topArticleLimit: () => [...queryKeys.adminSettings.all, "top-article-limit"] as const,
     /** Prefix danh sách bài nổi bật của mọi cây (mỗi danh sách kèm `limit`). */
