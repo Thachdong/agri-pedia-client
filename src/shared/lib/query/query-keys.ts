@@ -98,8 +98,9 @@ export const queryKeys = {
     list: (filters: TArticleListFilters) => [...queryKeys.articles.lists(), filters] as const,
     /** Cây có bài viết (code ↔ slug) — client. */
     crops: () => [...queryKeys.articles.all, "crops"] as const,
-    /** Toàn bộ bài của 1 cây (mọi trang) — tra bài theo diseaseCode (bài liên quan ở /diagnosis). */
-    cropIndex: (cropSlug: string) => [...queryKeys.articles.all, "crop-index", cropSlug] as const,
+    /** Bài về các bệnh của 1 cây (`diseaseCodes`) — bài liên quan ở /diagnosis. */
+    byDiseases: (cropSlug: string, diseaseCodes: string[]) =>
+      [...queryKeys.articles.all, "by-diseases", cropSlug, diseaseCodes] as const,
   },
   /** Khu quản trị bài viết (ADMIN) — tách khỏi `articles` public (khác endpoint, gồm cả bài unpublished). */
   adminArticles: {

@@ -9,8 +9,12 @@ import { ScrollCarousel } from "@/shared/components/molecules";
 import { ROUTES } from "@/shared/constants";
 import { useAppQueries, useAppQuery } from "@/shared/lib/query";
 import { cn } from "@/shared/lib/utils";
-import { RELATED_ARTICLES_MAX_CROPS, RELATED_ARTICLES_PER_CROP } from "../constants/article.constants";
-import { articleCropsQuery, cropArticleIndexQuery } from "../hooks/article.queries";
+import {
+  ARTICLE_DISEASE_CODES_MAX,
+  RELATED_ARTICLES_MAX_CROPS,
+  RELATED_ARTICLES_PER_CROP,
+} from "../constants/article.constants";
+import { articleCropsQuery, diseaseArticlesQuery } from "../hooks/article.queries";
 import type { TArticleCrop, TArticleListItem, TTopArticlesGroup } from "../types/article.types";
 import { ArticleCard } from "./article-card";
 import { TopArticlesSection } from "./top-articles-section";
@@ -32,7 +36,7 @@ const combineIndexes = (results: { data?: TArticleListItem[]; isPending: boolean
 /**
  * Bài viết liên quan ở /diagnosis (Specs/19102026): có chẩn đoán phát hiện bệnh → bài của các bệnh đó (theo lần chẩn
  * đoán gần nhất, mỗi cây 1 khối); chưa có chẩn đoán / chưa phát hiện bệnh / bệnh chưa có bài → bài nổi bật (như
- * trang chủ). Chỉ xét các trang lịch sử đã tải; API chưa lọc bài theo diseaseCode nên tải hết bài của cây rồi lọc.
+ * trang chủ). Chỉ xét các trang lịch sử đã tải; mỗi cây 1 request GET /knowledge/articles?diseaseCodes=…
  */
 export function DiagnosisRelatedArticles({ topArticles, className }: TDiagnosisRelatedArticlesProps) {
   const history = useDiagnosisHistory();
@@ -55,14 +59,14 @@ export function DiagnosisRelatedArticles({ topArticles, className }: TDiagnosisR
       [...codesByCrop.entries()]
         .flatMap(([cropType, codes]) => {
           const crop = crops.data?.crops.find((item) => item.code === cropType);
-          return crop ? [{ crop, codes }] : [];
+          return crop ? [{ crop, codes: codes.slice(0, ARTICLE_DISEASE_CODES_MAX) }] : [];
         })
         .slice(0, RELATED_ARTICLES_MAX_CROPS),
     [codesByCrop, crops.data],
   );
 
   const indexes = useAppQueries({
-    queries: targets.map(({ crop }) => ({ ...cropArticleIndexQuery(crop.slug), meta: { silent: true } })),
+    queries: targets.map(({ crop, codes }) => ({ ...diseaseArticlesQuery(crop.slug, codes), meta: { silent: true } })),
     combine: combineIndexes,
   });
 
@@ -70,7 +74,7 @@ export function DiagnosisRelatedArticles({ topArticles, className }: TDiagnosisR
     () =>
       targets.flatMap(({ crop, codes }, index) => {
         const articles = indexes.data[index] ?? [];
-        // Bài chính của bệnh (không lấy bài variant), theo thứ tự bệnh trong lịch sử.
+        // API trả theo tiêu đề, gồm cả bài variant → lấy bài chính, xếp theo thứ tự bệnh trong lịch sử.
         const byCode = new Map(
           articles.flatMap((item) => (item.disease && !item.variant ? [[item.disease.code, item] as const] : [])),
         );

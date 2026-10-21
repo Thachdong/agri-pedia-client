@@ -1,7 +1,7 @@
 import type { IHttpClient } from "@/shared/lib/http";
 import { appInfiniteQueryOptions, appQueryOptions, queryKeys } from "@/shared/lib/query";
-import { ARTICLE_LIST_PAGE_SIZE } from "../constants/article.constants";
-import { listAllCropArticles, listArticleCrops, listArticles } from "../services/article.service";
+import { ARTICLE_LIST_PAGE_SIZE, DISEASE_ARTICLES_PAGE_SIZE } from "../constants/article.constants";
+import { listArticleCrops, listArticles } from "../services/article.service";
 import type { TArticleListFilters } from "../types/article.types";
 
 /** Bài của 1 cây theo tiêu đề, phân trang cursor (`nextCursor` null = hết). Bài hiếm đổi → stale lâu. */
@@ -23,10 +23,13 @@ export const articleCropsQuery = (client?: IHttpClient) =>
     staleTime: 30 * 60_000,
   });
 
-/** Toàn bộ bài của 1 cây (mọi trang) — tra theo diseaseCode. */
-export const cropArticleIndexQuery = (cropSlug: string, client?: IHttpClient) =>
+/** Bài về các bệnh `diseaseCodes` (≤ 50) của 1 cây — 1 trang (bài chính + variant, theo tiêu đề). */
+export const diseaseArticlesQuery = (cropSlug: string, diseaseCodes: string[], client?: IHttpClient) =>
   appQueryOptions({
-    queryKey: queryKeys.articles.cropIndex(cropSlug),
-    queryFn: ({ signal }) => listAllCropArticles(cropSlug, client, { signal }),
+    queryKey: queryKeys.articles.byDiseases(cropSlug, diseaseCodes),
+    queryFn: ({ signal }) =>
+      listArticles({ crop: cropSlug, diseaseCodes, limit: DISEASE_ARTICLES_PAGE_SIZE }, client, { signal }).then(
+        ({ articles }) => articles,
+      ),
     staleTime: 30 * 60_000,
   });
