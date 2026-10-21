@@ -12,6 +12,10 @@ export {
 } from "./constants/article.constants";
 export { ArticleCropCard, type TArticleCropCardProps } from "./components/article-crop-card";
 export { ArticleCtaButton, type TArticleCtaButtonProps } from "./components/article-cta-button";
+export {
+  DiagnosisRelatedArticles,
+  type TDiagnosisRelatedArticlesProps,
+} from "./components/diagnosis-related-articles";
 export { ArticleDetail, type TArticleDetailProps } from "./components/article-detail";
 export { ArticleList, type TArticleListProps } from "./components/article-list";
 export {
