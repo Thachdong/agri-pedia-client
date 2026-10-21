@@ -80,3 +80,10 @@ export const ARTICLE_ORIGIN_LABELS: Record<TArticleOrigin, string> = {
   ADMIN: "Nội dung được kiểm duyệt bởi Admin",
   AI_REVIEWED: "Nội dung được kiểm duyệt bởi Admin",
 };
+
+/** Tải toàn bộ bài của 1 cây để tra theo diseaseCode: mỗi trang tối đa 100 (giới hạn API), chặn 5 trang (~500 bài). */
+export const CROP_INDEX_PAGE_SIZE = 100;
+export const CROP_INDEX_MAX_PAGES = 5;
+/** Bài liên quan ở /diagnosis: số bài tối đa mỗi cây, số cây tối đa (theo lần chẩn đoán gần nhất). */
+export const RELATED_ARTICLES_PER_CROP = 8;
+export const RELATED_ARTICLES_MAX_CROPS = 3;

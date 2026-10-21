@@ -21,7 +21,7 @@ export {
 } from "./components/article-markdown";
 export { ArticleOriginBadge, type TArticleOriginBadgeProps } from "./components/article-origin-badge";
 export { TopArticlesSection, type TTopArticlesSectionProps } from "./components/top-articles-section";
-export { articleListQuery } from "./hooks/article.queries";
+export { articleCropsQuery, articleListQuery, cropArticleIndexQuery } from "./hooks/article.queries";
 export { useArticleList } from "./hooks/use-article-list";
 export { getArticle, getArticleSitemap, getTopArticles, listArticleCrops, listArticles } from "./services/article.service";
 export type {
