@@ -4,7 +4,7 @@ Feature: product (cập nhật) | Nơi dùng: dialog "Thêm sản phẩm" (M8) t
 Spec: Specs/19102026/distributor-flow.png — "Product Creation Support (6): Scan label and get information"
 Wireframe: không có — gắn vào ProductFormDialog hiện có (ui-ux.md §7 M8)
 API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 MB; chỉ DISTRIBUTOR ACTIVE)
-- 200 { status: FOUND (suggestion { name, description }) | NOT_FOUND (detectedName) | UNREADABLE, remaining }
+- 200 { status: FOUND (suggestion { name, description, categoryId | null, unit | null }) | NOT_FOUND (detectedName) | UNREADABLE, remaining }
 - 400 PRODUCT_SUGGESTION_INVALID_IMAGE, 403 PRODUCT_SELLER_NOT_ALLOWED, 413 (> 5 MB), 422 PRODUCT_SUGGESTION_QUOTA_EXCEEDED
 - Quota trọn đời mỗi distributor (admin đặt). Không có API xem `remaining` trước — chỉ biết sau lần gọi đầu.
 - Ảnh không được lưu.
@@ -35,7 +35,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 ## Checklist kiểm tay
 - [ ] DISTRIBUTOR → /profile/<id của mình> → "Thêm sản phẩm": khối "Điền nhanh từ ảnh nhãn" ở đầu form (sửa sản phẩm không có).
 - [ ] Chụp ảnh (camera trong trang; chặn quyền camera → nút mở camera của máy) và "Chọn từ máy" đều quét được.
-- [ ] Tìm thấy → điền tên + mô tả; form đã có tên / mô tả khác → hỏi "Thay nội dung đã nhập?" trước.
+- [ ] Tìm thấy → điền tên + mô tả + danh mục + đơn vị (null thì giữ ô đó); form đã có giá trị khác → hỏi "Thay nội dung đã nhập?" trước.
 - [ ] Đọc được tên nhưng chưa có trong danh mục → "Dùng tên này" điền tên.
 - [ ] Không đọc được → nhắc chụp lại; ảnh lỗi → báo lỗi; hết lượt → khoá ô chụp + báo hết lượt; "Còn N lượt" sau mỗi lần quét.
 - [ ] Form chẩn đoán vẫn chụp / chọn / nén ảnh như trước (AddImageTile, CameraCaptureDialog, nén đã chuyển sang shared).

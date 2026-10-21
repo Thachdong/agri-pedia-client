@@ -512,7 +512,7 @@ export interface paths {
         put?: never;
         /**
          * Add a catalog item
-         * @description Suggested to distributors whose photo shows this name. The name is unique ignoring case, diacritics and punctuation.
+         * @description Suggested to distributors whose photo shows this name. The name is unique ignoring case, diacritics and punctuation. Optional `categoryId` (from `GET /categories`) and `unit` are suggested too, to preselect the product form.
          */
         post: operations["AdminProductCatalogController_create"];
         delete?: never;
@@ -538,7 +538,10 @@ export interface paths {
         delete: operations["AdminProductCatalogController_delete"];
         options?: never;
         head?: never;
-        /** Change a catalog item (omitted fields are kept) */
+        /**
+         * Change a catalog item (omitted fields are kept)
+         * @description `categoryId` / `unit`: null clears them.
+         */
         patch: operations["AdminProductCatalogController_update"];
         trace?: never;
     };
@@ -1543,6 +1546,9 @@ export interface components {
         ProductSuggestionContentResponse: {
             name: string;
             description: string;
+            categoryId: string | null;
+            /** @enum {string|null} */
+            unit: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton" | null;
         };
         SuggestProductResponse: {
             /** @enum {string} */
@@ -1562,6 +1568,9 @@ export interface components {
             id: string;
             name: string;
             description: string;
+            categoryId: string | null;
+            /** @enum {string|null} */
+            unit: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton" | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -1576,10 +1585,16 @@ export interface components {
         CreateCatalogItemDto: {
             name: string;
             description: string;
+            categoryId?: string;
+            /** @enum {string} */
+            unit?: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton";
         };
         UpdateCatalogItemDto: {
             name?: string;
             description?: string;
+            categoryId?: string | null;
+            /** @enum {string|null} */
+            unit?: "kg" | "10kg" | "50kg" | "100kg" | "bag" | "piece" | "ton" | null;
         };
         ProductSuggestionSettingsResponse: {
             invalidImageLimit: number;
@@ -3716,6 +3731,15 @@ export interface operations {
                     "application/json": components["schemas"]["DomainErrorResponse"];
                 };
             };
+            /** @description PRODUCT_CATEGORY_NOT_FOUND */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
             /** @description PRODUCT_CATALOG_ITEM_NAME_TAKEN */
             409: {
                 headers: {
@@ -3832,7 +3856,7 @@ export interface operations {
                     "application/json": components["schemas"]["DomainErrorResponse"];
                 };
             };
-            /** @description PRODUCT_CATALOG_ITEM_NOT_FOUND */
+            /** @description PRODUCT_CATALOG_ITEM_NOT_FOUND, PRODUCT_CATEGORY_NOT_FOUND */
             404: {
                 headers: {
                     [name: string]: unknown;

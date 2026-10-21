@@ -146,7 +146,7 @@ function ResultMessage({ result, onUseName }: { result: TProductSuggestion; onUs
   if (result.status === "FOUND" && result.suggestion) {
     return (
       <Callout tone="success">
-        Tìm thấy <span className="font-semibold">{result.suggestion.name}</span> — đã gợi ý tên và mô tả, hãy kiểm tra lại.
+        Tìm thấy <span className="font-semibold">{result.suggestion.name}</span> — đã gợi ý tên, mô tả, danh mục và đơn vị (nếu có), hãy kiểm tra lại.
       </Callout>
     );
   }

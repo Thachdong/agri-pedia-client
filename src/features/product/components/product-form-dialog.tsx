@@ -36,8 +36,16 @@ import { createProductSchema, updateProductSchema } from "../schemas/product.sch
 import type { TProductDetail, TProductFormValues, TProductStatus, TProductUnit } from "../types/product.types";
 import { ProductLabelScanner } from "./product-label-scanner";
 
-/** Nội dung điền từ ảnh nhãn: tìm thấy → tên + mô tả; chưa có trong danh mục → chỉ tên. */
-type TLabelFill = { name: string; description?: string };
+/**
+ * Nội dung điền từ ảnh nhãn: tìm thấy → tên + mô tả (+ danh mục, đơn vị khi danh mục gợi ý có); chưa có trong danh mục
+ * → chỉ tên. `categoryId` / `unit` null hoặc thiếu = không đổi ô đó.
+ */
+type TLabelFill = {
+  name: string;
+  description?: string;
+  categoryId?: string | null;
+  unit?: TProductUnit | null;
+};
 
 export type TProductFormDialogProps = {
   open: boolean;
@@ -133,17 +141,28 @@ function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormP
   // Gợi ý từ ảnh nhãn chờ xác nhận ghi đè (ô đã có nội dung khác).
   const [pendingFill, setPendingFill] = useState<TLabelFill | null>(null);
 
-  const applyFill = ({ name, description }: TLabelFill) => {
-    form.setValue("name", name, { ...setOptions, shouldValidate: true });
-    if (description !== undefined) form.setValue("description", description, { ...setOptions, shouldValidate: true });
+  // Danh mục gợi ý không còn trong danh sách (đã xoá) → bỏ qua, giữ lựa chọn hiện tại.
+  const knownCategory = (categoryId: string | null | undefined) =>
+    categoryId && categories.data?.some((category) => category.id === categoryId) ? categoryId : null;
+
+  const applyFill = (fill: TLabelFill) => {
+    const fillOptions = { ...setOptions, shouldValidate: true };
+    form.setValue("name", fill.name, fillOptions);
+    if (fill.description !== undefined) form.setValue("description", fill.description, fillOptions);
+    const categoryId = knownCategory(fill.categoryId);
+    if (categoryId) form.setValue("categoryId", categoryId, fillOptions);
+    if (fill.unit) form.setValue("unit", fill.unit, fillOptions);
   };
   // Chỉ hỏi khi sẽ thay mất nội dung người dùng đã nhập; ô trống / trùng gợi ý → điền thẳng.
   const requestFill = (fill: TLabelFill) => {
-    const { name, description } = form.getValues();
+    const { name, description, categoryId: currentCategory, unit } = form.getValues();
     const overwritesName = name.trim() !== "" && name !== fill.name;
+    const categoryId = knownCategory(fill.categoryId);
+    const overwritesCategory = categoryId !== null && currentCategory !== "" && currentCategory !== categoryId;
+    const overwritesUnit = Boolean(fill.unit) && unit !== "" && unit !== fill.unit;
     const overwritesDescription =
       fill.description !== undefined && description.trim() !== "" && description !== fill.description;
-    if (overwritesName || overwritesDescription) setPendingFill(fill);
+    if (overwritesName || overwritesDescription || overwritesCategory || overwritesUnit) setPendingFill(fill);
     else applyFill(fill);
   };
 
@@ -415,7 +434,7 @@ function ProductForm({ distributorId, product, onDone, onCancel }: TProductFormP
         title="Thay nội dung đã nhập?"
         description={
           pendingFill?.description !== undefined
-            ? "Tên và mô tả bạn đã nhập sẽ được thay bằng gợi ý từ ảnh nhãn."
+            ? "Nội dung bạn đã nhập (tên, mô tả, danh mục, đơn vị) sẽ được thay bằng gợi ý từ ảnh nhãn."
             : "Tên bạn đã nhập sẽ được thay bằng tên đọc từ ảnh nhãn."
         }
         confirmLabel="Thay"
