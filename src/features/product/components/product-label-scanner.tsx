@@ -13,10 +13,12 @@ import { cn } from "@/shared/lib/utils";
 import {
   PRODUCT_ERROR_CODE,
   PRODUCT_ERROR_MESSAGES,
+  PRODUCT_UNIT_LABELS,
   SUGGESTION_PHOTO_ACCEPT,
   SUGGESTION_PHOTO_MAX_BYTES,
   SUGGESTION_PHOTO_MAX_EDGE,
 } from "../constants/product.constants";
+import { useCategories } from "../hooks/use-categories";
 import { useSuggestProduct } from "../hooks/use-suggest-product";
 import type { TProductSuggestion } from "../types/product.types";
 
@@ -143,13 +145,7 @@ export function ProductLabelScanner({ onFound, onUseName, disabled = false, clas
 }
 
 function ResultMessage({ result, onUseName }: { result: TProductSuggestion; onUseName: (name: string) => void }) {
-  if (result.status === "FOUND" && result.suggestion) {
-    return (
-      <Callout tone="success">
-        Tìm thấy <span className="font-semibold">{result.suggestion.name}</span> — đã gợi ý tên, mô tả, danh mục và đơn vị (nếu có), hãy kiểm tra lại.
-      </Callout>
-    );
-  }
+  if (result.status === "FOUND" && result.suggestion) return <FoundMessage suggestion={result.suggestion} />;
   if (result.status === "NOT_FOUND" && result.detectedName) {
     const name = result.detectedName;
     return (
@@ -166,4 +162,21 @@ function ResultMessage({ result, onUseName }: { result: TProductSuggestion; onUs
     );
   }
   return <Callout tone="warning">Không đọc được tên sản phẩm. Hãy chụp lại rõ phần tên trên nhãn.</Callout>;
+}
+
+/** Tìm thấy: tên + danh mục / đơn vị được gợi ý (danh mục không còn trong danh sách → form giữ lựa chọn cũ, không ghi). */
+function FoundMessage({ suggestion }: { suggestion: TProductSuggestionContent }) {
+  const { data: categories } = useCategories();
+  const category = categories?.find((item) => item.id === suggestion.categoryId)?.name;
+  const unit = suggestion.unit ? PRODUCT_UNIT_LABELS[suggestion.unit] : undefined;
+  const details = [category && `Danh mục: ${category}`, unit && `Đơn vị: ${unit}`].filter(Boolean);
+
+  return (
+    <Callout tone="success">
+      <p>
+        Tìm thấy <span className="font-semibold">{suggestion.name}</span> — đã điền gợi ý, hãy kiểm tra lại trước khi lưu.
+      </p>
+      {details.length > 0 && <p className="mt-1 text-xs text-muted-foreground">{details.join(" · ")}</p>}
+    </Callout>
+  );
 }

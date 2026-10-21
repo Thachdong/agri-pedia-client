@@ -1,4 +1,4 @@
-# product-creation-support — gợi ý tên + mô tả sản phẩm từ ảnh nhãn (DISTRIBUTOR)
+# product-creation-support — gợi ý tên, mô tả, danh mục, đơn vị sản phẩm từ ảnh nhãn (DISTRIBUTOR)
 
 Feature: product (cập nhật) | Nơi dùng: dialog "Thêm sản phẩm" (M8) trên /profile/<id của mình>
 Spec: Specs/19102026/distributor-flow.png — "Product Creation Support (6): Scan label and get information"
@@ -17,6 +17,9 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - [x] 5. [atomic-component]  organism  ProductLabelScanner  (new, product) — chụp (camera trong trang) / chọn ảnh nhãn → nén ≤ 5 MB → gửi; trạng thái: đang đọc / FOUND / NOT_FOUND / UNREADABLE / ảnh lỗi / hết lượt; "Còn N lượt"
 - [x] 6. [atomic-component]  organism  ProductFormDialog    (update, product) — chỉ khi tạo mới: scanner ở đầu form; FOUND → điền tên + mô tả (ô đã có nội dung → ConfirmDialog trước khi ghi đè); NOT_FOUND → nút "Dùng tên này" (cùng quy tắc xác nhận)
 - [x] 7. [arch-review]       — không có vi phạm
+- [x] 8. [feature-api]       API cập nhật: suggestion thêm `categoryId` (id từ GET /categories) + `unit` (đều có thể null) — `npm run gen:api`
+- [x] 9. [atomic-component]  organism  ProductFormDialog    (update) — FOUND điền thêm danh mục (chỉ khi id còn trong danh sách) + đơn vị; ghi đè danh mục / đơn vị đã chọn cũng hỏi trước
+- [x] 10. [atomic-component] organism  ProductLabelScanner  (update) — thông báo FOUND hiện danh mục + đơn vị được gợi ý
 
 ## Components (in order)
   [atom]      Button, Input, Textarea            reuse  shared
@@ -28,14 +31,14 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
   [page]      /profile/[id] (owner)              reuse  (không đổi)
 
 ## Decisions
-- Ghi đè tên / mô tả đã có nội dung → hỏi xác nhận trước.
+- Ghi đè tên / mô tả / danh mục / đơn vị đã có giá trị khác → hỏi xác nhận trước. Gợi ý null → giữ nguyên ô đó.
 - Không dùng ảnh nhãn làm ảnh sản phẩm.
 - Chụp / chọn ảnh giống form chẩn đoán (camera trong trang + chọn từ máy).
 
 ## Checklist kiểm tay
 - [ ] DISTRIBUTOR → /profile/<id của mình> → "Thêm sản phẩm": khối "Điền nhanh từ ảnh nhãn" ở đầu form (sửa sản phẩm không có).
 - [ ] Chụp ảnh (camera trong trang; chặn quyền camera → nút mở camera của máy) và "Chọn từ máy" đều quét được.
-- [ ] Tìm thấy → điền tên + mô tả + danh mục + đơn vị (null thì giữ ô đó); form đã có giá trị khác → hỏi "Thay nội dung đã nhập?" trước.
+- [ ] Tìm thấy → điền tên + mô tả + danh mục + đơn vị (null thì giữ ô đó), thông báo hiện danh mục + đơn vị gợi ý; form đã có giá trị khác → hỏi "Thay nội dung đã nhập?" trước.
 - [ ] Đọc được tên nhưng chưa có trong danh mục → "Dùng tên này" điền tên.
 - [ ] Không đọc được → nhắc chụp lại; ảnh lỗi → báo lỗi; hết lượt → khoá ô chụp + báo hết lượt; "Còn N lượt" sau mỗi lần quét.
 - [ ] Form chẩn đoán vẫn chụp / chọn / nén ảnh như trước (AddImageTile, CameraCaptureDialog, nén đã chuyển sang shared).
