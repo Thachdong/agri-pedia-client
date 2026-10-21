@@ -44,6 +44,8 @@ export const PRODUCT_ERROR_CODE = {
   CATEGORY_NOT_FOUND: "PRODUCT_CATEGORY_NOT_FOUND",
   INVALID_PRICE: "PRODUCT_INVALID_PRICE",
   INVALID_QUANTITY: "PRODUCT_INVALID_QUANTITY",
+  SUGGESTION_INVALID_IMAGE: "PRODUCT_SUGGESTION_INVALID_IMAGE",
+  SUGGESTION_QUOTA_EXCEEDED: "PRODUCT_SUGGESTION_QUOTA_EXCEEDED",
 } as const;
 
 /** Message tiếng Việt thay cho message tiếng Anh của server. */
@@ -54,4 +56,12 @@ export const PRODUCT_ERROR_MESSAGES: Record<string, string> = {
   [PRODUCT_ERROR_CODE.CATEGORY_NOT_FOUND]: "Danh mục không còn tồn tại, vui lòng chọn lại.",
   [PRODUCT_ERROR_CODE.INVALID_PRICE]: "Giá không hợp lệ.",
   [PRODUCT_ERROR_CODE.INVALID_QUANTITY]: "Số lượng không hợp lệ.",
+  [PRODUCT_ERROR_CODE.SUGGESTION_INVALID_IMAGE]: "Ảnh không hợp lệ hoặc không đọc được, hãy chụp lại.",
+  [PRODUCT_ERROR_CODE.SUGGESTION_QUOTA_EXCEEDED]: "Bạn đã dùng hết lượt gợi ý từ ảnh nhãn.",
 };
+
+/** Ảnh nhãn gửi gợi ý (POST /products/suggestions): JPEG nén ở client, ≤ 5 MB, cạnh ≤ 2048px (đủ đọc chữ). */
+export const SUGGESTION_PHOTO_MAX_BYTES = 5 * 1024 * 1024;
+export const SUGGESTION_PHOTO_MAX_EDGE = 2048;
+/** Định dạng nhận ở input file — HEIC/HEIF được nén sang JPEG nếu trình duyệt decode được. */
+export const SUGGESTION_PHOTO_ACCEPT = "image/jpeg,image/png,image/webp,image/heic,image/heif";

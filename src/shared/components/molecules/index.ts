@@ -13,3 +13,4 @@ export { ImageLightbox, type TImageLightboxProps } from "./image-lightbox";
 export { Breadcrumb, type TBreadcrumbItem, type TBreadcrumbProps } from "./breadcrumb";
 export { SidebarDrawer, type TSidebarDrawerProps } from "./sidebar-drawer";
 export { ScrollCarousel, type TScrollCarouselProps } from "./scroll-carousel";
+export { AddImageTile, type TAddImageTileProps } from "./add-image-tile";

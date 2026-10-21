@@ -4,7 +4,8 @@ import { SendIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Button, Textarea } from "@/shared/components/atoms";
-import { Callout, FormField, LoginRequiredDialog } from "@/shared/components/molecules";
+import { AddImageTile, Callout, FormField, LoginRequiredDialog } from "@/shared/components/molecules";
+import { CameraCaptureDialog } from "@/shared/components/organisms";
 import { ROUTES } from "@/shared/constants";
 import { applyServerErrors, FORM_ROOT_ERROR, useAppForm } from "@/shared/lib/form";
 import { APP_ERROR_CODE, isAppError, type AppError } from "@/shared/lib/http";
@@ -13,6 +14,7 @@ import { cn } from "@/shared/lib/utils";
 import {
   DEFAULT_PLANT_PART,
   DIAGNOSIS_ERROR_CODE,
+  DIAGNOSIS_IMAGE_ACCEPT,
   DIAGNOSIS_MAX_IMAGES,
   DIAGNOSIS_NOTE_MAX,
 } from "../constants/diagnosis.constants";
@@ -22,9 +24,8 @@ import { diagnosisFormSchema, type TDiagnosisFormContext } from "../schemas/diag
 import type { TDiagnosisFormImage, TDiagnosisFormValues, TPlantPart } from "../types/diagnosis.types";
 import type { TCropPlantPart } from "../types/knowledge.types";
 import { analyzeImage } from "../utils/blur-score.util";
-import { compressImage, ImageDecodeError } from "../utils/compress-image.util";
-import { AddImageTile } from "./add-image-tile";
-import { CameraCaptureDialog } from "./camera-capture-dialog";
+import { ImageDecodeError } from "@/shared/lib/image";
+import { compressDiagnosisImage } from "../utils/compress-image.util";
 import { DiagnosisImageSlot } from "./diagnosis-image-slot";
 
 const FORM_ID = "diagnosis-form";
@@ -186,7 +187,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
 
   const onSubmit = form.handleSubmit(async (values) => {
     setCompressing(true);
-    const results = await Promise.allSettled(values.images.map(({ file }) => compressImage(file, settings)));
+    const results = await Promise.allSettled(values.images.map(({ file }) => compressDiagnosisImage(file, settings)));
     setCompressing(false);
 
     const failed = results.flatMap((result, index) => (result.status === "rejected" ? [values.images[index]] : []));
@@ -264,6 +265,7 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
             <li>
               <AddImageTile
                 remaining={remaining}
+                accept={DIAGNOSIS_IMAGE_ACCEPT}
                 onCapture={() => setCameraOpen(true)}
                 onPick={addFiles}
                 disabled={busy}
@@ -323,6 +325,8 @@ export function DiagnosisForm({ cropType, plantParts, layout = "page", guest = f
       <CameraCaptureDialog
         open={cameraOpen}
         onOpenChange={setCameraOpen}
+        title="Chụp ảnh vết bệnh"
+        description="Di chuyển vết bệnh vào giữa khung hình"
         remaining={remaining}
         onCapture={(file) => addFiles([file])}
       />

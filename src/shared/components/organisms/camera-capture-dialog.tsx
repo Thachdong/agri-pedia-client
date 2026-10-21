@@ -2,7 +2,7 @@
 
 import { CameraIcon, CameraOffIcon } from "lucide-react";
 import { useRef, useState } from "react";
-import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from "@/shared/components/atoms";
+import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from "../atoms";
 import { useCameraStream, type TCameraStatus } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 
@@ -15,6 +15,9 @@ const FALLBACK_MESSAGES: Partial<Record<TCameraStatus, string>> = {
 export type TCameraCaptureDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  /** Tiêu đề + hướng dẫn trên khung ngắm (vd. "Chụp ảnh vết bệnh"). */
+  title: string;
+  description: string;
   /** Số ảnh còn được chụp — hết thì tự đóng. */
   remaining: number;
   onCapture: (file: File) => void;
@@ -25,7 +28,7 @@ export type TCameraCaptureDialogProps = {
  * Chụp được nhiều ảnh liên tiếp tới khi hết chỗ. Không mở được camera → dùng camera của máy qua input file `capture`.
  * Mobile: toàn màn hình.
  */
-export function CameraCaptureDialog({ open, onOpenChange, remaining, onCapture }: TCameraCaptureDialogProps) {
+export function CameraCaptureDialog({ open, onOpenChange, title, description, remaining, onCapture }: TCameraCaptureDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -35,8 +38,8 @@ export function CameraCaptureDialog({ open, onOpenChange, remaining, onCapture }
         )}
       >
         <div className="px-4 pt-4 pr-12">
-          <DialogTitle>Chụp ảnh vết bệnh</DialogTitle>
-          <DialogDescription>Di chuyển vết bệnh vào giữa khung hình</DialogDescription>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
         </div>
         {/* Chỉ mount khi mở → camera bật khi mở, tắt khi đóng. */}
         {open && (
