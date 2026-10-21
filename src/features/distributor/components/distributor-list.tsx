@@ -18,11 +18,20 @@ export type TDistributorListProps = {
   selectedId?: string | null;
   /** DISTRIBUTOR đang xem: shop của mình ghim đầu danh sách, card shop khác không mở được. */
   ownShopId?: string;
+  /** Khối ghi chú đầu danh sách (vd. hướng dẫn bật lại quyền vị trí). */
+  notice?: React.ReactNode;
   className?: string;
 };
 
 /** Danh sách distributor (ui-ux.md §6 (7)) — infinite scroll theo page. */
-export function DistributorList({ query, locating = false, selectedId, ownShopId, className }: TDistributorListProps) {
+export function DistributorList({
+  query,
+  locating = false,
+  selectedId,
+  ownShopId,
+  notice,
+  className,
+}: TDistributorListProps) {
   // Không destructure theo discriminated union: lỗi trang kế cũng làm `status = "error"` nhưng vẫn giữ `data`.
   const { data, refetch, hasNextPage, isFetchingNextPage, isFetchNextPageError, fetchNextPage } = query;
   const { data: provinces } = useProvinces();
@@ -91,6 +100,7 @@ export function DistributorList({ query, locating = false, selectedId, ownShopId
 
   return (
     <ListFrame className={className} title={`${NEARBY_SCOPE_TITLES[data.scope]} (${data.total})`}>
+      {notice}
       {note && <p className="mb-2 rounded-md bg-highlight-subtle px-3 py-2 text-xs text-foreground">{note}</p>}
       {items.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-8 text-center text-sm text-muted-foreground">

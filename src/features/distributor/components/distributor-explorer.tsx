@@ -1,8 +1,9 @@
 "use client";
 
 import { createContext, use, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Callout } from "@/shared/components/molecules";
 import { MarkerMap, type TMapMarker } from "@/shared/components/organisms";
-import { type TCoordinates, useGeolocation } from "@/shared/hooks";
+import { type TCoordinates, useGeolocation, useGeolocationPermission } from "@/shared/hooks";
 import { cn } from "@/shared/lib/utils";
 import { useMe } from "@/features/user";
 import { ALL_ORIGIN_MAX_PAGES, LOCATE_WAIT_MS, USER_LABELS } from "../constants/distributor.constants";
@@ -23,6 +24,8 @@ type TExplorerContext = {
   selectedId: string | null;
   select: (id: string) => void;
   ownShopId?: string;
+  /** Guest đã chặn quyền vị trí → danh sách toàn quốc + hướng dẫn bật lại. */
+  locationDenied: boolean;
 };
 
 const ExplorerContext = createContext<TExplorerContext | null>(null);
@@ -49,6 +52,7 @@ export type TDistributorExplorerProviderProps = {
 type TOriginProps = { active: boolean; children: (location: TOriginState) => React.ReactNode };
 type TOriginState = Pick<TExplorerContext, "locating" | "userLocation" | "userLabel"> & {
   params: TNearbyDistributorsParams;
+  locationDenied?: boolean;
 };
 
 /**
@@ -82,6 +86,14 @@ export function DistributorExplorerProvider({ origin = "geolocation", ownShopId,
 function GeolocationOrigin({ active, children }: TOriginProps) {
   const { coords, status, request } = useGeolocation();
   const [waitExpired, setWaitExpired] = useState(false);
+  const permission = useGeolocationPermission();
+  const previousPermission = useRef(permission);
+
+  // Người dùng bật lại quyền trong cài đặt trình duyệt → lấy vị trí lại, danh sách / map tự chuyển sang gần bạn.
+  useEffect(() => {
+    if (active && previousPermission.current === "denied" && permission !== "denied") void request();
+    previousPermission.current = permission;
+  }, [active, permission, request]);
 
   useEffect(() => {
     if (!active) return;
@@ -93,7 +105,13 @@ function GeolocationOrigin({ active, children }: TOriginProps) {
   const locating = (status === "idle" || status === "loading") && !waitExpired;
   const params = useMemo<TNearbyDistributorsParams>(() => (coords ? { lat: coords.lat, long: coords.long } : {}), [coords]);
 
-  return children({ params, locating, userLocation: coords, userLabel: USER_LABELS.geolocation });
+  return children({
+    params,
+    locating,
+    userLocation: coords,
+    userLabel: USER_LABELS.geolocation,
+    locationDenied: active && permission === "denied",
+  });
 }
 
 const NO_LOCATION_PARAMS: TNearbyDistributorsParams = {};
@@ -139,6 +157,7 @@ function ExplorerCore({
   userLocation,
   userLabel,
   ownShopId,
+  locationDenied = false,
   loadAll = false,
   children,
 }: TExplorerCoreProps) {
@@ -155,8 +174,19 @@ function ExplorerCore({
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const value = useMemo<TExplorerContext>(
-    () => ({ query, active, activate, locating, userLocation, userLabel, selectedId, select: setSelectedId, ownShopId }),
-    [query, active, activate, locating, userLocation, userLabel, selectedId, ownShopId],
+    () => ({
+      query,
+      active,
+      activate,
+      locating,
+      userLocation,
+      userLabel,
+      selectedId,
+      select: setSelectedId,
+      ownShopId,
+      locationDenied,
+    }),
+    [query, active, activate, locating, userLocation, userLabel, selectedId, ownShopId, locationDenied],
   );
 
   return <ExplorerContext value={value}>{children}</ExplorerContext>;
@@ -210,14 +240,25 @@ export function DistributorExplorerMap({ className }: { className?: string }) {
 
 /** Danh sách distributor (7) — highlight + cuộn tới item được chọn trên map. */
 export function DistributorExplorerList({ className }: { className?: string }) {
-  const { query, active, locating, selectedId, ownShopId } = useExplorer();
+  const { query, active, locating, selectedId, ownShopId, locationDenied } = useExplorer();
   return (
     <DistributorList
       query={query}
       locating={!active || locating}
       selectedId={selectedId}
       ownShopId={ownShopId}
+      notice={locationDenied && <LocationDeniedNotice />}
       className={className}
     />
+  );
+}
+
+/** Trình duyệt không hỏi lại quyền đã chặn → chỉ người dùng mở lại được; bật lại thì danh sách tự cập nhật. */
+function LocationDeniedNotice() {
+  return (
+    <Callout tone="warning" role="status" title="Bạn đã chặn quyền truy cập vị trí" className="mb-2">
+      Đang hiện nhà phân phối toàn quốc. Để xem gần bạn: bấm biểu tượng cài đặt trang (ổ khoá) cạnh thanh địa chỉ → Vị
+      trí → Cho phép. Danh sách sẽ tự cập nhật.
+    </Callout>
   );
 }
