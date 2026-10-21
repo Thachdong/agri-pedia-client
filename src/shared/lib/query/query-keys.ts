@@ -27,6 +27,8 @@ export const queryKeys = {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
     wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
+    /** Reverse geocode — toạ độ đã làm tròn để các lần chọn gần trùng dùng chung cache. */
+    reverse: (lat: number, long: number) => [...queryKeys.location.all, "reverse", lat, long] as const,
   },
   users: {
     all: ["users"] as const,
