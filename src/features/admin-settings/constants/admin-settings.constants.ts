@@ -24,3 +24,10 @@ export const TOP_ARTICLE_LIMIT_BOUNDS = { min: 1, max: 50 } as const;
 
 /** Select "không chọn cây mặc định" — Radix Select không nhận value rỗng. */
 export const NO_DEFAULT_CROP = "__none__";
+
+/**
+ * Model id của AI provider — mirror server: chữ, số, `.`, `_`, `-`, tối đa 100 ký tự, không bắt đầu bằng `.`/`_`/`-`.
+ * Server không kiểm id có ở provider.
+ */
+export const AI_MODEL_ID_MAX_LENGTH = 100;
+export const AI_MODEL_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;

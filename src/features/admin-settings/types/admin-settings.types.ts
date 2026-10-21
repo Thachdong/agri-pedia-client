@@ -38,3 +38,7 @@ export type TDiagnosisSettingsFormValues = {
 };
 
 export type TTopArticleLimitFormValues = { limit: number | null };
+
+/** Giá trị form AI model — chuỗi rỗng = dùng model env (gửi null). */
+export type TDiagnosisAiModelsFormValues = { describeModel: string; verifyModel: string };
+export type TProductSuggestionAiModelFormValues = { model: string };
