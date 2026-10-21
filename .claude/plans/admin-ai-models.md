@@ -15,7 +15,7 @@ API:
 - [x] 5. [validation-schema]  diagnosisAiModelsSchema, productSuggestionAiModelSchema — rule model id chung (regex + ≤ 100), rỗng = null (dùng mặc định)
 - [x] 6. [atomic-component]   molecule  AiModelField                (new, feature) — label + input model id; badge "Mặc định" / "Tuỳ chỉnh"; mô tả "Để trống = <default env>"; nút "Dùng mặc định" xoá input
 - [x] 7. [atomic-component]   organism  DiagnosisAiModelsForm       (new, feature) — 2 AiModelField (B1 mô tả ảnh, B3 xác minh); callout cảnh báo sai id = chẩn đoán lỗi, chỉ áp cho ca mới; loading / lỗi tải + thử lại / lỗi server theo field; lưu
-- [ ] 8. [atomic-component]   organism  ProductSuggestionAiModelForm (new, feature) — 1 AiModelField (đọc tên sản phẩm từ ảnh); cùng hành vi step 7
+- [x] 8. [atomic-component]   organism  ProductSuggestionAiModelForm (new, feature) — 1 AiModelField (đọc tên sản phẩm từ ảnh); cùng hành vi step 7
 - [ ] 9. [page]               /admin/ai-provider (redirect) + /diagnosis + /product-suggestion; ROUTES.admin.aiProvider; sidebar nhóm "AI Provider" bỏ mock → 2 mục
 - [ ] 10. [arch-review]
 
