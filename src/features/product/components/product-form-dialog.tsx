@@ -70,7 +70,6 @@ const FIELD_ERRORS: Partial<Record<string, "price" | "quantity" | "categoryId">>
   [PRODUCT_ERROR_CODE.CATEGORY_NOT_FOUND]: "categoryId",
 };
 
-
 /**
  * M8 / M9 — tạo / sửa sản phẩm của chính mình (ui-ux.md §7, owner).
  * Ảnh mới upload lên TMP ngay khi chọn; submit (chờ upload xong) → POST /products (media) hoặc PATCH /products/:id (addMedia + removeMediaIds).
