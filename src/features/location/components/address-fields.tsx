@@ -35,6 +35,12 @@ function LoadError({ message, onRetry }: { message: string; onRetry: () => void 
   );
 }
 
+/*
+ * `onValueChange` bỏ qua "": Radix Select trong <form> đồng bộ value sang <select> native ẩn rồi phát "change".
+ * Đổi tỉnh + xã cùng lúc (điền theo vị trí) thì lúc đó <select> xã còn option của tỉnh cũ → value đọc ra ""
+ * → Radix báo đổi thành "" và xoá mất xã vừa điền. Danh sách không có item rỗng nên "" chỉ đến từ đây.
+ */
+
 function MismatchHint({ children }: { children: React.ReactNode }) {
   return <p className="text-xs text-warning">{children}</p>;
 }
@@ -142,7 +148,7 @@ export function AddressFields({ idPrefix, value, onChange, onBlur, errors = {}, 
           <>
             <Select
               value={value.province}
-              onValueChange={(province) => onChange({ province, ward: "" })}
+              onValueChange={(province) => province && onChange({ province, ward: "" })}
               onOpenChange={(open) => !open && onBlur?.("province")}
               disabled={disabled || !provinces.data}
             >
@@ -172,7 +178,7 @@ export function AddressFields({ idPrefix, value, onChange, onBlur, errors = {}, 
           <>
             <Select
               value={value.ward}
-              onValueChange={(ward) => onChange({ ward })}
+              onValueChange={(ward) => ward && onChange({ ward })}
               onOpenChange={(open) => !open && onBlur?.("ward")}
               disabled={disabled || !value.province || !wards.data}
             >
