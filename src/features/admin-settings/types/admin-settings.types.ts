@@ -10,6 +10,7 @@ export type TUpdateDiagnosisAiModelsInput = TApiSchema<"UpdateDiagnosisAiModelsD
 
 /** GET / PUT /admin/product-suggestion/ai-model — model đọc tên sản phẩm từ ảnh; null = model env `defaults.model`. */
 export type TProductSuggestionAiModel = TApiSchema<"ProductSuggestionAiModelResponse">;
+export type TUpdateProductSuggestionAiModelInput = TApiSchema<"UpdateProductSuggestionAiModelDto">;
 
 /** GET / PUT /admin/knowledge/settings — số bài nổi bật mỗi cây (1..50, mặc định 10). */
 export type TTopArticleSettings = TApiSchema<"TopArticleSettingsResponse">;

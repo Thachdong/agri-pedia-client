@@ -18,6 +18,7 @@ export { useTopArticleSettings } from "./hooks/use-top-article-settings";
 export { useUpdateTopArticleLimit } from "./hooks/use-update-top-article-limit";
 export { useUpdateDiagnosisAiModels } from "./hooks/use-update-diagnosis-ai-models";
 export { useUpdateDiagnosisSettings } from "./hooks/use-update-diagnosis-settings";
+export { useUpdateProductSuggestionAiModel } from "./hooks/use-update-product-suggestion-ai-model";
 export type {
   TCropTopArticle,
   TCropTopArticles,
@@ -28,5 +29,6 @@ export type {
   TTopArticleSettings,
   TUpdateDiagnosisAiModelsInput,
   TUpdateDiagnosisSettingsInput,
+  TUpdateProductSuggestionAiModelInput,
   TUpdateTopArticleSettingsInput,
 } from "./types/admin-settings.types";
