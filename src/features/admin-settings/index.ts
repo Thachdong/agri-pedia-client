@@ -1,4 +1,5 @@
 // Public API của feature `admin-settings` (cài đặt nền tảng: chẩn đoán, bài viết nổi bật — ADMIN).
+export { DiagnosisAiModelsForm, type TDiagnosisAiModelsFormProps } from "./components/diagnosis-ai-models-form";
 export { DiagnosisSettingsForm, type TDiagnosisSettingsFormProps } from "./components/diagnosis-settings-form";
 export { TopArticleLimitForm, type TTopArticleLimitFormProps } from "./components/top-article-limit-form";
 export { TopArticlesEditor, type TTopArticlesEditorProps } from "./components/top-articles-editor";
