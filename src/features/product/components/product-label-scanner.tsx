@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2Icon, ScanTextIcon } from "lucide-react";
+import { Loader2Icon, RefreshCwIcon, ScanTextIcon } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { Button } from "@/shared/components/atoms";
@@ -52,6 +52,13 @@ export function ProductLabelScanner({ onFound, onUseName, disabled = false, clas
   const result = suggest.data;
   const busy = compressing || suggest.isPending;
 
+  // Bỏ ảnh đã quét → hiện lại ô chụp / chọn ảnh (kết quả cũ cũng bỏ; giá trị đã điền vào form giữ nguyên).
+  const clearPhoto = () => {
+    setPhoto(null);
+    setError(undefined);
+    suggest.reset();
+  };
+
   const scan = async (file: File) => {
     setPhoto(file);
     setError(undefined);
@@ -95,20 +102,39 @@ export function ProductLabelScanner({ onFound, onUseName, disabled = false, clas
       </header>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-        {preview && (
-          <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-md bg-muted sm:w-28">
-            <Image src={preview} alt="Ảnh nhãn vừa quét" fill sizes="(min-width: 640px) 7rem, 100vw" unoptimized className="object-cover" />
+        {/* Chỉ 1 ảnh: đã có ảnh → ẩn ô chụp / chọn, hiện ảnh + "Quét ảnh khác". */}
+        {photo ? (
+          <div className="flex w-full shrink-0 flex-col gap-2 sm:w-36">
+            <div className="relative h-28 w-full overflow-hidden rounded-md bg-muted">
+              {preview && (
+                <Image
+                  src={preview}
+                  alt="Ảnh nhãn vừa quét"
+                  fill
+                  sizes="(min-width: 640px) 9rem, 100vw"
+                  unoptimized
+                  className="object-cover"
+                />
+              )}
+            </div>
+            {!quotaExceeded && (
+              <Button type="button" size="sm" variant="outline" onClick={clearPhoto} disabled={disabled || busy}>
+                <RefreshCwIcon aria-hidden />
+                Quét ảnh khác
+              </Button>
+            )}
           </div>
+        ) : (
+          <AddImageTile
+            remaining={1}
+            multiple={false}
+            accept={SUGGESTION_PHOTO_ACCEPT}
+            onCapture={() => setCameraOpen(true)}
+            onPick={([file]) => file && void scan(file)}
+            disabled={disabled || quotaExceeded}
+            className="aspect-auto h-28 w-full sm:w-36"
+          />
         )}
-        <AddImageTile
-          remaining={1}
-          multiple={false}
-          accept={SUGGESTION_PHOTO_ACCEPT}
-          onCapture={() => setCameraOpen(true)}
-          onPick={([file]) => file && void scan(file)}
-          disabled={disabled || busy || quotaExceeded}
-          className="aspect-auto h-28 w-full sm:w-36"
-        />
 
         <div className="flex min-w-0 flex-1 flex-col gap-2" aria-live="polite">
           {busy && (

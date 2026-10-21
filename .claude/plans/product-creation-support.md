@@ -20,6 +20,7 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 - [x] 8. [feature-api]       API cập nhật: suggestion thêm `categoryId` (id từ GET /categories) + `unit` (đều có thể null) — `npm run gen:api`
 - [x] 9. [atomic-component]  organism  ProductFormDialog    (update) — FOUND điền thêm danh mục (chỉ khi id còn trong danh sách) + đơn vị; ghi đè danh mục / đơn vị đã chọn cũng hỏi trước
 - [x] 10. [atomic-component] organism  ProductLabelScanner  (update) — thông báo FOUND hiện danh mục + đơn vị được gợi ý
+- [x] 11. [atomic-component] organism  ProductLabelScanner  (update) — chỉ 1 ảnh: đã chọn / chụp ảnh → ẩn ô chụp / chọn, hiện ảnh + "Quét ảnh khác" (bỏ ảnh + kết quả, hiện lại ô)
 
 ## Components (in order)
   [atom]      Button, Input, Textarea            reuse  shared
@@ -33,12 +34,13 @@ API: POST /products/suggestions (multipart `image`, 1 ảnh jpg/png/webp ≤ 5 M
 ## Decisions
 - Ghi đè tên / mô tả / danh mục / đơn vị đã có giá trị khác → hỏi xác nhận trước. Gợi ý null → giữ nguyên ô đó.
 - Không dùng ảnh nhãn làm ảnh sản phẩm.
-- Chụp / chọn ảnh giống form chẩn đoán (camera trong trang + chọn từ máy).
+- Chụp / chọn ảnh giống form chẩn đoán (camera trong trang + chọn từ máy). Chỉ 1 ảnh: có ảnh rồi thì ẩn ô chụp / chọn.
 
 ## Checklist kiểm tay
 - [ ] DISTRIBUTOR → /profile/<id của mình> → "Thêm sản phẩm": khối "Điền nhanh từ ảnh nhãn" ở đầu form (sửa sản phẩm không có).
 - [ ] Chụp ảnh (camera trong trang; chặn quyền camera → nút mở camera của máy) và "Chọn từ máy" đều quét được.
 - [ ] Tìm thấy → điền tên + mô tả + danh mục + đơn vị (null thì giữ ô đó), thông báo hiện danh mục + đơn vị gợi ý; form đã có giá trị khác → hỏi "Thay nội dung đã nhập?" trước.
 - [ ] Đọc được tên nhưng chưa có trong danh mục → "Dùng tên này" điền tên.
+- [ ] Chọn / chụp xong → ô chụp / chọn ẩn, hiện ảnh + "Quét ảnh khác"; bấm → ô hiện lại (giá trị đã điền vào form giữ nguyên).
 - [ ] Không đọc được → nhắc chụp lại; ảnh lỗi → báo lỗi; hết lượt → khoá ô chụp + báo hết lượt; "Còn N lượt" sau mỗi lần quét.
 - [ ] Form chẩn đoán vẫn chụp / chọn / nén ảnh như trước (AddImageTile, CameraCaptureDialog, nén đã chuyển sang shared).
