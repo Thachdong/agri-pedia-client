@@ -2,7 +2,13 @@
 export { DiagnosisSettingsForm, type TDiagnosisSettingsFormProps } from "./components/diagnosis-settings-form";
 export { TopArticleLimitForm, type TTopArticleLimitFormProps } from "./components/top-article-limit-form";
 export { TopArticlesEditor, type TTopArticlesEditorProps } from "./components/top-articles-editor";
-export { adminDiagnosisSettingsQuery, cropTopArticlesQuery, topArticleSettingsQuery } from "./hooks/admin-settings.queries";
+export {
+  adminDiagnosisAiModelsQuery,
+  adminDiagnosisSettingsQuery,
+  cropTopArticlesQuery,
+  topArticleSettingsQuery,
+} from "./hooks/admin-settings.queries";
+export { useAdminDiagnosisAiModels } from "./hooks/use-admin-diagnosis-ai-models";
 export { useAdminDiagnosisSettings } from "./hooks/use-admin-diagnosis-settings";
 export { useCropTopArticles } from "./hooks/use-crop-top-articles";
 export { useSetCropTopArticles } from "./hooks/use-set-crop-top-articles";
@@ -12,6 +18,7 @@ export { useUpdateDiagnosisSettings } from "./hooks/use-update-diagnosis-setting
 export type {
   TCropTopArticle,
   TCropTopArticles,
+  TDiagnosisAiModels,
   TDiagnosisSettingsAdmin,
   TSetCropTopArticlesInput,
   TTopArticleSettings,

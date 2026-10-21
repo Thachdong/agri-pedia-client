@@ -1,6 +1,7 @@
 import { http, type IHttpClient } from "@/shared/lib/http";
 import type {
   TCropTopArticles,
+  TDiagnosisAiModels,
   TDiagnosisSettingsAdmin,
   TSetCropTopArticlesInput,
   TTopArticleSettings,
@@ -18,6 +19,10 @@ export const getDiagnosisSettingsAdmin = (client: IHttpClient = http) =>
  */
 export const updateDiagnosisSettings = (input: TUpdateDiagnosisSettingsInput, client: IHttpClient = http) =>
   client.put<TDiagnosisSettingsAdmin>("/admin/diagnosis/settings", input);
+
+/** AI model của các bước chẩn đoán (null = model env trong `defaults`). 403 DIAGNOSIS_ADMIN_REQUIRED. */
+export const getDiagnosisAiModels = (client: IHttpClient = http) =>
+  client.get<TDiagnosisAiModels>("/admin/diagnosis/ai-models");
 
 /** Số bài nổi bật tối đa mỗi cây (mặc định 10). 403 KNOWLEDGE_ADMIN_REQUIRED. */
 export const getTopArticleSettings = (client: IHttpClient = http) =>

@@ -569,6 +569,30 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/product-suggestion/ai-model": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the AI model that reads product names
+         * @description `model`: picked by an admin; null = the env model in `defaults.model` is used.
+         */
+        get: operations["AdminProductSuggestionController_getModel"];
+        /**
+         * Replace the AI model that reads product names
+         * @description `model` is required; null = use the env model. Model id: letters, digits, `.`, `_`, `-`, at most 100 characters, not starting with `.`, `_` or `-` (PRODUCT_SUGGESTION_INVALID_SETTINGS otherwise). The id is not checked against the provider: an unknown model makes suggestions fail. Applies to the next suggestion.
+         */
+        put: operations["AdminProductSuggestionController_updateModel"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/admin/product-suggestion/misses": {
         parameters: {
             query?: never;
@@ -894,6 +918,30 @@ export interface paths {
          * @description Every field is required. Ranges: dailyFreeLimit 1..1000, maxImages 1..10, maxImageBytes 102400..20971520, maxImageWidth / maxImageHeight 256..8192 (DIAGNOSIS_INVALID_SETTINGS with `details.field` otherwise). `defaultCropType` must be a crop enabled for diagnosis, or null.
          */
         put: operations["AdminDiagnosisSettingsController_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/diagnosis/ai-models": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the AI models of the diagnosis steps (admin)
+         * @description describeModel (B1) / verifyModel (B3): model picked by an admin, null = the env model in `defaults` is used.
+         */
+        get: operations["AdminDiagnosisSettingsController_getModels"];
+        /**
+         * Replace the AI models of the diagnosis steps (admin)
+         * @description Both fields are required; null = use the env model. Model id: letters, digits, `.`, `_`, `-`, at most 100 characters, not starting with `.`, `_` or `-` (DIAGNOSIS_INVALID_SETTINGS with `details.field` otherwise). The id is not checked against the provider: an unknown model makes diagnoses fail. Applies to diagnoses created afterwards.
+         */
+        put: operations["AdminDiagnosisSettingsController_updateModels"];
         post?: never;
         delete?: never;
         options?: never;
@@ -1604,6 +1652,16 @@ export interface components {
             invalidImageLimit: number;
             notFoundLimit: number;
         };
+        ProductSuggestionDefaultAiModelResponse: {
+            model: string;
+        };
+        ProductSuggestionAiModelResponse: {
+            model: string | null;
+            defaults: components["schemas"]["ProductSuggestionDefaultAiModelResponse"];
+        };
+        UpdateProductSuggestionAiModelDto: {
+            model: string | null;
+        };
         ProductSuggestionMissResponse: {
             normalizedName: string;
             latestDetectedName: string;
@@ -1937,6 +1995,19 @@ export interface components {
             maxImageBytes: number;
             maxImageWidth: number;
             maxImageHeight: number;
+        };
+        DiagnosisVisionModelsResponse: {
+            describeModel: string;
+            verifyModel: string;
+        };
+        DiagnosisAiModelsResponse: {
+            describeModel: string | null;
+            verifyModel: string | null;
+            defaults: components["schemas"]["DiagnosisVisionModelsResponse"];
+        };
+        UpdateDiagnosisAiModelsDto: {
+            describeModel: string | null;
+            verifyModel: string | null;
         };
         CropPlantPartResponse: {
             /** @enum {string} */
@@ -3963,6 +4034,93 @@ export interface operations {
             };
         };
     };
+    AdminProductSuggestionController_getModel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductSuggestionAiModelResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description PRODUCT_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminProductSuggestionController_updateModel: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProductSuggestionAiModelDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductSuggestionAiModelResponse"];
+                };
+            };
+            /** @description Request validation failed, or: PRODUCT_SUGGESTION_INVALID_SETTINGS */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description PRODUCT_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
     AdminProductSuggestionController_misses: {
         parameters: {
             query?: {
@@ -4833,6 +4991,93 @@ export interface operations {
                 };
             };
             /** @description Request validation failed, or: DIAGNOSIS_INVALID_SETTINGS, DIAGNOSIS_CROP_NOT_SUPPORTED */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationErrorResponse"] | components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminDiagnosisSettingsController_getModels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiagnosisAiModelsResponse"];
+                };
+            };
+            /** @description AUTH_INVALID_ACCESS_TOKEN */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+            /** @description DIAGNOSIS_ADMIN_REQUIRED */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DomainErrorResponse"];
+                };
+            };
+        };
+    };
+    AdminDiagnosisSettingsController_updateModels: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDiagnosisAiModelsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiagnosisAiModelsResponse"];
+                };
+            };
+            /** @description Request validation failed, or: DIAGNOSIS_INVALID_SETTINGS */
             400: {
                 headers: {
                     [name: string]: unknown;
