@@ -1,10 +1,17 @@
 import { schema, v } from "@/shared/lib/validation";
 import {
+  AI_MODEL_ID_MAX_LENGTH,
+  AI_MODEL_ID_PATTERN,
   DIAGNOSIS_SETTINGS_BOUNDS,
   MAX_IMAGE_MB_BOUNDS,
   TOP_ARTICLE_LIMIT_BOUNDS,
 } from "../constants/admin-settings.constants";
-import type { TDiagnosisSettingsFormValues, TTopArticleLimitFormValues } from "../types/admin-settings.types";
+import type {
+  TDiagnosisAiModelsFormValues,
+  TDiagnosisSettingsFormValues,
+  TProductSuggestionAiModelFormValues,
+  TTopArticleLimitFormValues,
+} from "../types/admin-settings.types";
 
 const REQUIRED = "Vui lòng nhập giá trị";
 
@@ -38,4 +45,27 @@ export const diagnosisSettingsSchema = schema<TDiagnosisSettingsFormValues>({
 /** Mirror UpdateTopArticleSettingsDto (1..50). */
 export const topArticleLimitSchema = schema<TTopArticleLimitFormValues>({
   limit: integerIn(TOP_ARTICLE_LIMIT_BOUNDS),
+});
+
+/** Model id hoặc rỗng (= model env) — khớp server (DIAGNOSIS_ / PRODUCT_SUGGESTION_INVALID_SETTINGS khi sai). */
+const aiModelId = () =>
+  v
+    .string()
+    .trim()
+    .allow("")
+    .max(AI_MODEL_ID_MAX_LENGTH)
+    .pattern(AI_MODEL_ID_PATTERN)
+    .messages({
+      "string.pattern.base": "Chỉ gồm chữ, số, dấu . _ - và bắt đầu bằng chữ hoặc số",
+    });
+
+/** Mirror UpdateDiagnosisAiModelsDto — cả 2 bước, rỗng = model env. */
+export const diagnosisAiModelsSchema = schema<TDiagnosisAiModelsFormValues>({
+  describeModel: aiModelId(),
+  verifyModel: aiModelId(),
+});
+
+/** Mirror UpdateProductSuggestionAiModelDto — rỗng = model env. */
+export const productSuggestionAiModelSchema = schema<TProductSuggestionAiModelFormValues>({
+  model: aiModelId(),
 });

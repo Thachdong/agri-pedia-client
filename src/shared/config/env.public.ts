@@ -10,6 +10,8 @@ export const publicEnv = {
   mapTileAttribution:
     process.env.NEXT_PUBLIC_MAP_TILE_ATTRIBUTION ||
     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  /** Reverse geocode (Nominatim API) — browser gọi thẳng. Mặc định OSM public (1 req/s) — traffic lớn nên tự host. */
+  geocodeUrl: (process.env.NEXT_PUBLIC_GEOCODE_URL || "https://nominatim.openstreetmap.org").replace(/\/+$/, ""),
   /** socket.io server (NestJS, cùng port HTTP) — browser kết nối thẳng bằng realtime ticket, không mang token. */
   realtimeUrl: process.env.NEXT_PUBLIC_REALTIME_URL || "http://localhost:3000",
   /** URL gốc của site (không có `/` cuối) — metadataBase, canonical, sitemap, robots. */

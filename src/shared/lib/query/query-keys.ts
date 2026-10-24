@@ -27,6 +27,8 @@ export const queryKeys = {
     all: ["location"] as const,
     provinces: () => [...queryKeys.location.all, "provinces"] as const,
     wards: (provinceCode: string) => [...queryKeys.location.all, "wards", provinceCode] as const,
+    /** Reverse geocode — toạ độ đã làm tròn để các lần chọn gần trùng dùng chung cache. */
+    reverse: (lat: number, long: number) => [...queryKeys.location.all, "reverse", lat, long] as const,
   },
   users: {
     all: ["users"] as const,
@@ -119,6 +121,10 @@ export const queryKeys = {
     all: ["admin-settings"] as const,
     /** GET /admin/diagnosis/settings. */
     diagnosis: () => [...queryKeys.adminSettings.all, "diagnosis"] as const,
+    /** GET /admin/diagnosis/ai-models. */
+    diagnosisAiModels: () => [...queryKeys.adminSettings.all, "diagnosis-ai-models"] as const,
+    /** GET /admin/product-suggestion/ai-model. */
+    productSuggestionAiModel: () => [...queryKeys.adminSettings.all, "product-suggestion-ai-model"] as const,
     /** GET /admin/knowledge/settings — số bài nổi bật mỗi cây. */
     topArticleLimit: () => [...queryKeys.adminSettings.all, "top-article-limit"] as const,
     /** Prefix danh sách bài nổi bật của mọi cây (mỗi danh sách kèm `limit`). */

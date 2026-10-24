@@ -4,6 +4,14 @@ import type { TApiSchema } from "@/shared/lib/http";
 export type TDiagnosisSettingsAdmin = TApiSchema<"DiagnosisSettingsResponse">;
 export type TUpdateDiagnosisSettingsInput = TApiSchema<"UpdateDiagnosisSettingsDto">;
 
+/** GET / PUT /admin/diagnosis/ai-models — model B1 (mô tả ảnh) / B3 (xác minh); null = model env trong `defaults`. */
+export type TDiagnosisAiModels = TApiSchema<"DiagnosisAiModelsResponse">;
+export type TUpdateDiagnosisAiModelsInput = TApiSchema<"UpdateDiagnosisAiModelsDto">;
+
+/** GET / PUT /admin/product-suggestion/ai-model — model đọc tên sản phẩm từ ảnh; null = model env `defaults.model`. */
+export type TProductSuggestionAiModel = TApiSchema<"ProductSuggestionAiModelResponse">;
+export type TUpdateProductSuggestionAiModelInput = TApiSchema<"UpdateProductSuggestionAiModelDto">;
+
 /** GET / PUT /admin/knowledge/settings — số bài nổi bật mỗi cây (1..50, mặc định 10). */
 export type TTopArticleSettings = TApiSchema<"TopArticleSettingsResponse">;
 export type TUpdateTopArticleSettingsInput = TApiSchema<"UpdateTopArticleSettingsDto">;
@@ -30,3 +38,7 @@ export type TDiagnosisSettingsFormValues = {
 };
 
 export type TTopArticleLimitFormValues = { limit: number | null };
+
+/** Giá trị form AI model — chuỗi rỗng = dùng model env (gửi null). */
+export type TDiagnosisAiModelsFormValues = { describeModel: string; verifyModel: string };
+export type TProductSuggestionAiModelFormValues = { model: string };

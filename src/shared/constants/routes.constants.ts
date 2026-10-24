@@ -50,5 +50,11 @@ export const ROUTES = {
       topArticles: (crop?: string) =>
         crop ? `/admin/settings/top-articles?crop=${encodeURIComponent(crop)}` : "/admin/settings/top-articles",
     },
+    /** AI model dùng cho chẩn đoán bệnh / hỗ trợ tạo sản phẩm (admin-page.png mục 3). */
+    aiProvider: {
+      root: "/admin/ai-provider",
+      diagnosis: "/admin/ai-provider/diagnosis",
+      productSuggestion: "/admin/ai-provider/product-suggestion",
+    },
   },
 } as const;
